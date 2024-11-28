@@ -1,31 +1,24 @@
+import NextLink from "next/link";
+import { Link as ThemeLink } from "theme-ui";
 
-import NextLink from 'next/link';
-import { Text } from 'theme-ui';
+export default function Link(props) {
+	if (props.onClick) {
+		return (
+			<ThemeLink
+				onClick={props.onClick}
+				sx={{ variant: `links.${props.variant ? props.variant : "default"}` }}
+			>
+				{props.children}
+			</ThemeLink>
+		);
+	}
 
-interface LinkProps {
-    children: React.ReactNode,
-    href: string,
-    variant?: string,
-    onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
+	return (
+		<NextLink
+			href={props.href}
+			sx={{ variant: props.variant ? `links.${props.variant}` : "links" }}
+		>
+			{props.children}
+		</NextLink>
+	);
 }
-
-const defaultProps = {
-    children: null,
-    href: null,
-    variant: "link",
-    onClick: null
-}
-
-export default function Link(props: LinkProps) {
-    const {children, href, variant, onClick} = props;
-    return (
-        <NextLink href={href} onClick={onClick}>
-            <Text variant={variant}>
-                {children}
-            </Text>
-        </NextLink>
-    )
-
-}
-
-Link.defaultProps = defaultProps;

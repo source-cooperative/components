@@ -4,43 +4,80 @@ import { useColorMode } from "theme-ui";
 import { useCallback } from "react";
 
 interface FooterLink {
-    href: string,
-    text: string
+	href: string;
+	text: string;
 }
 
 interface FooterProps {
-    links: FooterLink[]
+	links: FooterLink[];
+	text: string[];
 }
 
 const defaultProps = {
-    links: []
-}
+	links: [],
+	text: [],
+};
 
 export default function Footer(props: FooterProps) {
-    const [colorMode, setColorMode] = useColorMode()
+	const [colorMode, setColorMode] = useColorMode();
 
-    const toggle = useCallback(() => {
-        setColorMode(colorMode === 'light' ? 'dark' : 'light')
-    }, [colorMode])
+	const toggle = useCallback(() => {
+		setColorMode(colorMode === "light" ? "dark" : "light");
+	}, [colorMode]);
 
-    return (
-        <Grid sx={{py: 3, gridTemplateColumns: "1fr 1fr 1fr 1fr", gridTemplateRows: "1fr 1fr", gap: 1}}>
-        {
-            props.links.map((link, index) => {
-                return (
-                    <Box sx={{display: "flex", justifyContent: "center"}}>
-                    <Link key={index} href={link.href}><Text sx={{fontFamily: "mono", fontSize: 0, textTransform: "uppercase", fontWeight: "bold"}}>{link.text}</Text></Link>
-                    </Box>
-                )
-            })
-        }
-            <Box sx={{display: "flex", justifyContent: "center"}}>
-                <Link href="#" onClick={(e) => {toggle()}}>
-                <Text sx={{fontFamily: "mono", fontSize: 0, textTransform: "uppercase", fontWeight: "bold"}}>Toggle Dark Mode</Text>
-                </Link>
-            </Box>
-        </Grid>
-    ) 
+	return (
+		<Grid
+			sx={{
+				py: 3,
+				gridTemplateColumns: "1fr 1fr 1fr 1fr",
+				gridTemplateRows: "1fr 1fr",
+				gap: 1,
+			}}
+		>
+			{props.links.map((link, index) => {
+				return (
+					<Box
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+							textAlign: "center",
+						}}
+					>
+						<Link key={index} href={link.href} variant="footer">
+							{link.text}
+						</Link>
+					</Box>
+				);
+			})}
+			<Box
+				sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}
+			>
+				<Link
+					onClick={(e) => {
+						toggle();
+					}}
+					variant="footer"
+				>
+					Toggle Dark Mode
+				</Link>
+			</Box>
+
+			{props.text.map((text, index) => {
+				return (
+					<Box
+						key={`footer-text-${index}`}
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+							textAlign: "center",
+						}}
+					>
+						<Text variant="footer">{text}</Text>
+					</Box>
+				);
+			})}
+		</Grid>
+	);
 }
 
 Footer.defaultProps = defaultProps;
