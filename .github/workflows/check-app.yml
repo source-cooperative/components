@@ -1,4 +1,4 @@
-name: quality
+name: Demo app quality
 on:
   push:
 jobs:

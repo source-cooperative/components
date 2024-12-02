@@ -1,4 +1,4 @@
-name: quality
+name: Package quality
 on:
   push:
 jobs:
