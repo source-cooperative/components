@@ -48,6 +48,9 @@ export default function Home() {
 				<li>
 					<Link href="/browser">Browser</Link>
 				</li>
+				<li>
+					<Link href="/form">Form</Link>
+				</li>
 			</ul>
 		</BaseLayout>
 	);
