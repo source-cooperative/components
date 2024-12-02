@@ -14,7 +14,7 @@ const nextConfig = {
     ],
   },
   typescript: {
-    tsconfigPath: "./tsconfig.build.json",
+    tsconfigPath: "./tsconfig.app.json",
   },
 };
 
