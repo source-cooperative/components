@@ -12,6 +12,9 @@ const nextConfig = {
       },
     ],
   },
+  typescript: {
+    tsconfigPath: "./tsconfig.build.json",
+  },
 };
 
 module.exports = nextConfig;
