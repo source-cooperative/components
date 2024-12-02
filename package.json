@@ -51,6 +51,8 @@
 	"scripts": {
 		"dev": "next dev",
 		"format": "prettier --write 'index.js'",
-		"build": "rimraf dst && microbundle src/index.tsx -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment"
+		"build:app": "next build",
+		"build:package": "rimraf dst && microbundle src/index.tsx -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment",
+		"prepare": "npm run build:package"
 	}
 }
