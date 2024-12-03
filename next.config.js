@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   reactStrictMode: true,
   trailingSlash: true,
   images: {
@@ -13,7 +14,7 @@ const nextConfig = {
     ],
   },
   typescript: {
-    tsconfigPath: "./tsconfig.build.json",
+    tsconfigPath: "./tsconfig.app.json",
   },
 };
 
