@@ -1,4 +1,4 @@
-import { ThemeProvider, Heading, Paragraph, Card } from "theme-ui";
+import { ThemeUIProvider, Heading, Paragraph, Card } from "theme-ui";
 import Prism from "@theme-ui/prism";
 import { useThemedStylesWithMdx } from "@theme-ui/mdx";
 import type { ComponentPropsWithoutRef } from "react";
@@ -46,6 +46,6 @@ export function SourceComponents() {
 	return useThemedStylesWithMdx(components);
 }
 
-export function SourceProvider({ children, theme, components }) {
-	return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+export function SourceProvider({ children, theme }) {
+	return <ThemeUIProvider theme={theme}>{children}</ThemeUIProvider>;
 }

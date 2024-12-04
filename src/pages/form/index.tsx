@@ -1,6 +1,5 @@
 import BaseLayout from "../../components/BaseLayout";
-import Browser from "../../components/Browser";
-import { Box, Field, Heading } from "theme-ui";
+import { Heading } from "theme-ui";
 import { sideNavLinks } from "../../utils/constants";
 import Form from "@/components/Form";
 import {
@@ -10,7 +9,6 @@ import {
 	FormResultState,
 } from "@/components/Form";
 import { useState } from "react";
-import Button from "@/components/Button";
 
 export default function FormPage() {
 	const [usernameState, setUsernameState] = useState({
