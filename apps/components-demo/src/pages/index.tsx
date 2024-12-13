@@ -1,6 +1,6 @@
 import { Heading, Box } from "theme-ui";
 import { sideNavLinks } from "../utils/constants";
-import { SearchBar, BaseLayout, Link, Footer } from "@/index";
+import { SearchBar, BaseLayout, Link, Footer } from "@source-cooperative/components";
 
 const FOOTER_LINKS = [
 	{

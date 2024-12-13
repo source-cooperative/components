@@ -1,0 +1,12 @@
+name: packages/components
+on:
+  push:
+    paths:
+      - "apps/packages/components/**"
+      - ".github/workflows/_common_jobs.yml"
+      - ".github/workflows/ci_packages_components.yml"
+jobs:
+  ci:
+    uses: ./.github/workflows/_common_jobs.yml
+    with:
+      workspace: "@source-cooperative/components"

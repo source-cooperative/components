@@ -1,13 +1,13 @@
-import BaseLayout from "../../components/BaseLayout";
-import { Heading } from "theme-ui";
-import { sideNavLinks } from "../../utils/constants";
-import Form from "@/components/Form";
-import {
+import { 
+	BaseLayout,
+	Form,
 	FieldType,
 	FieldState,
 	FormResult,
-	FormResultState,
-} from "@/components/Form";
+	FormResultState
+} from "@source-cooperative/components";
+import { Heading } from "theme-ui";
+import { sideNavLinks } from "../../utils/constants";
 import { useState } from "react";
 
 export default function FormPage() {

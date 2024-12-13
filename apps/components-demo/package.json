@@ -1,0 +1,42 @@
+{
+  "name": "@source-cooperative/components-demo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Demo app to showcase the Source Cooperative React Components",
+  "main": "dst/index.js",
+  "module": "dst/index.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/source-cooperative/components.git",
+    "directory": "apps/demo"
+  },
+  "keywords": [
+    "theme-ui",
+    "source-cooperative"
+  ],
+  "files": [
+    "dst"
+  ],
+  "author": "radiantearth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/source-cooperative/components/issues"
+  },
+  "dependencies": {
+    "@source-cooperative/components": "1.0.15",
+    "@source-cooperative/theme": "1.0.11",
+    "next": "13.5.6",
+    "theme-ui": "0.16.1",
+    "@emotion/react": "11.11.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-loading-skeleton": "3.5.0"
+  },
+  "homepage": "https://github.com/source-cooperative/components#readme",
+  "scripts": {
+    "dev": "next dev",
+    "format": "prettier --write 'index.js'",
+    "build": "next build",
+    "typecheck": "tsc --noEmit"
+  }
+}

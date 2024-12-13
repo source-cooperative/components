@@ -222,3 +222,7 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/osx,visualstudiocode,nextjs,node
 
 dst
+
+# we use exact dependencies, and don't need a package-lock.json. Also: it helps with overrides:
+# https://tobiasedwards.co.uk/blog/unifying-dependency-versions-across-npm-workspaces/
+package-lock.json

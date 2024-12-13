@@ -2,7 +2,7 @@ import { ThemeUIProvider, Heading, Paragraph, Card } from "theme-ui";
 import Prism from "@theme-ui/prism";
 import { useThemedStylesWithMdx } from "@theme-ui/mdx";
 import type { ComponentPropsWithoutRef } from "react";
-import Link from "@/components/Link";
+import Link from "../components/Link";
 import CodeBlock from "../components/CodeBlock";
 import { InlineCode } from "../components/CodeBlock";
 

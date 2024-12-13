@@ -1,5 +1,4 @@
-import BaseLayout from "../../components/BaseLayout";
-import Browser from "../../components/Browser";
+import { BaseLayout, Browser } from "@source-cooperative/components";
 import { Box, Heading } from "theme-ui";
 import { sideNavLinks } from "../../utils/constants";
 
