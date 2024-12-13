@@ -27,7 +27,7 @@ npm install
 To build the workspaces:
 
 ```sh
-npm run build
+npm run build -ws
 ```
 
 To run the demo:

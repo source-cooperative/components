@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "Demo app to showcase the Source Cooperative React Components",
+  "type": "module",
   "main": "dst/index.js",
   "module": "dst/index.esm.js",
   "repository": {
@@ -34,9 +35,9 @@
   },
   "homepage": "https://github.com/source-cooperative/components#readme",
   "scripts": {
-    "dev": "next dev",
-    "format": "prettier --write 'index.js'",
     "build": "next build",
+    "dev": "next dev",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   }
 }

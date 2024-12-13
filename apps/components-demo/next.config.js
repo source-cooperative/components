@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+export default nextConfig = {
   output: "export",
   basePath: "/components", // for GitHub Pages, which is hosted at /components
   reactStrictMode: true,
@@ -15,5 +15,3 @@ const nextConfig = {
     ],
   }
 };
-
-module.exports = nextConfig;
