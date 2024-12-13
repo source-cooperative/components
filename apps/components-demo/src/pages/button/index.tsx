@@ -1,13 +1,12 @@
-import Layout from "../../components/BaseLayout";
+import { BaseLayout, Button } from "@source-cooperative/components";
 import { sideNavLinks } from "../../utils/constants";
-import Button from "../../components/Button";
 
 export default function ButtonPage() {
 	return (
 		<>
-			<Layout sideNavLinks={sideNavLinks}>
+			<BaseLayout sideNavLinks={sideNavLinks}>
 				<Button>Hello World</Button>
-			</Layout>
+			</BaseLayout>
 		</>
 	);
 }

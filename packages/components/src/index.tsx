@@ -4,10 +4,10 @@ export { default as Button } from "./components/Button";
 export { default as CodeBlock } from "./components/CodeBlock";
 export { default as Footer } from "./components/Footer";
 export {
-	default as Form,
-	FieldType,
-	FieldState,
-	FormResultState,
+  default as Form,
+  FieldType,
+  FieldState,
+  FormResultState,
 } from "./components/Form";
 export type { FormResult } from "./components/Form";
 export { default as BaseLayout } from "./components/BaseLayout";

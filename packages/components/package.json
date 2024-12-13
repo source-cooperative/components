@@ -1,0 +1,50 @@
+{
+  "name": "@source-cooperative/components",
+  "version": "1.0.15",
+  "description": "Source Cooperative React Components",
+  "main": "dst/index.js",
+  "module": "dst/index.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/source-cooperative/components.git",
+    "directory": "packages/components"
+  },
+  "keywords": [
+    "theme-ui",
+    "source-cooperative"
+  ],
+  "files": [
+    "dst"
+  ],
+  "author": "radiantearth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/source-cooperative/components/issues"
+  },
+  "dependencies": {
+    "@theme-ui/color": "0.16.1",
+    "@theme-ui/mdx": "0.16.1",
+    "@theme-ui/prism": "0.16.1",
+    "react-hot-toast": "^2.4.1",
+    "react-loading-skeleton": "^3.3.1",
+    "usehooks-ts": "^2.9.1"
+  },
+  "peerDependencies": {
+    "next": "13.5.6",
+    "theme-ui": "0.16.1",
+    "@emotion/react": "11.11.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "microbundle": "^0.13.0",
+    "rimraf": "3.0.2"
+  },
+  "homepage": "https://github.com/source-cooperative/components#readme",
+  "scripts": {
+    "format": "prettier --write 'index.js'",
+    "build": "rimraf dst && microbundle src/index.tsx -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment",
+    "prepare": "npm run build",
+    "typecheck": "tsc --noEmit"
+  }
+}

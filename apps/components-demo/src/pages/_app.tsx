@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import { SourceProvider } from "../lib/provider";
+import { SourceProvider } from "@source-cooperative/components";
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (

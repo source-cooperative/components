@@ -1,0 +1,12 @@
+name: apps/components-demo
+on:
+  push:
+    paths:
+      - "apps/components-demo/**"
+      - ".github/workflows/_common_jobs.yml"
+      - ".github/workflows/ci_apps_components_demo.yml"
+jobs:
+  ci:
+    uses: ./.github/workflows/_common_jobs.yml
+    with:
+      workspace: "@source-cooperative/components-demo"

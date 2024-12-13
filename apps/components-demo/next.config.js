@@ -13,10 +13,7 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
-  },
-  typescript: {
-    tsconfigPath: "./tsconfig.app.json",
-  },
+  }
 };
 
 module.exports = nextConfig;
