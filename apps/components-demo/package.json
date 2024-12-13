@@ -25,14 +25,12 @@
   "dependencies": {
     "@source-cooperative/components": "1.0.15",
     "@source-cooperative/theme": "1.0.11",
-    "react-loading-skeleton": "^3.3.1"
-  },
-  "peerDependencies": {
     "next": "13.5.6",
     "theme-ui": "0.16.1",
     "@emotion/react": "11.11.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-loading-skeleton": "3.5.0"
   },
   "homepage": "https://github.com/source-cooperative/components#readme",
   "scripts": {
