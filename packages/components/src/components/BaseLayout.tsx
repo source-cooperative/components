@@ -247,7 +247,7 @@ export default function BaseLayout(props: LayoutProps) {
                   <Select
                     value={router.pathname}
                     onChange={(e) => {
-                      router.push(e.target.value)
+                      router.push(e.target.value).catch((e: unknown) => { console.error(e) })
                     }}
                   >
                     {sideNavLinks ?
