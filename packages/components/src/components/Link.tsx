@@ -1,8 +1,17 @@
 import NextLink from 'next/link'
+import React from 'react'
 import { Link as ThemeLink } from 'theme-ui'
 
-export default function Link(props) {
-  if (props.onClick) {
+type LinkProps = {
+  children: React.ReactNode;
+  variant?: string;
+} & ({
+  href: string;
+} | {
+  onClick: () => void;
+})
+export default function Link(props: LinkProps) {
+  if ('onClick' in props) {
     return (
       <ThemeLink
         onClick={props.onClick}
@@ -12,7 +21,6 @@ export default function Link(props) {
       </ThemeLink>
     )
   }
-
   return (
     <NextLink
       href={props.href}

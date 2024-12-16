@@ -8,10 +8,10 @@ interface ButtonProps {
   href?: string;
   disabled?: boolean;
   variant?: string;
-  onClick?: (e: any) => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-function Button (props: ButtonProps, ref) {
+function Button (props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
   const { children, suffix, href, disabled, variant, onClick } = props
   if (href) {
     return (

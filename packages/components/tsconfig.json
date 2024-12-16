@@ -1,74 +1,39 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "module": "NodeNext",
+    // "allowJs": true,
     "skipLibCheck": true,
-    "moduleResolution": "nodenext",
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    // "esModuleInterop": true,
+    "module": "esnext",
+    // "moduleDetection": "force",
+    "moduleResolution": "node",
+    // "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "theme-ui",
+    // "incremental": true,
+    // "baseUrl": ".",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "outDir": "./es",
-    "emitDeclarationOnly": true,
-    "declaration": true,
   },
   "include": [
-    "src"
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "./dst/**/*"
   ]
 }
-// {
-//   "compilerOptions": {
-//     "target": "ES2020",
-//     "useDefineForClassFields": true,
-//     "lib": [
-//       "dom",
-//       "dom.iterable",
-//       "esnext"
-//     ],
-//     // "allowJs": true,
-//     "skipLibCheck": true,
-//     "strict": true,
-//     "forceConsistentCasingInFileNames": true,
-//     "noEmit": true,
-//     // "esModuleInterop": true,
-//     "module": "NodeNext",
-//     "moduleDetection": "force",
-//     "moduleResolution": "NodeNext",
-//     // "resolveJsonModule": true,
-//     "isolatedModules": true,
-//     // "allowSyntheticDefaultImports": true,
-//     "jsx": "react-jsx",
-//     "jsxImportSource": "theme-ui",
-//     // "incremental": true,
-//     "baseUrl": ".",
-//     "paths": {
-//       "@/*": [
-//         "./src/*"
-//       ]
-//     },
-//     "noUnusedLocals": true,
-//     "noUnusedParameters": true,
-//     "noFallthroughCasesInSwitch": true,
-//     "noUncheckedSideEffectImports": true,
-//   },
-//   "include": [
-//     "next-env.d.ts",
-//     "**/*.ts",
-//     "**/*.tsx"
-//   ],
-//   "exclude": [
-//     "node_modules",
-//     "./dst/**/*"
-//   ]
-// }
