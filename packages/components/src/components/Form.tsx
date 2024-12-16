@@ -306,13 +306,16 @@ export default function Form(props: FormProps) {
 
     setSubmitting(true)
 
+    const formData = new FormData(e.currentTarget)
     const values: Record<string, string> = {}
-
-    const { elements } = e.currentTarget
     fields.forEach((field) => {
       const name = field.id
-      const element = elements.namedItem(name)
-      values[field.id] = element && 'value' in element ? element.value : ''
+      const value = formData.get(name)
+      if (value === null || value instanceof File) {
+        /// file upload is not supported
+        return
+      }
+      values[field.id] = value
     })
 
     onSubmit(values).then((result) => {
