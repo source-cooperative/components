@@ -1,10 +1,15 @@
-import { Box } from 'theme-ui'
+import React from 'react'
 
-export default function SVG({ ...props }) {
+type SVGProps = {
+  children: React.ReactNode
+  title?: string
+} & React.SVGProps<SVGSVGElement>
+
+export default function SVG({ title, children, ...props }: SVGProps) {
   return (
-    <Box as="svg" stroke="none" {...props}>
-      {props.title ? <title>{props.title}</title> : <></>}
-      {props.children}
-    </Box>
+    <svg stroke="none" {...props}>
+      {title ? <title>{title}</title> : <></>}
+      {children}
+    </svg>
   )
 }

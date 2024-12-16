@@ -1,4 +1,4 @@
-import React, { ComponentProps, useRef } from 'react'
+import React, { ComponentPropsWithoutRef, useRef } from 'react'
 import { toast } from 'react-hot-toast'
 import { Box, Card } from 'theme-ui'
 import { useCopyToClipboard } from 'usehooks-ts'
@@ -25,7 +25,7 @@ function copyToClipboard(container: HTMLElement) {
 type CodeBlockProps = {
   children: React.ReactNode;
   copyButton?: boolean;
-} & ComponentProps<typeof Card>
+} & ComponentPropsWithoutRef<typeof Card>
 
 export default function CodeBlock({ children, copyButton, ...props }: CodeBlockProps) {
   const copy = useCopyToClipboard()[1]
