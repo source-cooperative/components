@@ -1,21 +1,15 @@
-import { useRef } from 'react'
+import React, { ComponentProps, useRef } from 'react'
 import { toast } from 'react-hot-toast'
 import { Box, Card } from 'theme-ui'
 import { useCopyToClipboard } from 'usehooks-ts'
 import SVG from './SVG.js'
 
-function copyToClipboard(container) {
-  toast.success('Copied to Clipboard')
-  return container.current.innerText
-}
-
-export function InlineCode(element) {
-  const { children, className } = element.children.props
+export function InlineCode({ children }: {children: React.ReactNode}) {
   return (
     <Card
       variant="inlineCode"
       onClick={(e) => {
-        window.getSelection().selectAllChildren(e.target)
+        window.getSelection()?.selectAllChildren(e.currentTarget)
       }}
     >
       {children}
@@ -23,13 +17,24 @@ export function InlineCode(element) {
   )
 }
 
-export default function CodeBlock({ children, copyButton, ...props }) {
-  const [value, copy] = useCopyToClipboard()
+function copyToClipboard(container: HTMLElement) {
+  toast.success('Copied to Clipboard')
+  return container.innerText
+}
 
-  const buttonRef = useRef(null)
+type CodeBlockProps = {
+  children: React.ReactNode;
+  copyButton?: boolean;
+} & ComponentProps<typeof Card>
+
+export default function CodeBlock({ children, copyButton, ...props }: CodeBlockProps) {
+  const copy = useCopyToClipboard()[1]
+
+  const buttonRef = useRef<HTMLElement | null>(null)
+  const { current } = buttonRef
   return (
     <Card variant="code" {...props}>
-      {copyButton ?
+      {copyButton && current !== null &&
         <Box
           sx={{
             pl: 1,
@@ -43,8 +48,8 @@ export default function CodeBlock({ children, copyButton, ...props }) {
             cursor: 'pointer',
             backgroundColor: 'muted',
           }}
-          onClick={(e) => {
-            copy(copyToClipboard(buttonRef))
+          onClick={() => {
+            copy(copyToClipboard(current)).catch((e: unknown) => { console.error(e) })
           }}
         >
           <SVG
@@ -55,8 +60,6 @@ export default function CodeBlock({ children, copyButton, ...props }) {
             <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
           </SVG>
         </Box>
-        :
-        <></>
       }
       <Box ref={buttonRef}>{children}</Box>
     </Card>
