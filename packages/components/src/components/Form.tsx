@@ -1,3 +1,5 @@
+import { ResponsiveStyleValue } from '@theme-ui/css'
+import type { Property } from 'csstype'
 import { FormEvent, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import {
@@ -10,49 +12,29 @@ import {
   Text,
   Textarea,
 } from 'theme-ui'
+import { FieldState, FieldType, FormResultState } from '../lib/enums.js'
 import Button from './Button.js'
-
-export enum FieldState {
-  VALID,
-  VALIDATING,
-  INVALID,
-  WARNING,
-}
-
-export enum FieldType {
-  TEXT,
-  EMAIL,
-  PASSWORD,
-  SELECT,
-  CHECKBOX,
-  TEXTAREA,
-}
 
 export interface FormFieldState {
   state: FieldState;
   message?: string;
 }
 
-interface FormField {
+interface FormFieldData {
   type: FieldType;
   title: string;
   id: string;
   defaultValue?: string;
   required?: boolean;
   showRequired?: boolean;
-  columnStart?: any;
-  columnEnd?: any;
-  properties?: any;
+  columnStart?: Property.GridColumnStart;
+  columnEnd?: Property.GridColumnEnd;
+  properties?: {options?: {value: string; text: string}[]};
   state: FormFieldState;
   setState: (state: FormFieldState) => void;
   onLoad?: () => void;
   validationDelay?: number;
   onValidation?: (val: string) => void;
-}
-
-export enum FormResultState {
-  SUCCESS,
-  FAILURE,
 }
 
 export interface FormResult {
@@ -62,8 +44,8 @@ export interface FormResult {
 }
 
 interface FormProps {
-  fields: FormField[];
-  gridColumns?: any;
+  fields: FormFieldData[];
+  gridColumns?: ResponsiveStyleValue<string | number>;
   active?: boolean;
   submitText?: string;
   onSubmit: (values: Record<string, string>) => Promise<FormResult>;
@@ -74,7 +56,7 @@ const defaultProps = {
   active: true,
 }
 
-function FormField(field: FormField) {
+function FormField(field: FormFieldData) {
   let fieldMessage = null
 
   if (field.state.state === FieldState.INVALID && field.state.message) {
@@ -113,7 +95,7 @@ function FormField(field: FormField) {
     if (field.onLoad) {
       field.onLoad()
     }
-  }, [])
+  }, [field])
 
   useEffect(() => {
     if (value === '' && field.required) {
@@ -152,12 +134,13 @@ function FormField(field: FormField) {
       })
     }
 
-    if (!field.onValidation) {
+    const { onValidation } = field
+    if (!onValidation) {
       return
     }
 
     const timeoutId = setTimeout(
-      () => { field.onValidation(value) },
+      () => { onValidation(value) },
       field.validationDelay ? field.validationDelay : 1000,
     )
     return () => { clearTimeout(timeoutId) }
@@ -304,48 +287,46 @@ export default function Form(props: FormProps) {
   const [submitting, setSubmitting] = useState(false)
   const [submittable, setSubmittable] = useState(false)
 
-  function checkSubmittable() {
+  useEffect(() => {
     let submittable = true
     fields.forEach((field) => {
       if (
         field.state.state === FieldState.INVALID ||
-        field.state.state === FieldState.VALIDATING
+          field.state.state === FieldState.VALIDATING
       ) {
         submittable = false
       }
     })
-
     setSubmittable(submittable)
-  }
-
-  useEffect(() => {
-    checkSubmittable()
   }, [fields])
 
-  function submitHandler(e: FormEvent<HTMLDivElement>) {
+  function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     e.stopPropagation()
 
     setSubmitting(true)
 
-    const values = {}
+    const values: Record<string, string> = {}
 
+    const { elements } = e.currentTarget
     fields.forEach((field) => {
-      values[field.id] = e.target.elements[field.id].value
+      const name = field.id
+      const element = elements.namedItem(name)
+      values[field.id] = element && 'value' in element ? element.value : ''
     })
 
     onSubmit(values).then((result) => {
       if (result.state === FormResultState.SUCCESS) {
-        result.onSuccess()
+        result.onSuccess?.()
       } else {
-        toast.error(result.message)
+        toast.error(result.message ?? 'An error occurred while submitting the form')
       }
       setSubmitting(false)
-    })
+    }).catch((e: unknown) => { console.error(e) })
   }
 
   return (
-    <Box as="form" onSubmit={submitHandler}>
+    <Box as="form" onSubmit={(e) => { submitHandler(e as unknown as FormEvent<HTMLFormElement>) }}>
       <Grid columns={gridColumns} gap={3} mb={3}>
         {fields.map((field, i) => {
           return <FormField key={`form-field-${i}`} {...field} />
