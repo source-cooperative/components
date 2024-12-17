@@ -4,25 +4,24 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
-import { sharedJsRules, sharedTsRules } from '../../eslint.config.js'
+import { sharedJsRules, sharedTsRules } from '../../eslint.config.mjs'
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage'] },
+  { ignores: ['coverage/', 'dist/', 'es/'] },
   {
+    settings: { react: { version: '18.3' } },
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylisticTypeChecked],
-    // Set the react version
-     settings: { react: { version: '18.3' } } ,
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx,js}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser, 
+      globals: globals.browser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: ['./tsconfig.json', './tsconfig.eslint.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
-      react, 
+      'react': react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
@@ -39,5 +38,19 @@ export default tseslint.config(
       ...sharedJsRules,
       ...sharedTsRules,
     },
+  },
+  {
+    files: ['test/**/*.{ts,tsx}', '*.{js,ts}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
+  },
+  {
+    files: ['**/*.js'],
+    ...tseslint.configs.disableTypeChecked,
   },
 )
