@@ -10,23 +10,8 @@ import {
   Text,
   Textarea,
 } from 'theme-ui'
+import { FieldState, FieldType, FormResultState } from '../lib/enums'
 import Button from './Button'
-
-export enum FieldState {
-	VALID,
-	VALIDATING,
-	INVALID,
-	WARNING,
-}
-
-export enum FieldType {
-	TEXT,
-	EMAIL,
-	PASSWORD,
-	SELECT,
-	CHECKBOX,
-	TEXTAREA,
-}
 
 interface FormField {
 	type: FieldType;
@@ -46,11 +31,6 @@ interface FormField {
 	onLoad?: () => void;
 	validationDelay?: number;
 	onValidation?: (val: string) => void;
-}
-
-export enum FormResultState {
-	SUCCESS,
-	FAILURE,
 }
 
 export interface FormResult {
