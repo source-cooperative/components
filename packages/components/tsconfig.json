@@ -16,6 +16,7 @@
 		"jsx": "react-jsx",
 		"jsxImportSource": "theme-ui",
 		"incremental": true,
+		"strictNullChecks": true
 	},
 	"include": ["**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules", "./dst/**/*"]
