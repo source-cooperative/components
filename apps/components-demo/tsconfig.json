@@ -19,9 +19,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
-			"@components/*": ["../../packages/components/src/*"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../../packages/components/src/index.tsx"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules", "./dst/**/*"]
 }

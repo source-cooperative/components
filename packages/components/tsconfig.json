@@ -16,11 +16,7 @@
 		"jsx": "react-jsx",
 		"jsxImportSource": "theme-ui",
 		"incremental": true,
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./src/*"]
-		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": ["**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules", "./dst/**/*"]
 }
