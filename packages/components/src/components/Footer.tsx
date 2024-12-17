@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { Box, Grid, Text, useColorMode } from 'theme-ui'
 import Link from './Link'
 
@@ -18,11 +17,7 @@ const defaultProps = {
 }
 
 export default function Footer(props: FooterProps) {
-  const [colorMode, setColorMode] = useColorMode()
-
-  const toggle = useCallback(() => {
-    setColorMode(colorMode === 'light' ? 'dark' : 'light')
-  }, [colorMode])
+  const setColorMode = useColorMode()[1]
 
   return (
     <Grid
@@ -35,14 +30,12 @@ export default function Footer(props: FooterProps) {
     >
       {props.links.map((link, index) => {
         return (
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              textAlign: 'center',
-            }}
-          >
-            <Link key={index} href={link.href} variant="footer">
+          <Box key={index} sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }} >
+            <Link href={link.href} variant="footer">
               {link.text}
             </Link>
           </Box>
@@ -52,9 +45,7 @@ export default function Footer(props: FooterProps) {
         sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
       >
         <Link
-          onClick={(e) => {
-            toggle()
-          }}
+          onClick={() => { setColorMode(colorMode => colorMode === 'light' ? 'dark' : 'light') }}
           variant="footer"
         >
 					Toggle Dark Mode
