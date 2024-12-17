@@ -19,7 +19,7 @@ export default function BrowserPage() {
     items: [
       {
         name: 'FooBar',
-        size: null,
+        size: undefined,
         href: '/',
       },
       {
@@ -32,9 +32,9 @@ export default function BrowserPage() {
 
   const loadingData = {
     prev: false,
-    next: null,
-    breadcrumbs: null,
-    items: null,
+    next: undefined,
+    breadcrumbs: [],
+    items: [],
   }
 
   return (
