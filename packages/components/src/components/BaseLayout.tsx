@@ -13,7 +13,7 @@ export interface SideNavLink {
 	href: string;
 }
 
-interface Alert {
+interface AlertData {
 	text: string;
 	variant: string;
 }
@@ -27,8 +27,8 @@ interface LayoutProps {
 	footer?: React.ReactNode;
 	dropDown?: React.ReactNode;
 	sideNavLinks?: SideNavLink[];
-	alerts?: Alert[];
-	messages?: Alert[];
+	alerts?: AlertData[];
+	messages?: AlertData[];
 }
 
 const defaultProps = {
@@ -88,14 +88,14 @@ export default function BaseLayout(props: LayoutProps) {
           <Box sx={{ zIndex: 99999 }}>
             {alerts?.map((alert, i) => {
               return (
-                <Alert key={'alert-' + i} variant={alert.variant}>
+                <Alert key={`alert-${i}`} variant={alert.variant}>
                   {alert.text}
                 </Alert>
               )
             })}
             {messages?.map((message, i) => {
               return (
-                <Alert key={'message-' + i} variant={message.variant}>
+                <Alert key={`message-${i}`} variant={message.variant}>
                   {message.text}
                 </Alert>
               )
@@ -222,7 +222,7 @@ export default function BaseLayout(props: LayoutProps) {
                           <Link
                             href={sideNavLink.href}
                             variant={
-                              router.pathname == sideNavLink.href
+                              router.pathname === sideNavLink.href
                                 ? 'sideNavActive'
                                 : 'sideNav'
                             }
@@ -249,7 +249,7 @@ export default function BaseLayout(props: LayoutProps) {
                   <Select
                     value={router.pathname}
                     onChange={(e) => {
-                      router.push(e.target.value)
+                      router.push(e.target.value).catch((e: unknown) => { console.error(e) })
                     }}
                   >
                     {sideNavLinks ?
