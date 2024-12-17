@@ -1,9 +1,10 @@
 import { transparentize } from '@theme-ui/color'
 import Link from 'next/link'
+import { ReactNode } from 'react'
 import { Box, Card, Text } from 'theme-ui'
 
 interface TagProps {
-	children: React.ReactNode;
+	children: ReactNode;
 	color: string;
 	href?: string;
 }
