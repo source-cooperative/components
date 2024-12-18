@@ -67,15 +67,15 @@ export default function AccountDropdown(props: AccountDropdownProps) {
   return (
     <>
       <Box
-        onMouseOut={(e) => { setMenuOpen(false) }}
-        onMouseOver={(e) => { setMenuOpen(true) }}
+        onMouseOut={() => { setMenuOpen(false) }}
+        onMouseOver={() => { setMenuOpen(true) }}
         sx={{
           display: ['none', 'none', 'block', 'block'],
         }}
       >
         <Button
           variant="nav"
-          onClick={(e) => {
+          onClick={() => {
             setMenuOpen(!menuOpen)
           }}
         >
@@ -122,7 +122,7 @@ export default function AccountDropdown(props: AccountDropdownProps) {
       >
         <Button
           variant="nav"
-          onClick={(e) => {
+          onClick={() => {
             setMenuOpen(!menuOpen)
           }}
         >
@@ -145,7 +145,7 @@ export default function AccountDropdown(props: AccountDropdownProps) {
         >
           <Button
             variant="nav"
-            onClick={(e) => {
+            onClick={() => {
               setMenuOpen(!menuOpen)
             }}
           >
