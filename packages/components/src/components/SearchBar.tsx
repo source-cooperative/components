@@ -1,5 +1,6 @@
-import { Box, Grid, Input } from "theme-ui";
-import Button from "./Button";
+import { FormEvent, MouseEvent } from 'react'
+import { Box, Grid, Input } from 'theme-ui'
+import Button from './Button'
 
 interface SearchBarProps {
 	placeholder?: string;
@@ -9,53 +10,56 @@ interface SearchBarProps {
 }
 
 const defaultProps = {
-	placeholder: "Search",
-	defaultValue: null,
-	buttonText: "Browse",
-	handleSubmit: null,
-};
-
-export default function SearchBar(props: SearchBarProps) {
-	const { placeholder, defaultValue, buttonText, handleSubmit } = props;
-
-	const handler = (e) => {
-		e.stopPropagation();
-		e.preventDefault();
-
-		const form = e.currentTarget.parentElement.parentElement;
-		let body;
-
-		if (form && form instanceof HTMLFormElement) {
-			const formData = new FormData(form);
-
-			// map the entire form data to JSON for the request body
-			body = Object.fromEntries(formData);
-			const method = e.currentTarget;
-			body = {
-				...body,
-				...{ [method.name]: method.value },
-			};
-
-			if (handleSubmit) {
-				handleSubmit(body.query);
-			}
-		}
-	};
-
-	return (
-		<Box as="form" onSubmit={handler} sx={{ width: "100%" }}>
-			<Grid sx={{ gridGap: 3, gridTemplateColumns: "auto max-content" }}>
-				<Input
-					placeholder={placeholder}
-					name="query"
-					defaultValue={defaultValue}
-				/>
-				<Button variant="nav" onClick={handler}>
-					{buttonText}
-				</Button>
-			</Grid>
-		</Box>
-	);
+  placeholder: 'Search',
+  defaultValue: null,
+  buttonText: 'Browse',
+  handleSubmit: null,
 }
 
-SearchBar.defaultProps = defaultProps;
+function SearchBar(props: SearchBarProps) {
+  const { placeholder, defaultValue, buttonText, handleSubmit } = props
+
+  function submitForm(form: HTMLFormElement) {
+    const formData = new FormData(form)
+    const query = formData.get('query')
+    if (handleSubmit && query && typeof query === 'string') {
+      handleSubmit(query)
+    }
+  }
+  function onFormSubmit(e: FormEvent) {
+    e.stopPropagation()
+    e.preventDefault()
+    const form = e.currentTarget
+
+    if (form instanceof HTMLFormElement) {
+      submitForm(form)
+    }
+  }
+  function onButtonClick(e: MouseEvent) {
+    e.stopPropagation()
+    e.preventDefault()
+    const element = e.currentTarget
+    const form = element.parentElement?.parentElement
+    if (form && form instanceof HTMLFormElement) {
+      submitForm(form)
+    }
+  }
+
+  return (
+    <Box as="form" onSubmit={onFormSubmit} sx={{ width: '100%' }}>
+      <Grid sx={{ gridGap: 3, gridTemplateColumns: 'auto max-content' }}>
+        <Input
+          placeholder={placeholder}
+          name="query"
+          defaultValue={defaultValue}
+        />
+        <Button variant="nav" onClick={onButtonClick}>
+          {buttonText}
+        </Button>
+      </Grid>
+    </Box>
+  )
+}
+
+SearchBar.defaultProps = defaultProps
+export default SearchBar
