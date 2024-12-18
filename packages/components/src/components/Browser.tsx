@@ -54,7 +54,7 @@ function humanFileSize(bytes: number, si = false, dp = 1) {
   return bytes.toFixed(dp) + ' ' + units[u]
 }
 
-function FileIcon({ color = null }: { color: string }) {
+function FileIcon({ color }: { color: string }) {
   return (
     <SVG
       viewBox="0 0 16 16"
@@ -77,7 +77,7 @@ function FileIcon({ color = null }: { color: string }) {
   )
 }
 
-function FolderIcon({ color = null }: { color: string }) {
+function FolderIcon({ color }: { color: string }) {
   return (
     <SVG
       viewBox="0 0 16 16"
