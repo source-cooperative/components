@@ -3,6 +3,7 @@
     "include": [
         "src",
         "test",
+        "**/*.mjs",
         "**/*.js",
         "**/*.ts",
         "**/*.tsx"

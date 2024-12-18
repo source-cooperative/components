@@ -1,6 +1,7 @@
 import {
   BaseLayout,
   FieldState,
+  FieldStateValue,
   FieldType,
   Form,
   FormResult,
@@ -10,26 +11,28 @@ import { useState } from 'react'
 import { Heading } from 'theme-ui'
 import { sideNavLinks } from '../../utils/constants'
 
+interface FormFieldState { state: FieldStateValue; message?: string }
+
 export default function FormPage() {
-  const [usernameState, setUsernameState] = useState({
+  const [usernameState, setUsernameState] = useState<FormFieldState>({
     state: FieldState.INVALID,
-    message: null,
+    message: undefined,
   })
-  const [passwordState, setPasswordState] = useState({
+  const [passwordState, setPasswordState] = useState<FormFieldState>({
     state: FieldState.INVALID,
-    message: null,
+    message: undefined,
   })
-  const [accountState, setAccountState] = useState({
+  const [accountState, setAccountState] = useState<FormFieldState>({
     state: FieldState.VALID,
-    message: null,
+    message: undefined,
   })
-  const [tosState, setTosState] = useState({
+  const [tosState, setTosState] = useState<FormFieldState>({
     state: FieldState.INVALID,
-    message: null,
+    message: undefined,
   })
-  const [tagsState, setTagsState] = useState({
+  const [tagsState, setTagsState] = useState<FormFieldState>({
     state: FieldState.INVALID,
-    message: null,
+    message: undefined,
   })
 
   const fields = [
@@ -41,7 +44,7 @@ export default function FormPage() {
       defaultValue: 'kevin@kb.gg',
       state: usernameState,
       validationDelay: 500,
-      setState: (state: { state: FieldState; message?: string }) => {
+      setState: (state: FormFieldState) => {
         setUsernameState({
           state: state.state,
           message: state.message,
@@ -68,7 +71,7 @@ export default function FormPage() {
       title: 'Password',
       state: passwordState,
       validationDelay: 1,
-      setState: (state: { state: FieldState; message?: string }) => {
+      setState: (state: FormFieldState) => {
         setPasswordState({
           state: state.state,
           message: state.message,
@@ -88,7 +91,7 @@ export default function FormPage() {
       title: 'Account ID',
       state: accountState,
       validationDelay: 1,
-      setState: (state: { state: FieldState; message?: string }) => {
+      setState: (state: FormFieldState) => {
         setAccountState({
           state: state.state,
           message: state.message,
@@ -122,7 +125,7 @@ export default function FormPage() {
       validationDelay: 1,
       columnStart: 0,
       columnEnd: 2,
-      setState(state: { state: FieldState; message?: string }) {
+      setState(state: FormFieldState) {
         setTagsState({
           state: state.state,
           message: state.message,
@@ -139,7 +142,7 @@ export default function FormPage() {
       validationDelay: 1,
       columnStart: 0,
       columnEnd: 2,
-      setState(state: { state: FieldState; message?: string }) {
+      setState(state: FormFieldState) {
         setTosState({
           state: state.state,
           message: state.message,
@@ -150,7 +153,7 @@ export default function FormPage() {
 
   function onSubmit(values: Record<string, string>): Promise<FormResult> {
     console.log(values)
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
           state: FormResultState.FAILURE,

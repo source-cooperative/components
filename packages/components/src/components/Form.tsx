@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react'
+import { ResponsiveStyleValue } from '@theme-ui/css'
+import type { Property } from 'csstype'
+import { FormEvent, ReactNode, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import {
   Box,
@@ -10,38 +12,41 @@ import {
   Text,
   Textarea,
 } from 'theme-ui'
+import type { FieldStateValue, FieldTypeValue, FormResultStateValue } from '../lib/enums'
 import { FieldState, FieldType, FormResultState } from '../lib/enums'
 import Button from './Button'
 
-interface FormField {
-	type: FieldType;
+export interface FormFieldState {
+  state: FieldStateValue;
+  message?: string;
+}
+
+interface FormFieldData {
+	type: FieldTypeValue;
 	title: string;
 	id: string;
 	defaultValue?: string;
 	required?: boolean;
 	showRequired?: boolean;
-	columnStart?: any;
-	columnEnd?: any;
-	properties?: any;
-	state: {
-		state: FieldState;
-		message?: string;
-	};
-	setState: (state: { state: FieldState; message?: string }) => void;
+	columnStart?: Property.GridColumnStart;
+	columnEnd?: Property.GridColumnEnd;
+	properties?: {options?: {value: string; text: string}[]};
+	state: FormFieldState;
+	setState: (state: FormFieldState) => void;
 	onLoad?: () => void;
 	validationDelay?: number;
 	onValidation?: (val: string) => void;
 }
 
 export interface FormResult {
-	state: FormResultState;
+	state: FormResultStateValue;
 	message?: string;
 	onSuccess?: () => void;
 }
 
 interface FormProps {
-	fields: FormField[];
-	gridColumns?: any;
+	fields: FormFieldData[];
+	gridColumns?: ResponsiveStyleValue<string | number>;
 	active?: boolean;
 	submitText?: string;
 	onSubmit: (values: Record<string, string>) => Promise<FormResult>;
@@ -52,209 +57,178 @@ const defaultProps = {
   active: true,
 }
 
-function FormField(field: FormField) {
-  let fieldMessage = null
-
-  if (field.state.state == FieldState.INVALID && field.state.message) {
-    fieldMessage =
-			<Text sx={{ color: 'red', fontFamily: 'mono', fontSize: 0 }}>
-			  {field.state.message}
-			</Text>
-
+function getFieldMessage(field: FormFieldData): ReactNode {
+  if (!field.state.message) {
+    return <></>
   }
+  const color = field.state.state === FieldState.INVALID ? 'red' :
+    field.state.state === FieldState.WARNING || field.state.state === FieldState.VALIDATING ? 'orange' :
+      'green'
 
-  if (
-    (field.state.state == FieldState.WARNING ||
-			field.state.state == FieldState.VALIDATING) &&
-		field.state.message
-  ) {
-    fieldMessage =
-			<Text sx={{ color: 'orange', fontFamily: 'mono', fontSize: 0 }}>
-			  {field.state.message}
-			</Text>
+  return <Text sx={{
+    color,
+    fontFamily: 'mono',
+    fontSize: 0,
+  }}>{field.state.message}</Text>
+}
 
+function getInputElement(field: FormFieldData, onValueChange: (value: string) => void): ReactNode {
+  switch (field.type) {
+  case FieldType.TEXT:
+    return <Input
+      onChange={(e) => {
+        onValueChange(e.target.value)
+      }}
+      defaultValue={field.defaultValue}
+      name={field.id}
+      id={field.id}
+    />
+  case FieldType.PASSWORD:
+    return <Input
+      onChange={(e) => {
+        onValueChange(e.target.value)
+      }}
+      defaultValue={field.defaultValue}
+      name={field.id}
+      id={field.id}
+      type="password"
+    />
+  case FieldType.EMAIL:
+    return <Input
+      onChange={(e) => {
+        onValueChange(e.target.value)
+      }}
+      defaultValue={field.defaultValue}
+      name={field.id}
+      id={field.id}
+      type="email"
+    />
+  case FieldType.SELECT:
+    return <Select
+      defaultValue={field.defaultValue}
+      name={field.id}
+      id={field.id}
+      onChange={(e) => {
+        onValueChange(e.target.value)
+      }}
+    >
+      {
+        (field.properties?.options ?? []).map((option, i) => {
+          return (
+            <option
+              key={`form-field-select-${i}`}
+              value={option.value}
+              selected={field.defaultValue === option.value}
+            >
+              {option.text}
+            </option>
+          )
+        })
+      }
+    </Select>
+  case FieldType.TEXTAREA:
+    return <Textarea
+      name={field.id}
+      id={field.id}
+      defaultValue={field.defaultValue}
+      onChange={(e) => {
+        onValueChange(e.target.value)
+      }}
+    />
+  case FieldType.CHECKBOX:
+    return <Box
+      sx={{
+        gridColumnStart: field.columnStart,
+        gridColumnEnd: field.columnEnd,
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <Label>
+        <Checkbox
+          onChange={(e) => {
+            onValueChange(e.target.checked ? 'checked' : 'not_checked')
+          }}
+          defaultChecked={field.defaultValue === 'checked'}
+          name={field.id}
+          id={field.id}
+        />
+        {field.title}
+        {field.required && field.showRequired ?
+          <Text sx={{ color: 'red', pl: 1 }}>*</Text>
+          :
+          <></>
+        }
+      </Label>
+    </Box>
+  default:
+    return <></>
   }
+}
 
-  if (field.state.state == FieldState.VALID && field.state.message) {
-    fieldMessage =
-			<Text sx={{ color: 'green', fontFamily: 'mono', fontSize: 0 }}>
-			  {field.state.message}
-			</Text>
+function FormField(field: FormFieldData) {
+  const setTimeoutId = useState<ReturnType<typeof setTimeout> | undefined>(undefined)[1]
+  const setHasLoaded = useState(false)[1]
 
-  }
+  const onValueChange = useCallback(
+    (value: string) => {
+      if (value === '' && field.required) {
+        field.setState({
+          state: FieldState.INVALID,
+          message: undefined,
+        })
+        return
+      }
 
-  const [value, setValue] = useState(
-    field.defaultValue ? field.defaultValue : '',
+      if (value === '' && !field.required) {
+        field.setState({
+          state: FieldState.VALID,
+          message: undefined,
+        })
+        return
+      }
+
+      if (
+        field.type === FieldType.CHECKBOX &&
+			field.required) {
+        if (value === 'checked') {
+          field.setState({
+            state: FieldState.VALID,
+            message: undefined,
+          })
+        } else if (value === 'not_checked') {
+          field.setState({
+            state: FieldState.INVALID,
+            message: undefined,
+          })
+        }
+      }
+
+      if (!field.onValidation) {
+        return
+      }
+
+      setTimeoutId(timeoutId => {
+        clearTimeout(timeoutId)
+        return setTimeout(
+          () => { field.onValidation?.(value) },
+          field.validationDelay ? field.validationDelay : 1000,
+        )
+      })
+    },
+    [field, setTimeoutId],
   )
 
   useEffect(() => {
-    if (field.onLoad) {
-      field.onLoad()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (value == '' && field.required) {
-      field.setState({
-        state: FieldState.INVALID,
-        message: null,
-      })
-      return
-    }
-
-    if (value == '' && !field.required) {
-      field.setState({
-        state: FieldState.VALID,
-        message: null,
-      })
-      return
-    }
-
-    if (
-      field.type == FieldType.CHECKBOX &&
-			field.required &&
-			value == 'checked'
-    ) {
-      field.setState({
-        state: FieldState.VALID,
-        message: null,
-      })
-    } else if (
-      field.type == FieldType.CHECKBOX &&
-			field.required &&
-			value == 'not_checked'
-    ) {
-      field.setState({
-        state: FieldState.INVALID,
-        message: null,
-      })
-    }
-
-    if (!field.onValidation) {
-      return
-    }
-
-    const timeoutId = setTimeout(
-      () => { field.onValidation(value) },
-      field.validationDelay ? field.validationDelay : 1000,
-    )
-    return () => { clearTimeout(timeoutId) }
-  }, [value])
-
-  let inputElement
-
-  if (field.type == FieldType.TEXT) {
-    inputElement =
-			<Input
-			  onChange={(e) => {
-			    setValue(e.target.value)
-			  }}
-			  defaultValue={field.defaultValue}
-			  name={field.id}
-			  id={field.id}
-			/>
-
-  }
-
-  if (field.type == FieldType.PASSWORD) {
-    inputElement =
-			<Input
-			  onChange={(e) => {
-			    setValue(e.target.value)
-			  }}
-			  defaultValue={field.defaultValue}
-			  name={field.id}
-			  id={field.id}
-			  type="password"
-			/>
-
-  }
-
-  if (field.type == FieldType.EMAIL) {
-    inputElement =
-			<Input
-			  onChange={(e) => {
-			    setValue(e.target.value)
-			  }}
-			  defaultValue={field.defaultValue}
-			  name={field.id}
-			  id={field.id}
-			  type="email"
-			/>
-
-  }
-
-  if (field.type == FieldType.SELECT) {
-    inputElement =
-			<Select
-			  defaultValue={field.defaultValue}
-			  name={field.id}
-			  id={field.id}
-			  onChange={(e) => {
-			    setValue(e.target.value)
-			  }}
-			>
-			  {field.properties?.options ?
-			    field.properties.options.map((option, i) => {
-			      return (
-			        <option
-			          key={`form-field-select-${i}`}
-			          value={option.value}
-			          selected={field.defaultValue == option.value}
-			        >
-			          {option.text}
-			        </option>
-			      )
-			    })
-				 :
-			    <></>
-			  }
-			</Select>
-
-  }
-
-  if (field.type == FieldType.TEXTAREA) {
-    inputElement =
-			<Textarea
-			  name={field.id}
-			  id={field.id}
-			  defaultValue={field.defaultValue}
-			  onChange={(e) => {
-			    setValue(e.target.value)
-			  }}
-			/>
-
-  }
-
-  if (field.type == FieldType.CHECKBOX) {
-    return (
-      <Box
-        sx={{
-          gridColumnStart: field.columnStart,
-          gridColumnEnd: field.columnEnd,
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <Label>
-          <Checkbox
-            onChange={(e) => {
-              setValue(e.target.checked ? 'checked' : 'not_checked')
-            }}
-            defaultChecked={field.defaultValue == 'checked'}
-            name={field.id}
-            id={field.id}
-          />
-          {field.title}
-          {field.required && field.showRequired ?
-            <Text sx={{ color: 'red', pl: 1 }}>*</Text>
-					 :
-            <></>
-          }
-        </Label>
-      </Box>
-    )
-  }
+    setHasLoaded((hasLoaded) => {
+      if (hasLoaded) {
+        return true
+      }
+      field.onLoad?.()
+      onValueChange(field.defaultValue ? field.defaultValue : '')
+      return true
+    })
+  }, [ field, onValueChange, setHasLoaded ])
 
   return (
     <Box
@@ -271,8 +245,8 @@ function FormField(field: FormField) {
           <></>
         }
       </Label>
-      {inputElement}
-      {fieldMessage ? fieldMessage : <></>}
+      {getInputElement(field, onValueChange)}
+      {getFieldMessage(field)}
     </Box>
   )
 }
@@ -282,48 +256,50 @@ export default function Form(props: FormProps) {
   const [submitting, setSubmitting] = useState(false)
   const [submittable, setSubmittable] = useState(false)
 
-  function checkSubmittable() {
+  useEffect(() => {
     let submittable = true
     fields.forEach((field) => {
       if (
-        field.state.state == FieldState.INVALID ||
-				field.state.state == FieldState.VALIDATING
+        field.state.state === FieldState.INVALID ||
+				field.state.state === FieldState.VALIDATING
       ) {
         submittable = false
       }
     })
 
     setSubmittable(submittable)
-  }
-
-  useEffect(() => {
-    checkSubmittable()
   }, [fields])
 
-  function submitHandler(e) {
+  function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     e.stopPropagation()
 
     setSubmitting(true)
 
-    const values = {}
-
+    const formData = new FormData(e.currentTarget)
+    const values: Record<string, string> = {}
     fields.forEach((field) => {
-      values[field.id] = e.target.elements[field.id].value
+      const name = field.id
+      const value = formData.get(name)
+      if (value === null || value instanceof File) {
+        /// file upload is not supported
+        return
+      }
+      values[field.id] = value
     })
 
     onSubmit(values).then((result) => {
-      if (result.state == FormResultState.SUCCESS) {
-        result.onSuccess()
+      if (result.state === FormResultState.SUCCESS) {
+        result.onSuccess?.()
       } else {
-        toast.error(result.message)
+        toast.error(result.message ?? 'An error occurred while submitting the form')
       }
       setSubmitting(false)
-    })
+    }).catch((e: unknown) => { console.error(e) })
   }
 
   return (
-    <Box as="form" onSubmit={submitHandler}>
+    <Box as="form" onSubmit={(e) => { submitHandler(e as unknown as FormEvent<HTMLFormElement>) }}>
       <Grid columns={gridColumns} gap={3} mb={3}>
         {fields.map((field, i) => {
           return <FormField key={`form-field-${i}`} {...field} />

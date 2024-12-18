@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint'
 import { sharedJsRules, sharedTsRules } from '../../eslint.config.mjs'
 
 export default tseslint.config(
-  { ignores: ['coverage/', 'dist/', 'es/'] },
+  { ignores: ['dst/'] },
   {
     settings: { react: { version: '18.3' } },
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylisticTypeChecked],
@@ -16,7 +16,7 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.eslint.json'],
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -40,7 +40,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['test/**/*.{ts,tsx}', '*.{js,ts}'],
+    files: ['test/**/*.{ts,tsx}', '*.{js,mjs}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: {
@@ -50,7 +50,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.js'],
+    files: ['**/*.js', '**/*.mjs'],
     ...tseslint.configs.disableTypeChecked,
   },
 )
