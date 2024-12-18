@@ -1,8 +1,8 @@
-import theme from '@source-cooperative/theme'
 import type { AppProps } from 'next/app'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/globals.css'
+import { theme } from '../utils/theme'
 
 import { SourceProvider } from '@source-cooperative/components'
 
