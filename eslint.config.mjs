@@ -9,7 +9,6 @@ export const sharedJsRules = {
   'comma-dangle': ['error', 'always-multiline'],
   'eol-last': 'error',
   eqeqeq: 'error',
-  'func-style': ['error', 'declaration'],
   indent: ['error', 2],
   'no-constant-condition': 'off',
   'no-extra-parens': 'error',
