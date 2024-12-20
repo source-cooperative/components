@@ -164,15 +164,13 @@ export default function FormPage() {
   }
 
   return (
-    <>
-      <BaseLayout sideNavLinks={sideNavLinks}>
-        <Heading as="h1">Form</Heading>
-        <Form
-          onSubmit={onSubmit}
-          gridColumns={['auto', 'auto', '1fr 1fr', '1fr 1fr']}
-          fields={fields}
-        />
-      </BaseLayout>
-    </>
+    <BaseLayout sideNavLinks={sideNavLinks}>
+      <Heading as="h1">Form</Heading>
+      <Form
+        onSubmit={onSubmit}
+        gridColumns={['auto', 'auto', '1fr 1fr', '1fr 1fr']}
+        fields={fields}
+      />
+    </BaseLayout>
   )
 }

@@ -51,6 +51,9 @@ export default function Home() {
         <li>
           <Link href="/form">Form</Link>
         </li>
+        <li>
+          <Link href="/viewers">Viewers</Link>
+        </li>
       </ul>
     </BaseLayout>
   )

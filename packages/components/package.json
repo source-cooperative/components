@@ -2,6 +2,11 @@
   "name": "@source-cooperative/components",
   "version": "1.0.15",
   "description": "Source Cooperative React Components",
+  "source": "src/index.ts",
+  "exports": {
+    "require": "./dst/index.js",
+    "default": "./dst/index.modern.js"
+  },
   "main": "dst/index.js",
   "module": "dst/index.esm.js",
   "repository": {
@@ -22,27 +27,37 @@
     "url": "https://github.com/source-cooperative/components/issues"
   },
   "dependencies": {
+    "@mdx-js/mdx": "3.1.0",
+    "@mdx-js/react": "3.1.0",
     "@theme-ui/color": "0.16.1",
     "@theme-ui/mdx": "0.16.1",
     "@theme-ui/prism": "0.16.1",
+    "d3-fetch": "3.0.1",
+    "ol": "7.5.0",
+    "ol-pmtiles": "0.3.0",
+    "pmtiles": "2.10.0",
     "react-hot-toast": "2.4.1",
     "react-loading-skeleton": "3.5.0",
+    "rehype-slug": "6.0.0",
+    "remark-gfm": "4.0.0",
     "usehooks-ts": "2.9.1"
   },
   "peerDependencies": {
-    "next": "13.*",
-    "theme-ui": "0.16.*",
     "@emotion/react": "11.*",
+    "next": "13.*",
     "react": "18.*",
-    "react-dom": "18.*"
+    "react-dom": "18.*",
+    "theme-ui": "0.16.*"
   },
   "devDependencies": {
+    "@types/d3-fetch": "3.0.7",
+    "@types/mdx": "2.0.13",
     "microbundle": "0.13.0",
     "rimraf": "3.0.2"
   },
   "homepage": "https://github.com/source-cooperative/components#readme",
   "scripts": {
-    "build": "rimraf dst && microbundle src/index.tsx -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment",
+    "build": "rimraf dst && microbundle src/index.ts -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment",
     "lint": "eslint .",
     "prepare": "npm run build",
     "typecheck": "tsc --noEmit"
