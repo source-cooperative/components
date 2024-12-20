@@ -1,7 +1,7 @@
-import { CodeBlock } from '@source-cooperative/components'
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { Box, Paragraph } from 'theme-ui'
+import { default as CodeBlock } from '../../CodeBlock'
 import { FileProps } from '../types'
 
 export function TextViewer(props: FileProps) {

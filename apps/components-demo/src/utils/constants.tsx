@@ -15,4 +15,8 @@ export const sideNavLinks = [
     href: '/form',
     title: 'Form',
   },
+  {
+    href: '/viewers',
+    title: 'Viewers',
+  },
 ]

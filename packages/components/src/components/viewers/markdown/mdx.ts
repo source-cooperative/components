@@ -1,21 +1,18 @@
 import { evaluate } from '@mdx-js/mdx'
 import type { EvaluateOptions } from '@mdx-js/mdx/lib/util/resolve-evaluate-options.js'
-import { useMDXComponents } from '@mdx-js/react'
-import type { JSX } from 'react'
-import { Fragment } from 'react'
+import type { MDXComponents } from 'mdx/types.js'
+import { MDXModule } from 'mdx/types.js'
 import * as runtime from 'react/jsx-runtime'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 
-export type Content = () => JSX.Element
-export async function generateContent(text: string): Promise<Content> {
+export function generateContent(text: string, components: MDXComponents): Promise<MDXModule> {
   const evaluateOptions: Readonly<EvaluateOptions> = {
-    Fragment, // TODO(SL): or undefined? see https://github.com/mdx-js/mdx/pull/2465#issuecomment-2203046535
+    Fragment: undefined, // see https://github.com/mdx-js/mdx/pull/2465#issuecomment-2203046535
     ...runtime,
-    useMDXComponents, // is useful only if the context exists (eg, using <SourceProvider> from lib/provider.ts around the app)
+    useMDXComponents: () => components,
     rehypePlugins: [rehypeSlug],
     remarkPlugins: [remarkGfm],
   }
-  const { default: content } = await evaluate(text, evaluateOptions)
-  return () => content({}) // No props are needed
+  return evaluate(text, evaluateOptions)
 }

@@ -131,14 +131,17 @@ export function MapViewer(props: FileProps) {
   }, [map, filename, url, rawColors])
 
   const zoom = useMemo(() => {
-    const view = map?.getView()
-    const zoom = view?.getZoom()
-    if (!view || zoom === undefined) {
-      return
+    function changeZoom(increment: number) {
+      const view = map?.getView()
+      const zoom = view?.getZoom()
+      if (!view || zoom === undefined) {
+        return
+      }
+      view.setZoom(zoom + increment)
     }
     return {
-      increment: () => { view.setZoom(zoom + 1) },
-      decrement: () => { view.setZoom(zoom - 1) },
+      increment: () => { changeZoom(1) },
+      decrement: () => { changeZoom(-1) },
     }
   }, [map])
 
@@ -194,7 +197,7 @@ export function MapViewer(props: FileProps) {
                 justifyContent: 'center',
                 alignItems: 'last baseline',
               }}
-              onClick={zoom?.increment}
+              onClick={zoom.increment}
             >
               <Text>+</Text>
             </Flex>
@@ -215,7 +218,7 @@ export function MapViewer(props: FileProps) {
                 justifyContent: 'center',
                 alignItems: 'end',
               }}
-              onClick={zoom?.decrement}
+              onClick={zoom.decrement}
             >
               <Text>-</Text>
             </Flex>

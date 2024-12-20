@@ -1,4 +1,3 @@
-import { MDXProvider, useMDXComponents } from '@mdx-js/react'
 import type { ThemeProviderProps } from '@theme-ui/core'
 import { useThemedStylesWithMdx } from '@theme-ui/mdx'
 import Prism from '@theme-ui/prism'
@@ -46,15 +45,14 @@ const components: Readonly<MDXComponents> = {
   },
 } as const
 
+export function SourceComponents() {
+  return useThemedStylesWithMdx(components)
+}
+
 export function SourceProvider({ children, theme }: {children?: ReactNode, theme: ThemeProviderProps['theme'] }) {
-  const componentsWithStyles = useThemedStylesWithMdx(
-    useMDXComponents(components),
-  )
   return (
     <ThemeUIProvider theme={theme}>
-      <MDXProvider components={componentsWithStyles}>
-        {children}
-      </MDXProvider>
+      {children}
     </ThemeUIProvider>
   )
 }

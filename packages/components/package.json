@@ -2,6 +2,11 @@
   "name": "@source-cooperative/components",
   "version": "1.0.15",
   "description": "Source Cooperative React Components",
+  "source": "src/index.ts",
+  "exports": {
+    "require": "./dst/index.js",
+    "default": "./dst/index.modern.js"
+  },
   "main": "dst/index.js",
   "module": "dst/index.esm.js",
   "repository": {
@@ -52,7 +57,7 @@
   },
   "homepage": "https://github.com/source-cooperative/components#readme",
   "scripts": {
-    "build": "rimraf dst && microbundle src/index.tsx -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment",
+    "build": "rimraf dst && microbundle src/index.ts -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment",
     "lint": "eslint .",
     "prepare": "npm run build",
     "typecheck": "tsc --noEmit"

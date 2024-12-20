@@ -1,8 +1,11 @@
-import { Button } from '@source-cooperative/components'
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Grid, Heading, Text } from 'theme-ui'
+import { default as Button } from '../Button'
+import { map } from './map'
+import { markdown } from './markdown'
+import { table } from './table'
+import { text } from './text'
 import { FileProps, ViewerMetadata } from './types'
-import { ViewerId, viewers } from './viewers'
 
 interface ViewerLoaderProps {
   url: string;
@@ -19,6 +22,14 @@ interface State {
   fileProps: FileProps;
   compatibleViewers: CompatibleViewer[];
 }
+
+const viewers = {
+  markdown,
+  text,
+  map,
+  table,
+} as const
+export type ViewerId = keyof typeof viewers
 
 export function ViewerLoader(props: ViewerLoaderProps) {
   const { url, viewerId, onViewerSelected } = props
