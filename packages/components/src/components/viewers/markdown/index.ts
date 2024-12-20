@@ -5,10 +5,7 @@ export const markdown: ViewerMetadata = {
   title: 'Markdown Viewer',
   description: 'A markdown viewer.',
   compatibilityCheck: (props: FileProps) => {
-    if (props.filename.toLowerCase().endsWith('.md')) {
-      return true
-    }
-    return false
+    return ['.md', '.mdx'].some((key) => props.filename.toLowerCase().endsWith(key) )
   },
   viewer: MarkdownViewer,
 }

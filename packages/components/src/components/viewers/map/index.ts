@@ -5,15 +5,7 @@ export const map: ViewerMetadata = {
   title: 'Map Viewer',
   description: 'A map viewer.',
   compatibilityCheck: (props: FileProps) => {
-    if (props.filename.toLowerCase().endsWith('.pmtiles')) {
-      return true
-    }
-
-    if (props.filename.toLowerCase().endsWith('.geojson')) {
-      return true
-    }
-
-    return false
+    return ['.pmtiles', '.geojson'].some((key) => props.filename.toLowerCase().endsWith(key) )
   },
   viewer: MapViewer,
 }
