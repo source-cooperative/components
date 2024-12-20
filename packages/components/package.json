@@ -27,6 +27,7 @@
     "@theme-ui/color": "0.16.1",
     "@theme-ui/mdx": "0.16.1",
     "@theme-ui/prism": "0.16.1",
+    "d3-fetch": "3.0.1",
     "ol": "7.5.0",
     "ol-pmtiles": "0.3.0",
     "pmtiles": "2.10.0",
@@ -44,6 +45,7 @@
     "theme-ui": "0.16.*"
   },
   "devDependencies": {
+    "@types/d3-fetch": "3.0.7",
     "@types/mdx": "2.0.13",
     "microbundle": "0.13.0",
     "rimraf": "3.0.2"
