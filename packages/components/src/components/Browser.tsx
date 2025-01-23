@@ -19,15 +19,8 @@ interface Listing {
 interface BrowserResult {
 	prev: boolean;
 	next?: string;
-	breadcrumbs: Breadcrumb[];
+	breadcrumbs?: Breadcrumb[];
 	items?: Listing[];
-}
-
-const defaultProps = {
-  prev: false,
-  next: null,
-  breadcrumbs: [],
-  items: null,
 }
 
 function humanFileSize(bytes: number, si = false, dp = 1) {
@@ -122,8 +115,7 @@ function Item(props: Listing) {
   }
 }
 
-export default function Browser(props: BrowserResult) {
-  const { prev, next, breadcrumbs, items } = props
+export default function Browser({ prev = false, next, breadcrumbs, items } : BrowserResult) {
   const router = useRouter()
 
   return (
@@ -136,7 +128,7 @@ export default function Browser(props: BrowserResult) {
           overflowWrap: 'break-word',
         }}
       >
-        {breadcrumbs.length === 0 ?
+        {!breadcrumbs || breadcrumbs.length === 0 ?
           <Skeleton />
 				 :
           <>
@@ -212,5 +204,3 @@ export default function Browser(props: BrowserResult) {
     </Box>
   )
 }
-
-Browser.defaultProps = defaultProps

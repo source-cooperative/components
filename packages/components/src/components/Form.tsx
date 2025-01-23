@@ -52,11 +52,6 @@ interface FormProps {
 	onSubmit: (values: Record<string, string>) => Promise<FormResult>;
 }
 
-const defaultProps = {
-  gridColumns: ['auto'],
-  active: true,
-}
-
 function getFieldMessage(field: FormFieldData): ReactNode {
   if (!field.state.message) {
     return <></>
@@ -251,8 +246,7 @@ function FormField(field: FormFieldData) {
   )
 }
 
-export default function Form(props: FormProps) {
-  const { fields, gridColumns, active, submitText, onSubmit } = props
+export default function Form({ fields, gridColumns, active = true, submitText = 'Submit', onSubmit } : FormProps) {
   const [submitting, setSubmitting] = useState(false)
   const [submittable, setSubmittable] = useState(false)
 
@@ -300,16 +294,14 @@ export default function Form(props: FormProps) {
 
   return (
     <Box as="form" onSubmit={(e) => { submitHandler(e as unknown as FormEvent<HTMLFormElement>) }}>
-      <Grid columns={gridColumns} gap={3} mb={3}>
+      <Grid columns={gridColumns ?? ['auto']} gap={3} mb={3}>
         {fields.map((field, i) => {
           return <FormField key={`form-field-${i}`} {...field} />
         })}
       </Grid>
       <Button disabled={!active || submitting || !submittable}>
-        {submitText ? submitText : 'Submit'}
+        {submitText}
       </Button>
     </Box>
   )
 }
-
-Form.defaultProps = defaultProps

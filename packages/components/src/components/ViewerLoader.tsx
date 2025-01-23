@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Grid, Heading, Text } from 'theme-ui'
-import { default as Button } from '../Button'
-import { map } from './map'
-import { markdown } from './markdown'
-import { table } from './table'
-import { text } from './text'
-import { FileProps, ViewerMetadata } from './types'
+import { default as Button } from './Button'
+import { ViewerId, viewers } from './viewers'
+import { FileProps, ViewerMetadata } from './viewers/types'
 
 interface ViewerLoaderProps {
   url: string;
@@ -23,15 +20,7 @@ interface State {
   compatibleViewers: CompatibleViewer[];
 }
 
-const viewers = {
-  markdown,
-  text,
-  map,
-  table,
-} as const
-export type ViewerId = keyof typeof viewers
-
-export function ViewerLoader(props: ViewerLoaderProps) {
+export default function ViewerLoader(props: ViewerLoaderProps) {
   const { url, viewerId, onViewerSelected } = props
   const [state, setState] = useState<State | undefined>(undefined)
 
