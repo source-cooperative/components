@@ -37,7 +37,7 @@ export function ViewerLoader(props: ViewerLoaderProps) {
 
   const onClick = useCallback((id?: ViewerId) => {
     return () => {
-	  onViewerSelected?.(id)
+      onViewerSelected?.(id)
     }
   }, [onViewerSelected])
 
@@ -93,7 +93,7 @@ export function ViewerLoader(props: ViewerLoaderProps) {
           />
         }
         <Box sx={{ py: 2 }}>
-          <Button onClick={() => { onClick() }}>Change View</Button>
+          <Button onClick={onClick()}>Change View</Button>
         </Box>
       </Box>
     )
@@ -108,7 +108,7 @@ export function ViewerLoader(props: ViewerLoaderProps) {
           :
           compatibleViewers.map((viewer, i) => {
             const { id, metadata } = viewer
-            return <Button key={`viewer-${i}`} onClick={() => onClick(id)}>{metadata.title}</Button>
+            return <Button key={`viewer-${i}`} onClick={onClick(id)}>{metadata.title}</Button>
           })
         }
       </Grid>

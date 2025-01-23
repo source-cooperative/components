@@ -1,10 +1,8 @@
+import { SourceProvider, theme } from '@source-cooperative/components'
 import type { AppProps } from 'next/app'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/globals.css'
-import { theme } from '../utils/theme'
-
-import { SourceProvider } from '@source-cooperative/components'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

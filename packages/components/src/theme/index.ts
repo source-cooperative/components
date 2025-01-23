@@ -6,8 +6,7 @@ export const theme: Theme = {
   fonts: {
     body: 'IBM Plex Sans, relative-book-pro, Roboto, system-ui, -apple-system, BlinkMacSystemFont',
     faux: 'IBM Plex Sans, relative-faux-book-pro, Roboto, system-ui, -apple-system, BlinkMacSystemFont',
-    heading:
-              'IBM Plex Sans, relative-medium-pro, Roboto, system-ui, -apple-system, BlinkMacSystemFont',
+    heading: 'IBM Plex Sans, relative-medium-pro, Roboto, system-ui, -apple-system, BlinkMacSystemFont',
     mono: 'BerkleyMono, relative-mono-11-pitch-pro, Menlo, monospace',
   },
   fontSizes: [12, 14, 16, 18, 24, 34, 48, 64, 80, 96, 128],
@@ -512,7 +511,7 @@ export const theme: Theme = {
   },
   breakpoints: ['40em', '64em', '102em'],
   config: {
-    initialColorModeName: 'light',
+    initialColorModeName: 'dark',
     printColorModeName: 'light',
     useColorSchemeMediaQuery: false,
   },
