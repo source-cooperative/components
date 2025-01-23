@@ -31,16 +31,10 @@ interface LayoutProps {
 	messages?: AlertData[];
 }
 
-const defaultProps = {
-  title: 'Source Cooperative',
-  description:
-		'Source Cooperative is a neutral, non-profit data-sharing utility that allows trusted organizations to share data without purchasing a data portal SaaS subscription or managing infrastructure. Source allows organizations to share data using standard HTTP methods rather than requiring proprietary APIs or SaaS interfaces. It is currently in private beta.',
-}
-
 export default function BaseLayout(props: LayoutProps) {
   const {
-    title,
-    description,
+    title = 'Source Cooperative',
+    description = 'Source Cooperative is a neutral, non-profit data-sharing utility that allows trusted organizations to share data without purchasing a data portal SaaS subscription or managing infrastructure. Source allows organizations to share data using standard HTTP methods rather than requiring proprietary APIs or SaaS interfaces. It is currently in private beta.',
     children,
     logo,
     topMenu,
@@ -306,5 +300,3 @@ export default function BaseLayout(props: LayoutProps) {
     </main>
   )
 }
-
-BaseLayout.defaultProps = defaultProps

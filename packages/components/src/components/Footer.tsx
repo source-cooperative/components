@@ -7,16 +7,11 @@ interface FooterLink {
 }
 
 interface FooterProps {
-	links: FooterLink[];
-	text: string[];
+	links?: FooterLink[];
+	text?: string[];
 }
 
-const defaultProps = {
-  links: [],
-  text: [],
-}
-
-export default function Footer(props: FooterProps) {
+export default function Footer({ links, text }: FooterProps) {
   const setColorMode = useColorMode()[1]
 
   return (
@@ -28,7 +23,7 @@ export default function Footer(props: FooterProps) {
         gap: 1,
       }}
     >
-      {props.links.map((link, index) => {
+      {links?.map((link, index) => {
         return (
           <Box key={index} sx={{
             display: 'flex',
@@ -52,7 +47,7 @@ export default function Footer(props: FooterProps) {
         </Link>
       </Box>
 
-      {props.text.map((text, index) => {
+      {text?.map((text, index) => {
         return (
           <Box
             key={`footer-text-${index}`}
@@ -69,5 +64,3 @@ export default function Footer(props: FooterProps) {
     </Grid>
   )
 }
-
-Footer.defaultProps = defaultProps

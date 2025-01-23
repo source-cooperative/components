@@ -9,15 +9,7 @@ interface SearchBarProps {
 	handleSubmit?: (val: string) => void;
 }
 
-const defaultProps = {
-  placeholder: 'Search',
-  defaultValue: null,
-  buttonText: 'Browse',
-  handleSubmit: null,
-}
-
-function SearchBar(props: SearchBarProps) {
-  const { placeholder, defaultValue, buttonText, handleSubmit } = props
+export default function SearchBar( { placeholder = 'Search', defaultValue, buttonText = 'Browse', handleSubmit }: SearchBarProps) {
 
   function submitForm(form: HTMLFormElement) {
     const formData = new FormData(form)
@@ -60,6 +52,3 @@ function SearchBar(props: SearchBarProps) {
     </Box>
   )
 }
-
-SearchBar.defaultProps = defaultProps
-export default SearchBar

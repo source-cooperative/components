@@ -40,16 +40,7 @@ interface AccountDropdownProps {
 	links?: Link[];
 }
 
-const defaultProps = {
-  name: null,
-  signedIn: false,
-  verified: false,
-  usernameClaimed: false,
-  links: null,
-}
-
-export default function AccountDropdown(props: AccountDropdownProps) {
-  const { name, signedIn, verified, usernameClaimed, links } = props
+export default function AccountDropdown( { name, signedIn = false, verified = false, usernameClaimed = false, links }: AccountDropdownProps) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   if (!signedIn) {
@@ -97,20 +88,17 @@ export default function AccountDropdown(props: AccountDropdownProps) {
               top: 0,
             }}
           >
-            {links ?
-              links.map((link, i) => {
-                return (
-                  <Button
-                    variant="nav"
-                    key={`account-dropdown-nav-${i}`}
-                    href={link.href}
-                  >
-                    {link.text}
-                  </Button>
-                )
-              })
-						 :
-              <></>
+            {links?.map((link, i) => {
+              return (
+                <Button
+                  variant="nav"
+                  key={`account-dropdown-nav-${i}`}
+                  href={link.href}
+                >
+                  {link.text}
+                </Button>
+              )
+            })
             }
           </Box>
         </Box>
@@ -171,5 +159,3 @@ export default function AccountDropdown(props: AccountDropdownProps) {
     </>
   )
 }
-
-AccountDropdown.defaultProps = defaultProps
