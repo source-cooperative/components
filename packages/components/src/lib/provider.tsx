@@ -39,9 +39,7 @@ const components: Readonly<MDXComponents> = {
         <Prism className={className}>{children}</Prism>
       </CodeBlock>
       :
-      <InlineCode>
-        <Prism className={className}>{children}</Prism>
-      </InlineCode>
+      <InlineCode>{children}</InlineCode>
   },
 } as const
 
