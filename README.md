@@ -8,6 +8,10 @@ See https://github.com/source-cooperative/viewers.source.coop/ for an example of
 
 The code for the reusable components is in the [`packages/components`](./packages/components) directory.
 
+## Creating or improving a component
+
+For more information on how to contribute to this project, see the [contribution guide](CONTRIBUTING.md).
+
 ## Demo
 
 See the demo at https://source-cooperative.github.io/components/.
