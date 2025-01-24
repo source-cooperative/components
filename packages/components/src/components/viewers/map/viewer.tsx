@@ -71,7 +71,7 @@ export function MapViewer(props: FileProps) {
         url: 'https://r2-public.protomaps.com/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles',
       }),
       style: (feature) => {
-        basemapStyle.getFill().setColor(getFeatureColor(feature) ?? parseColor(rawColors?.background) ?? null)
+        basemapStyle.getFill()?.setColor(getFeatureColor(feature) ?? parseColor(rawColors?.background) ?? null)
         return basemapStyle
       },
     })
