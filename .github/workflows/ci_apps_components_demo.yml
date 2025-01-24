@@ -2,6 +2,7 @@ name: apps/components-demo
 on:
   push:
     paths:
+      - "packages/components/**"
       - "apps/components-demo/**"
       - ".github/workflows/_common_jobs.yml"
       - ".github/workflows/ci_apps_components_demo.yml"
