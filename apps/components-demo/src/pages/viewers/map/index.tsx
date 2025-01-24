@@ -8,7 +8,14 @@ export default function Map() {
     <BaseLayout sideNavLinks={sideNavLinks}>
       <Heading as="h1">{title}</Heading>
       <Paragraph>{description}</Paragraph>
-      <MapViewer url='/components/data/polygon-samples.geojson' filename="polygon-samples.geojson" />
+      <article>
+        <Heading as="h2">GeoJSON</Heading>
+        <MapViewer url='/components/data/polygon-samples.geojson' filename="polygon-samples.geojson" />
+      </article>
+      <article>
+        <Heading as="h2">PMTiles</Heading>
+        <MapViewer url='/components/data/hmb.pmtiles' filename="hmb.pmtiles" />
+      </article>
     </BaseLayout>
   )
 }

@@ -19,7 +19,7 @@ export function getPMTilesLayer({ url, style, onTileLoadError }: PMTilesLayerArg
     declutter: true,
     source: source,
     style: (feature) => {
-      style?.getFill().setColor(getFeatureColor(feature) ?? null) // TODO(SL): move this code elsewhere
+      style?.getFill()?.setColor(getFeatureColor(feature) ?? null) // TODO(SL): move this code elsewhere
       return style
     },
   })
