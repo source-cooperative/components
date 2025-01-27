@@ -4,7 +4,10 @@
   "description": "Source Cooperative React Components",
   "source": "src/index.ts",
   "type": "module",
-  "module": "dist/components.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/components.esm.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/source-cooperative/components.git",
