@@ -1,4 +1,3 @@
-import { PMTilesVectorSource } from 'ol-pmtiles'
 import Map from 'ol/Map'
 import MapBrowserEvent from 'ol/MapBrowserEvent'
 import Overlay from 'ol/Overlay.js'
@@ -66,17 +65,28 @@ export function MapViewer(props: FileProps) {
       }),
     })
 
-    const baseLayer = new VectorTileLayer({
-      source: new PMTilesVectorSource({
-        url: 'https://r2-public.protomaps.com/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles',
-      }),
-      style: (feature) => {
-        basemapStyle.getFill()?.setColor(getFeatureColor(feature) ?? parseColor(rawColors?.background) ?? null)
-        return basemapStyle
-      },
-    })
-    map.getLayers().insertAt(0, baseLayer) // insert at the bottom
-    return () => { map.removeLayer(baseLayer) }
+    let baseLayer: VectorTileLayer | undefined = undefined
+
+    async function createBaseLayer(map: Map) {
+      const { PMTilesVectorSource } = await import('ol-pmtiles')
+      baseLayer = new VectorTileLayer({
+        source: new PMTilesVectorSource({
+          url: 'https://r2-public.protomaps.com/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles',
+        }),
+        style: (feature) => {
+          basemapStyle.getFill()?.setColor(getFeatureColor(feature) ?? parseColor(rawColors?.background) ?? null)
+          return basemapStyle
+        },
+      })
+      map.getLayers().insertAt(0, baseLayer) // insert at the bottom
+    }
+    createBaseLayer(map).catch(() => { setError(true) })
+
+    return () => {
+      if (baseLayer) {
+        map.removeLayer(baseLayer)
+      }
+    }
   }, [map, rawColors])
 
   useEffect(() => {
