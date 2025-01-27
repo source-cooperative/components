@@ -65,9 +65,11 @@ export function MapViewer(props: FileProps) {
       }),
     })
 
-    async function createBaseLayer() {
+    let baseLayer: VectorTileLayer | undefined = undefined
+
+    async function createBaseLayer(map: Map) {
       const { PMTilesVectorSource } = await import('ol-pmtiles')
-      return new VectorTileLayer({
+      baseLayer = new VectorTileLayer({
         source: new PMTilesVectorSource({
           url: 'https://r2-public.protomaps.com/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles',
         }),
@@ -76,15 +78,15 @@ export function MapViewer(props: FileProps) {
           return basemapStyle
         },
       })
-    }
-
-    const baseLayerPromise = createBaseLayer()
-    baseLayerPromise.then((baseLayer) => {
       map.getLayers().insertAt(0, baseLayer) // insert at the bottom
-    }).catch(() => { setError(true) })
+    }
+    createBaseLayer(map).catch(() => { setError(true) })
 
-    // TODO(SL): find how to clean the layer - by name?
-    //return () => { baseLayerPromise.then(baseLayer => map.removeLayer(baseLayer)) }
+    return () => {
+      if (baseLayer) {
+        map.removeLayer(baseLayer)
+      }
+    }
   }, [map, rawColors])
 
   useEffect(() => {
