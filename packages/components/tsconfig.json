@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "esnext",
 		"lib": [
 			"dom",
 			"dom.iterable",
@@ -19,14 +19,11 @@
 		"allowSyntheticDefaultImports": true,
 		"jsx": "react-jsx",
 		"jsxImportSource": "theme-ui",
+		"jsxFactory": "",
+		"jsxFragmentFactory": "",
 		"incremental": true
 	},
 	"include": [
-		"**/*.ts",
-		"**/*.tsx"
-	],
-	"exclude": [
-		"node_modules",
-		"./dst/**/*"
+		"src"
 	]
 }
