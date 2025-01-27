@@ -13,6 +13,9 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  experimental: {
+    esmExternals: 'loose',
   }
 };
 
