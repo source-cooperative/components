@@ -22,5 +22,8 @@
 		"jsxFactory": "",
 		"jsxFragmentFactory": "",
 		"incremental": true
-	}
+	},
+	"include": [
+		"src"
+	]
 }
