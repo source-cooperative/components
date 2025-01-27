@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint'
 import { sharedJsRules, sharedTsRules } from '../../eslint.config.mjs'
 
 export default tseslint.config(
-  { ignores: ['dst/'] },
+  { ignores: ['dist/'] },
   {
     settings: { react: { version: '18.3' } },
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylisticTypeChecked],

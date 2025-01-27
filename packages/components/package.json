@@ -3,12 +3,8 @@
   "version": "1.1.4",
   "description": "Source Cooperative React Components",
   "source": "src/index.ts",
-  "exports": {
-    "require": "./dst/index.js",
-    "default": "./dst/index.modern.js"
-  },
-  "main": "dst/index.js",
-  "module": "dst/index.esm.js",
+  "type": "module",
+  "module": "dist/components.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/source-cooperative/components.git",
@@ -19,7 +15,7 @@
     "source-cooperative"
   ],
   "files": [
-    "dst"
+    "dist"
   ],
   "author": "radiantearth",
   "license": "MIT",
@@ -52,12 +48,13 @@
   "devDependencies": {
     "@types/d3-fetch": "3.0.7",
     "@types/mdx": "2.0.13",
-    "microbundle": "0.13.0",
-    "rimraf": "3.0.2"
+    "microbundle": "0.15.1",
+    "rimraf": "6.0.1"
   },
   "homepage": "https://github.com/source-cooperative/components#readme",
   "scripts": {
-    "build": "rimraf dst && microbundle src/index.ts -o dst/index.js --jsx React.createElement -f modern,es,cjs --jsxFragment React.Fragment",
+    "build": "microbundle -f es --target node",
+    "prebuild": "rimraf dist",
     "lint": "eslint .",
     "prepare": "npm run build",
     "typecheck": "tsc --noEmit"
