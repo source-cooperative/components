@@ -1,6 +1,7 @@
 # Source Cooperative Viewers
 
 The Source Cooperative Viewers is a webapp with interactive data viewers for data served through HTTP.
+
 These viewers power the dataset browser on Source Cooperative but can operate independently from Source Cooperative.
 
 ## Project Goals
