@@ -5,7 +5,8 @@
   "license": "MIT",
   "workspaces": [
     "packages/components",
-    "apps/components-demo"
+    "apps/components-demo",
+    "apps/viewers"
   ],
   "scripts": {
     "lint": "eslint ."
