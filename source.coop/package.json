@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@source-cooperative/cli": "../packages/cli",
     "@asteasolutions/zod-to-openapi": "^7.1.1",
     "@aws-sdk/client-dynamodb": "^3.635.0",
     "@aws-sdk/client-s3": "^3.679.0",
