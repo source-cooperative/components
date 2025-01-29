@@ -1,0 +1,36 @@
+{
+  "name": "@source-cooperative/viewers",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Source Cooperative Data Viewers",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/source-cooperative/components.git",
+    "directory": "apps/viewers"
+  },
+  "keywords": [
+    "theme-ui",
+    "source-cooperative"
+  ],
+  "author": "radiantearth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/source-cooperative/components/issues"
+  },
+  "dependencies": {
+    "@emotion/react": "11.11.1",
+    "@source-cooperative/components": "1.2.0",
+    "next": "13.5.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "theme-ui": "0.16.1"
+  },
+  "homepage": "https://github.com/source-cooperative/components#readme",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  }
+}
