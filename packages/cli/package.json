@@ -2,14 +2,12 @@
   "name": "@source-cooperative/cli",
   "version": "0.1.0",
   "private": true,
-  "description": "CLI Tool for interacting with Source Cooperative",
+  "description": "CLI Tool for interacting with Source Cooperative. See 'sc' command in root package.json -> 'npx sc --help'",
   "type": "module",
   "main": "src/index.js",
-  "bin": {
-    "sc": "./src/index.js"
-  },
   "scripts": {
-    "start": "npx sc"
+    "build": "echo 'Nothing to build, the cli is a Node.js script'",
+    "start": "node src/index.js"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3.734.0",

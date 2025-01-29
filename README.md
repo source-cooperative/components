@@ -1,32 +1,21 @@
-# Source Cooperative React Components
+# Source Cooperative Monorepo
 
-This repository contains a collection of reusable React components. They require React and Next.js, since some use Next.js (`next/link`, `next/router`).
+This is a monorepo for the Source Cooperative project. It contains the following packages and apps:
 
-## Components
-
-See https://github.com/source-cooperative/viewers.source.coop/ for an example of how to use these components.
-
-The code for the reusable components is in the [`packages/components`](./packages/components) directory.
+- `@source-cooperative/cli`: A command-line interface for administrating the Source Cooperative database. The code is in the [`packages/cli`](./packages/cli) directory.
+- `@source-cooperative/components`: A collection of reusable React components. The code is in the [`packages/components`](./packages/components) directory. It require React and Next.js, since some use Next.js (`next/link`, `next/router`).
+- `@source-cooperative/components-demo`: A demo app for the components. The code is in the [`apps/components-demo`](./apps/components-demo) directory.
+- `@source-cooperative/viewers`: The https://viewers.source.coop webapp. It aims at exploring large remote files in the browser. The code is in the [`apps/viewers`](./apps/viewers) directory.
 
 ## Creating or improving a component
 
 For more information on how to contribute to this project, see the [contribution guide](CONTRIBUTING.md).
 
-## Demo
-
-See the demo at https://source-cooperative.github.io/components/.
-
-The code for the demo is in the [`apps/components-demo`](./apps/components-demo) directory.
-
-## viewers.source.coop
-
-See the webapp at https://viewers.source.coop.
-
-The code is in the [`apps/viewers`](./apps/viewers) directory.
-
 ## Monorepo
 
-This is a monorepo managed with [npm workspaces](https://docs.npmjs.com/cli/v10/using-npm/workspaces). It contains three workspaces: `@source-cooperative/components`, and two other that depend on it: `@source-cooperative/components-demo` and `@source-cooperative/viewers` .
+The monorepo is managed with [npm workspaces](https://docs.npmjs.com/cli/v10/using-npm/workspaces). It contains three workspaces: `@source-cooperative/components`, and two other that depend on it: `@source-cooperative/components-demo` and `@source-cooperative/viewers` .
+
+### Install
 
 To install:
 
@@ -34,17 +23,31 @@ To install:
 npm install
 ```
 
+### Build
+
 To build the workspaces:
 
 ```sh
 npm run build -ws
 ```
 
-To build only the components:
+To build only one workspace, launch one of the following commands:
 
 ```sh
 npm run build -w @source-cooperative/components
+npm run build -w @source-cooperative/components-demo
+npm run build -w @source-cooperative/viewers
 ```
+
+Note that using `-w` or `-ws` must be done from the root of the monorepo. Alternatively, you can use `npm run build` from the workspace directory, eg:
+
+```sh
+cd packages/components
+npm i
+npm run build
+```
+
+### Run
 
 To run the demo locally:
 
@@ -56,4 +59,10 @@ To run the viewer app locally:
 
 ```sh
 npm run dev -w @source-cooperative/viewers
+```
+
+To run the `sc` command-line interface:
+
+```sh
+npx sc
 ```

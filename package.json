@@ -4,13 +4,16 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "apps/components-demo",
-    "apps/viewers",
     "packages/cli",
-    "packages/components"
+    "packages/components",
+    "apps/components-demo",
+    "apps/viewers"
   ],
   "scripts": {
     "lint": "eslint ."
+  },
+  "bin": {
+    "sc": "./packages/cli/src/index.js"
   },
   "overrides": {
     "@aws-sdk/client-dynamodb": "3.734.0",
