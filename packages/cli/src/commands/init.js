@@ -1,46 +1,46 @@
-import { CreateTableCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { CreateTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
 
 export async function init(production) {
-  let client;
+  let client
   if (!production) {
-    client = new DynamoDBClient({ endpoint: "http://localhost:8000" });
+    client = new DynamoDBClient({ endpoint: 'http://localhost:8000' })
   } else {
-    client = new DynamoDBClient();
+    client = new DynamoDBClient()
   }
 
-  createTables(client);
+  await createTables(client)
 }
 
 async function createTables(client) {
   const createAccountsTableCommand = new CreateTableCommand({
-    TableName: "sc-accounts",
+    TableName: 'sc-accounts',
     AttributeDefinitions: [
       {
-        AttributeName: "account_id",
-        AttributeType: "S",
+        AttributeName: 'account_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "identity_id",
-        AttributeType: "S",
+        AttributeName: 'identity_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "account_type",
-        AttributeType: "S",
+        AttributeName: 'account_type',
+        AttributeType: 'S',
       },
     ],
     KeySchema: [
       {
-        AttributeName: "account_id",
-        KeyType: "HASH",
+        AttributeName: 'account_id',
+        KeyType: 'HASH',
       },
     ],
     GlobalSecondaryIndexes: [
       {
-        IndexName: "identity_id",
-        KeySchema: [{ AttributeName: "identity_id", KeyType: "HASH" }],
+        IndexName: 'identity_id',
+        KeySchema: [{ AttributeName: 'identity_id', KeyType: 'HASH' }],
         Projection: {
-          ProjectionType: "ALL",
+          ProjectionType: 'ALL',
         },
         ProvisionedThroughput: {
           ReadCapacityUnits: 1,
@@ -48,10 +48,10 @@ async function createTables(client) {
         },
       },
       {
-        IndexName: "account_type",
-        KeySchema: [{ AttributeName: "account_type", KeyType: "HASH" }],
+        IndexName: 'account_type',
+        KeySchema: [{ AttributeName: 'account_type', KeyType: 'HASH' }],
         Projection: {
-          ProjectionType: "ALL",
+          ProjectionType: 'ALL',
         },
         ProvisionedThroughput: {
           ReadCapacityUnits: 1,
@@ -63,40 +63,40 @@ async function createTables(client) {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1,
     },
-  });
+  })
 
   const createRepositoriesTableCommand = new CreateTableCommand({
-    TableName: "sc-repositories",
+    TableName: 'sc-repositories',
     AttributeDefinitions: [
       {
-        AttributeName: "account_id",
-        AttributeType: "S",
+        AttributeName: 'account_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "repository_id",
-        AttributeType: "S",
+        AttributeName: 'repository_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "featured",
-        AttributeType: "N",
+        AttributeName: 'featured',
+        AttributeType: 'N',
       },
     ],
     KeySchema: [
       {
-        AttributeName: "account_id",
-        KeyType: "HASH",
+        AttributeName: 'account_id',
+        KeyType: 'HASH',
       },
       {
-        AttributeName: "repository_id",
-        KeyType: "RANGE",
+        AttributeName: 'repository_id',
+        KeyType: 'RANGE',
       },
     ],
     GlobalSecondaryIndexes: [
       {
-        IndexName: "featured",
-        KeySchema: [{ AttributeName: "featured", KeyType: "HASH" }],
+        IndexName: 'featured',
+        KeySchema: [{ AttributeName: 'featured', KeyType: 'HASH' }],
         Projection: {
-          ProjectionType: "ALL",
+          ProjectionType: 'ALL',
         },
         ProvisionedThroughput: {
           ReadCapacityUnits: 1,
@@ -108,32 +108,32 @@ async function createTables(client) {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1,
     },
-  });
+  })
 
   const createApiKeysTableCommand = new CreateTableCommand({
-    TableName: "sc-api-keys",
+    TableName: 'sc-api-keys',
     AttributeDefinitions: [
       {
-        AttributeName: "account_id",
-        AttributeType: "S",
+        AttributeName: 'account_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "access_key_id",
-        AttributeType: "S",
+        AttributeName: 'access_key_id',
+        AttributeType: 'S',
       },
     ],
     KeySchema: [
       {
-        AttributeName: "access_key_id",
-        KeyType: "HASH",
+        AttributeName: 'access_key_id',
+        KeyType: 'HASH',
       },
     ],
     GlobalSecondaryIndexes: [
       {
-        IndexName: "account_id",
-        KeySchema: [{ AttributeName: "account_id", KeyType: "HASH" }],
+        IndexName: 'account_id',
+        KeySchema: [{ AttributeName: 'account_id', KeyType: 'HASH' }],
         Projection: {
-          ProjectionType: "ALL",
+          ProjectionType: 'ALL',
         },
         ProvisionedThroughput: {
           ReadCapacityUnits: 1,
@@ -145,43 +145,43 @@ async function createTables(client) {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1,
     },
-  });
+  })
 
   const createMembershipsTableCommand = new CreateTableCommand({
-    TableName: "sc-memberships",
+    TableName: 'sc-memberships',
     AttributeDefinitions: [
       {
-        AttributeName: "membership_id",
-        AttributeType: "S",
+        AttributeName: 'membership_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "account_id",
-        AttributeType: "S",
+        AttributeName: 'account_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "membership_account_id",
-        AttributeType: "S",
+        AttributeName: 'membership_account_id',
+        AttributeType: 'S',
       },
       {
-        AttributeName: "repository_id",
-        AttributeType: "S",
+        AttributeName: 'repository_id',
+        AttributeType: 'S',
       },
     ],
     KeySchema: [
       {
-        AttributeName: "membership_id",
-        KeyType: "HASH",
+        AttributeName: 'membership_id',
+        KeyType: 'HASH',
       },
     ],
     GlobalSecondaryIndexes: [
       {
-        IndexName: "membership_account_id_repository_id",
+        IndexName: 'membership_account_id_repository_id',
         KeySchema: [
-          { AttributeName: "membership_account_id", KeyType: "HASH" },
-          { AttributeName: "repository_id", KeyType: "RANGE" },
+          { AttributeName: 'membership_account_id', KeyType: 'HASH' },
+          { AttributeName: 'repository_id', KeyType: 'RANGE' },
         ],
         Projection: {
-          ProjectionType: "ALL",
+          ProjectionType: 'ALL',
         },
         ProvisionedThroughput: {
           ReadCapacityUnits: 1,
@@ -189,12 +189,12 @@ async function createTables(client) {
         },
       },
       {
-        IndexName: "membership_account_id",
+        IndexName: 'membership_account_id',
         KeySchema: [
-          { AttributeName: "membership_account_id", KeyType: "HASH" },
+          { AttributeName: 'membership_account_id', KeyType: 'HASH' },
         ],
         Projection: {
-          ProjectionType: "ALL",
+          ProjectionType: 'ALL',
         },
         ProvisionedThroughput: {
           ReadCapacityUnits: 1,
@@ -202,10 +202,10 @@ async function createTables(client) {
         },
       },
       {
-        IndexName: "account_id",
-        KeySchema: [{ AttributeName: "account_id", KeyType: "HASH" }],
+        IndexName: 'account_id',
+        KeySchema: [{ AttributeName: 'account_id', KeyType: 'HASH' }],
         Projection: {
-          ProjectionType: "ALL",
+          ProjectionType: 'ALL',
         },
         ProvisionedThroughput: {
           ReadCapacityUnits: 1,
@@ -217,71 +217,81 @@ async function createTables(client) {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1,
     },
-  });
+  })
 
   const createDataConnectionsTableCommand = new CreateTableCommand({
-    TableName: "sc-data-connections",
+    TableName: 'sc-data-connections',
     AttributeDefinitions: [
       {
-        AttributeName: "data_connection_id",
-        AttributeType: "S",
+        AttributeName: 'data_connection_id',
+        AttributeType: 'S',
       },
     ],
     KeySchema: [
       {
-        AttributeName: "data_connection_id",
-        KeyType: "HASH",
+        AttributeName: 'data_connection_id',
+        KeyType: 'HASH',
       },
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1,
     },
-  });
+  })
 
   try {
-    await client.send(createAccountsTableCommand);
-  } catch (_) {}
+    await client.send(createAccountsTableCommand)
+  } catch (_) {
+    console.warn('Error creating accounts table')
+  }
 
   try {
-    await client.send(createRepositoriesTableCommand);
-  } catch (_) {}
+    await client.send(createRepositoriesTableCommand)
+  } catch (_) {
+    console.warn('Error creating repositories table')
+  }
 
   try {
-    await client.send(createApiKeysTableCommand);
-  } catch (_) {}
+    await client.send(createApiKeysTableCommand)
+  } catch (_) {
+    console.warn('Error creating api keys table')
+  }
 
   try {
-    await client.send(createMembershipsTableCommand);
-  } catch (_) {}
+    await client.send(createMembershipsTableCommand)
+  } catch (_) {
+    console.warn('Error creating memberships table')
+  }
 
   try {
-    await client.send(createDataConnectionsTableCommand);
+    await client.send(createDataConnectionsTableCommand)
     const localDataConnection = {
-      data_connection_id: "local",
-      name: "Local S3 Endpoint",
+      data_connection_id: 'local',
+      name: 'Local S3 Endpoint',
       prefix_template:
-        "{{repository.account_id}}/{{repository.repository_id}}/",
+        '{{repository.account_id}}/{{repository.repository_id}}/',
       read_only: false,
-      allowed_data_modes: [RepositoryDataMode.Open],
+      allowed_data_modes: ['open'], // RepositoryDataMode.Open, see source.coop types
       details: {
-        provider: DataProvider.S3,
-        bucket: "source-cooperative",
-        base_prefix: "",
-        region: S3Regions.US_WEST_2,
+        provider: 's3', // DataProvider.S3
+        bucket: 'source-cooperative',
+        base_prefix: '',
+        region: 'us-west-2', // S3Regions.US_WEST_2
       },
       authentication: {
-        type: DataConnectionAuthenticationType.S3Local,
+        type: 's3_local', // DataConnectionAuthenticationType.S3Local
       },
-    };
+    }
 
-    const docClient = DynamoDBDocumentClient.from(client);
+    const docClient = DynamoDBDocumentClient.from(client)
     const params = {
-      TableName: "sc-data-connections",
+      TableName: 'sc-data-connections',
       Item: localDataConnection,
-    };
+    }
 
-    const command = new PutCommand(params);
-    await docClient.send(command);
-  } catch (_) {}
+    const command = new PutCommand(params)
+    await docClient.send(command)
+  } catch (_) {
+    console.warn('Error creating data connections table')
+  }
 }
