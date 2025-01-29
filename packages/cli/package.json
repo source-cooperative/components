@@ -1,0 +1,20 @@
+{
+  "name": "@source-cooperative/cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CLI Tool for interacting with Source Cooperative",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "sc": "./src/index.js"
+  },
+  "scripts": {
+    "start": "npx sc"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.734.0",
+    "@aws-sdk/lib-dynamodb": "3.734.0",
+    "@aws-sdk/util-dynamodb": "3.734.0",
+    "commander": "8.3.0"
+  }
+}

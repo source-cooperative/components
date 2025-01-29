@@ -1,11 +1,9 @@
 /**
  * @file dump.ts
  * @description This file contains functions for dumping data from various sources to JSON files.
- * It includes functionality to export Ory relationships, Ory identities, and DynamoDB table contents.
+ * It includes functionality to export DynamoDB table contents.
  *
  * The main functions in this file are:
- * - dumpOryRelationships: Exports Ory relationship tuples to a JSON file.
- * - dumpOryIdentities: Exports Ory identities to a JSON file.
  * - dumpTable: Exports the contents of a DynamoDB table to a JSON file.
  *
  * Each function handles pagination and writes the retrieved data to a specified output directory.
@@ -13,24 +11,51 @@
  * @module dump
  * @requires @aws-sdk/client-dynamodb
  * @requires @aws-sdk/util-dynamodb
- * @requires ../utils
  */
 
 // Import necessary AWS SDK and utility functions
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import {
-  ensureOutputDir,
-  writeJsonFile,
-  oryApiCall,
-  RelationTuple,
-  Identity,
-  RelationTuplesResponse,
-  IdentitiesResponse,
-  env,
-} from "../utils";
+import * as fs from "fs";
+import * as path from "path";
 
-export async function dump(output: string, production: boolean): Promise<void> {
+/**
+ * Ensure output directory exists, by creating it if it doesn't.
+ * 
+ * @param {string} output - The base output directory path.
+ * @param {string} subDir - The subdirectory to create.
+ */
+export function ensureOutputDir(output, subDir)  {
+  const dir = path.join(output, subDir);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
+/**
+ * Write data to JSON file
+ * 
+ * @param {string} output - The base output directory path.
+ * @param {string} subDir - The subdirectory to write to.
+ * @param {string} fileName - The name of the file to write.
+ * @param {unknown} data - The data to write to the file.
+ * @throws {Error} If there's an error writing the file.
+ */
+export function writeJsonFile(output, subDir, fileName, data) {
+  const filePath = path.join(output, subDir, fileName);
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
+  console.log(`Data written to ${filePath}`);
+}
+
+/**
+ * Dumps the contents of all DynamoDB tables to JSON files.
+ * 
+ * @param {string} output - The base output directory path.
+ * @param {boolean} production - True if the production environment is being used.
+ * 
+ * @returns {Promise<void>} a Promise that resolves when all tables have been dumped.
+ */
+export async function dump(output, production) {
   await dumpTable("sc-accounts", output, production);
   await dumpTable("sc-repositories", output, production);
   await dumpTable("sc-api-keys", output, production);
@@ -47,14 +72,10 @@ export async function dump(output: string, production: boolean): Promise<void> {
  *
  * @param {string} tableName - The name of the DynamoDB table to dump.
  * @param {string} output - The base output directory path.
- * @returns {Promise<void>}
- * @throws {Error} If there's an error scanning the table.
+ * 
+ * @returns {Promise<void>} a Promise that resolves when the table has been dumped or rejects with an error.
  */
-export async function dumpTable(
-  tableName: string,
-  output: string,
-  production: boolean
-): Promise<void> {
+export async function dumpTable(tableName, output, production) {
   console.log(`Dumping table ${tableName}...`);
   // Ensure the output directory exists
   ensureOutputDir(output, "table");
@@ -65,8 +86,8 @@ export async function dumpTable(
     client = new DynamoDBClient();
   }
 
-  let items: unknown[] = [];
-  let lastEvaluatedKey: Record<string, any> | undefined;
+  let items = [];
+  let lastEvaluatedKey;
   try {
     // Scan the entire table, handling pagination
     do {

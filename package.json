@@ -4,15 +4,20 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "packages/components",
     "apps/components-demo",
-    "apps/viewers"
+    "apps/viewers",
+    "packages/cli",
+    "packages/components"
   ],
   "scripts": {
     "lint": "eslint ."
   },
   "overrides": {
+    "@aws-sdk/client-dynamodb": "3.734.0",
+    "@aws-sdk/lib-dynamodb": "3.734.0",
+    "@aws-sdk/util-dynamodb": "3.734.0",
     "@emotion/react": "11.11.1",
+    "commander": "8.3.0",
     "next": "13.5.6",
     "react": "18.3.1",
     "react-dom": "18.3.1",

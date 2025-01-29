@@ -1,14 +1,7 @@
-import {
-  DataConnection,
-  DataConnectionAuthenticationType,
-  DataProvider,
-  RepositoryDataMode,
-  S3Regions,
-} from "@/api/types";
-import { DynamoDBClient, CreateTableCommand } from "@aws-sdk/client-dynamodb";
+import { CreateTableCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 
-export async function init(production: boolean) {
+export async function init(production) {
   let client;
   if (!production) {
     client = new DynamoDBClient({ endpoint: "http://localhost:8000" });
@@ -19,7 +12,7 @@ export async function init(production: boolean) {
   createTables(client);
 }
 
-async function createTables(client: DynamoDBClient) {
+async function createTables(client) {
   const createAccountsTableCommand = new CreateTableCommand({
     TableName: "sc-accounts",
     AttributeDefinitions: [
@@ -264,7 +257,7 @@ async function createTables(client: DynamoDBClient) {
 
   try {
     await client.send(createDataConnectionsTableCommand);
-    const localDataConnection: DataConnection = {
+    const localDataConnection = {
       data_connection_id: "local",
       name: "Local S3 Endpoint",
       prefix_template:

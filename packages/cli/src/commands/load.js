@@ -1,21 +1,16 @@
-import { z } from "zod";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import * as fs from "fs";
 import * as path from "path";
-import {
-  AccountSchema,
-  APIKeySchema,
-  DataConnectionSchema,
-  MembershipSchema,
-  RepositorySchema,
-  Repository,
-  APIKey,
-  Account,
-  DataConnection,
-  Membership,
-} from "@/api/types";
-import { marshall } from "@aws-sdk/util-dynamodb";
 
-async function loadJson(path: string) {
+/**
+ * Load a JSON file from the specified path.
+ * 
+ * @param {string} path the path to the JSON file
+ * 
+ * @returns {Promise<unknown>} the parsed JSON data (it's expected to be an array if created by the dump command)
+ */
+async function loadJson(path) {
   const fileContent = await fs.promises.readFile(path, "utf-8");
 
   // Parse the JSON
@@ -24,20 +19,32 @@ async function loadJson(path: string) {
   return jsonData;
 }
 
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-
-function sleep(ms: number) {
+/**
+ * Sleep for the specified number of milliseconds.
+ * 
+ * @param {number} ms the number of milliseconds to sleep
+ * 
+ * @returns {Promise<void>} a Promise that resolves after the specified number of milliseconds
+ */
+function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
-async function batchInsertIntoDynamoDB(
-  tableName: string,
-  items: Repository[] | Account[] | Membership[] | APIKey[] | DataConnection[],
-  production: boolean
-): Promise<void> {
+/**
+ * Batch insert items into a DynamoDB table.
+ * 
+ * It expects the local aws config (environment variables).
+ * TODO(SL): explicitly pass the region and credentials?
+ * 
+ * @param {string} tableName the name of the table to insert items into
+ * @param {any[]} items the items to insert
+ * @param {boolean} production true if the production environment is being used
+ * 
+ * @returns {Promise<void>} a Promise that resolves when all items have been inserted
+ */
+async function batchInsertIntoDynamoDB(tableName, items, production) {
   // Create a DynamoDB client
   let client;
   if (!production) {
@@ -68,7 +75,15 @@ async function batchInsertIntoDynamoDB(
   console.log("All items inserted successfully");
 }
 
-export async function load(loadDirectory: string, production: boolean) {
+/**
+ * Load data from the specified directory into DynamoDB.
+ * 
+ * @param {string} loadDirectory the directory containing the data to load (it's expected to be created by the dump command)
+ * @param {boolean} production true if the production environment is being used
+ * 
+ * @returns {Promise<void>} a Promise that resolves when all data has been loaded
+ */
+export async function load(loadDirectory, production) {
   console.log(`Loading data from ${loadDirectory}`);
   const repositories = await loadJson(
     path.join(loadDirectory, "table", "sc-repositories.json")
