@@ -9,12 +9,15 @@
     "build": "echo 'Nothing to build, the cli is a Node.js script'",
     "lint": "eslint .",
     "start": "node src/index.js",
-    "typecheck": "echo 'No typescript in this project'"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3.734.0",
     "@aws-sdk/lib-dynamodb": "3.734.0",
     "@aws-sdk/util-dynamodb": "3.734.0",
     "commander": "8.3.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
