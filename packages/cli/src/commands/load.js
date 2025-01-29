@@ -4,19 +4,23 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 /**
- * Load a JSON file from the specified path.
+ * Load an array from a JSON file at the specified path.
  *
  * @param {string} path the path to the JSON file
  *
- * @returns {Promise<unknown>} the parsed JSON data (it's expected to be an array if created by the dump command)
+ * @returns {Promise<unknown[]>} the parsed JSON data (it's expected to be an array, as created by the dump command)
  */
-async function loadJson(path) {
+async function loadJsonArray(path) {
   const fileContent = await fs.promises.readFile(path, 'utf-8')
 
   // Parse the JSON
-  const jsonData = JSON.parse(fileContent)
+  const array = JSON.parse(fileContent)
 
-  return jsonData
+  if (!Array.isArray(array)) {
+    throw new Error(`Expected an array in ${path}`)
+  }
+
+  return array
 }
 
 /**
@@ -85,19 +89,19 @@ async function batchInsertIntoDynamoDB(tableName, items, production) {
  */
 export async function load(loadDirectory, production) {
   console.log(`Loading data from ${loadDirectory}`)
-  const repositories = await loadJson(
+  const repositories = await loadJsonArray(
     path.join(loadDirectory, 'table', 'sc-repositories.json'),
   )
-  const accounts = await loadJson(
+  const accounts = await loadJsonArray(
     path.join(loadDirectory, 'table', 'sc-accounts.json'),
   )
-  const apiKeys = await loadJson(
+  const apiKeys = await loadJsonArray(
     path.join(loadDirectory, 'table', 'sc-api-keys.json'),
   )
-  const memberships = await loadJson(
+  const memberships = await loadJsonArray(
     path.join(loadDirectory, 'table', 'sc-memberships.json'),
   )
-  const dataConnections = await loadJson(
+  const dataConnections = await loadJsonArray(
     path.join(loadDirectory, 'table', 'sc-data-connections.json'),
   )
 

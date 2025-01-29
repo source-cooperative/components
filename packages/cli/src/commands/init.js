@@ -1,6 +1,13 @@
 import { CreateTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
 
+/**
+ * Initialize the DynamoDB tables.
+ *
+ * @param {boolean} production - True if the production environment is being used.
+ *
+ * @returns {Promise<void>} a Promise that resolves when all tables have been created.
+ */
 export async function init(production) {
   let client
   if (!production) {
@@ -12,6 +19,13 @@ export async function init(production) {
   await createTables(client)
 }
 
+/**
+ * Create the DynamoDB tables.
+ *
+ * @param {DynamoDBClient} client - The DynamoDB client to use.
+ *
+ * @returns {Promise<void>} a Promise that resolves when all tables have been created.
+ */
 async function createTables(client) {
   const createAccountsTableCommand = new CreateTableCommand({
     TableName: 'sc-accounts',

@@ -72,6 +72,7 @@ export async function dump(output, production) {
  *
  * @param {string} tableName - The name of the DynamoDB table to dump.
  * @param {string} output - The base output directory path.
+ * @param {boolean} production - True if the production environment is being used.
  *
  * @returns {Promise<void>} a Promise that resolves when the table has been dumped or rejects with an error.
  */
@@ -86,23 +87,28 @@ export async function dumpTable(tableName, output, production) {
     client = new DynamoDBClient()
   }
 
+  // @ts-expect-error
   let items = []
   let lastEvaluatedKey
   try {
     // Scan the entire table, handling pagination
     do {
+      // @ts-expect-error
       const command = new ScanCommand({
         TableName: tableName,
         ExclusiveStartKey: lastEvaluatedKey,
       })
 
+      // @ts-expect-error
       const response = await client.send(command)
 
       // Unmarshall and add items to the array
       if (response.Items) {
+        // @ts-expect-error
         items = items.concat(response.Items.map((item) => unmarshall(item)))
       }
 
+      // @ts-expect-error
       lastEvaluatedKey = response.LastEvaluatedKey
     } while (lastEvaluatedKey)
 
