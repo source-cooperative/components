@@ -1,4 +1,4 @@
-name: packages/components
+name: packages/cli
 on:
   push:
     paths:
