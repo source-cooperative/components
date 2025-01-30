@@ -1,0 +1,23 @@
+{
+  "name": "@source-cooperative/cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CLI Tool for interacting with Source Cooperative. See 'sc' command in root package.json -> 'npx sc --help'",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "echo 'Nothing to build, the cli is a Node.js script'",
+    "lint": "eslint .",
+    "start": "node src/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.734.0",
+    "@aws-sdk/lib-dynamodb": "3.734.0",
+    "@aws-sdk/util-dynamodb": "3.734.0",
+    "commander": "8.3.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

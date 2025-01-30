@@ -4,7 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
-import { sharedJsRules, sharedTsRules } from '../../eslint.config.mjs'
+import { sharedJsReactRules, sharedJsRules, sharedTsRules } from '../../eslint.config.mjs'
 
 export default tseslint.config(
   { ignores: ['.next', 'coverage'] },
@@ -37,6 +37,7 @@ export default tseslint.config(
       ...js.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       ...sharedJsRules,
+      ...sharedJsReactRules,
       ...sharedTsRules,
     },
   },

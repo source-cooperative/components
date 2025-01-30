@@ -131,22 +131,19 @@ export default function BaseLayout(props: LayoutProps) {
                     gridRowStart: [1, 1, 1, 1],
                   }}
                 >
-                  {logo ?
-                    logo
-									 :
-                    <Link href="/">
-                      <Logo
-                        sx={{
-                          height: ['45px', '45px', '55px', '55px'],
-                          fill: 'background',
-                          backgroundColor: 'primary',
-                          p: 2,
-                          '&:hover': {
-                            fill: 'highlight',
-                          },
-                        }}
-                      />
-                    </Link>
+                  {logo ?? <Link href="/">
+                    <Logo
+                      sx={{
+                        height: ['45px', '45px', '55px', '55px'],
+                        fill: 'background',
+                        backgroundColor: 'primary',
+                        p: 2,
+                        '&:hover': {
+                          fill: 'highlight',
+                        },
+                      }}
+                    />
+                  </Link>
                   }
                 </Flex>
                 <Flex
@@ -158,7 +155,7 @@ export default function BaseLayout(props: LayoutProps) {
                     pl: [0, 0, 2, 2],
                   }}
                 >
-                  {topMenu ? topMenu : <></>}
+                  {topMenu}
                 </Flex>
                 <Flex
                   sx={{
@@ -293,7 +290,7 @@ export default function BaseLayout(props: LayoutProps) {
               mx: [0, 0, 0, 2],
             }}
           >
-            {footer ? footer : <></>}
+            {footer}
           </Box>
         </Grid>
       </Flex>

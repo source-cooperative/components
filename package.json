@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
+    "packages/cli",
     "packages/components",
     "apps/components-demo",
     "apps/viewers"
@@ -11,8 +12,15 @@
   "scripts": {
     "lint": "eslint ."
   },
+  "bin": {
+    "sc": "./packages/cli/src/index.js"
+  },
   "overrides": {
+    "@aws-sdk/client-dynamodb": "3.734.0",
+    "@aws-sdk/lib-dynamodb": "3.734.0",
+    "@aws-sdk/util-dynamodb": "3.734.0",
     "@emotion/react": "11.11.1",
+    "commander": "8.3.0",
     "next": "13.5.6",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -29,7 +37,7 @@
     "eslint-plugin-react-refresh": "0.4.16",
     "globals": "15.13.0",
     "jsdom": "25.0.1",
-    "typescript": "5.2.2",
-    "typescript-eslint": "8.18.0"
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.22.0"
   }
 }

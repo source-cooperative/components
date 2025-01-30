@@ -15,7 +15,7 @@ export default function Link(props: LinkProps) {
     return (
       <ThemeLink
         onClick={props.onClick}
-        sx={{ variant: `links.${props.variant ? props.variant : 'default'}` }}
+        sx={{ variant: `links.${props.variant ?? 'default'}` }}
       >
         {props.children}
       </ThemeLink>

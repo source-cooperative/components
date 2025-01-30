@@ -44,7 +44,10 @@ export const sharedJsRules = {
   ],
 
   'space-infix-ops': 'error',
+}
 
+/** @type {import('eslint').Linter.Config.RulesRecord} */
+export const sharedJsReactRules = {
   /// From https://emotion.sh/docs/eslint-plugin-react - maybe there's a better way to avoid 'no-unknown-property' on 'sx' and 'css' props
   'react/no-unknown-property': ['error', { 'ignore': ['css', 'sx'] }]
 }
@@ -54,6 +57,7 @@ export const sharedTsRules = {
   '@typescript-eslint/restrict-template-expressions': 'off',
   '@typescript-eslint/no-unused-vars': 'warn',
 }
+
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
