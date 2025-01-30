@@ -19,12 +19,12 @@ function Button (props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
         <Link href={href}>
           <ThemeButton
             ref={ref}
-            variant={variant ? variant : 'primary'}
+            variant={variant ?? 'primary'}
             disabled={disabled}
           >
             <>
               {children}
-              {suffix ? suffix : <></>}
+              {suffix}
             </>
           </ThemeButton>
         </Link>
@@ -35,7 +35,7 @@ function Button (props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
       <ThemeButton
         ref={ref}
         onClick={onClick}
-        variant={variant ? variant : 'primary'}
+        variant={variant ?? 'primary'}
         disabled={disabled}
       >
         <>{children}</>

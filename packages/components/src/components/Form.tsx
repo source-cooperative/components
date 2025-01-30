@@ -207,7 +207,7 @@ function FormField(field: FormFieldData) {
         clearTimeout(timeoutId)
         return setTimeout(
           () => { field.onValidation?.(value) },
-          field.validationDelay ? field.validationDelay : 1000,
+          field.validationDelay ?? 1000,
         )
       })
     },
@@ -220,7 +220,7 @@ function FormField(field: FormFieldData) {
         return true
       }
       field.onLoad?.()
-      onValueChange(field.defaultValue ? field.defaultValue : '')
+      onValueChange(field.defaultValue ?? '')
       return true
     })
   }, [ field, onValueChange, setHasLoaded ])
