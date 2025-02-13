@@ -11,11 +11,7 @@ This is a monorepo for the Source Cooperative project. It contains the following
 
 For more information on how to contribute to this project, see the [contribution guide](CONTRIBUTING.md).
 
-<<<<<<< HEAD
 ## Monorepo
-=======
-Ensure the AWS CLI is configured (even if the values don't matter) by running, e.g.:
->>>>>>> 82d107e (New footer (#51))
 
 The monorepo is managed with [npm workspaces](https://docs.npmjs.com/cli/v10/using-npm/workspaces). It contains three workspaces: `@source-cooperative/components`, and two other that depend on it: `@source-cooperative/components-demo` and `@source-cooperative/viewers` .
 
