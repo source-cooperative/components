@@ -1,4 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { isAuthorized } from "@/api/authz";
+import { getRepository, putRepository } from "@/api/db";
+import {
+  MethodNotImplementedError,
+  NotFoundError,
+  UnauthorizedError,
+} from "@/api/errors";
 import { withErrorHandling } from "@/api/middleware";
 import {
   Actions,
@@ -6,14 +12,8 @@ import {
   RepositoryUpdateRequestSchema,
 } from "@/api/types";
 import { getSession } from "@/api/utils";
-import { getRepository, putRepository } from "@/api/db";
-import {
-  NotFoundError,
-  MethodNotImplementedError,
-  UnauthorizedError,
-} from "@/api/errors";
-import { isAuthorized } from "@/api/authz";
 import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @openapi

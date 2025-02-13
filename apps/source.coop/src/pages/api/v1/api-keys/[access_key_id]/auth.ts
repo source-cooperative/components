@@ -1,14 +1,14 @@
 // Import necessary modules and types
-import type { NextApiRequest, NextApiResponse } from "next";
-import { APIKey } from "@/api/types";
-import { withErrorHandling } from "@/api/middleware";
-import { StatusCodes } from "http-status-codes";
+import { getAPIKey } from "@/api/db";
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
 } from "@/api/errors";
-import { getAPIKey } from "@/api/db";
+import { withErrorHandling } from "@/api/middleware";
+import { APIKey } from "@/api/types";
+import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 async function getAPIKeyHandler(
   req: NextApiRequest,

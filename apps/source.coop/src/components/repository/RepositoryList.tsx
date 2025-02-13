@@ -1,9 +1,9 @@
-import { Button, Grid, Box, Card, Text } from "theme-ui";
-import { RepositoryListing } from "./RepositoryListing";
 import { Repository, RepositoryListResponse } from "@/api/types";
-import useSWR, { SWRResponse } from "swr";
 import { ClientError } from "@/lib/client/accounts";
 import { useState } from "react";
+import useSWR, { SWRResponse } from "swr";
+import { Box, Button, Card, Grid, Text } from "theme-ui";
+import { RepositoryListing } from "./RepositoryListing";
 
 export function RepositoryList({
   title = "Repositories",

@@ -28,17 +28,16 @@
  * const adminStatus = isAdmin(session);
  */
 
-import { Account, AccountFlags, Actions, UserSession } from "@/api/types";
+import { isAuthorized } from "@/api/authz";
 import {
+  getAccount,
   getAccountByIdentityId,
   getAPIKey,
-  getAccount,
   getMembershipsForUser,
 } from "@/api/db";
-import type { NextApiRequest } from "next";
-import { isAuthorized } from "@/api/authz";
-import logger from "@/utils/logger";
+import { Account, AccountFlags, Actions, UserSession } from "@/api/types";
 import * as crypto from "crypto";
+import type { NextApiRequest } from "next";
 
 export function generateAccessKeyID(): string {
   const prefix = "SC";

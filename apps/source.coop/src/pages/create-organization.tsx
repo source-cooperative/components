@@ -1,6 +1,6 @@
+import { NewAccountForm } from "@/components/account/NewAccountForm";
 import { Layout } from "@/components/Layout";
 import { Box, Grid } from "theme-ui";
-import { NewAccountForm } from "@/components/account/NewAccountForm";
 
 export default function ManageAccount() {
   return (

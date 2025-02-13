@@ -1,13 +1,12 @@
-import { NextApiRequest } from "next";
-import httpMocks from "node-mocks-http";
-import { handler } from "@/pages/api/v1/accounts/[account_id]";
-import { getSession } from "@/api/utils";
 import { isAuthorized } from "@/api/authz";
 import { getAccount, putAccount } from "@/api/db";
-import { UnauthorizedError, NotFoundError } from "@/api/errors";
+import { NotFoundError, UnauthorizedError } from "@/api/errors";
+import { Account, AccountType, Actions, UserSession } from "@/api/types";
+import { getSession } from "@/api/utils";
 import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
-import { AccountType, UserSession, Account, Actions } from "@/api/types";
-import logger from "@/utils/logger";
+import { handler } from "@/pages/api/v1/accounts/[account_id]";
+import { NextApiRequest } from "next";
+import httpMocks from "node-mocks-http";
 
 jest.mock("@/api/utils", () => ({
   getSession: jest.fn(),

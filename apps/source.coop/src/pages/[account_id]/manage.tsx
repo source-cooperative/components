@@ -1,19 +1,19 @@
-import { Layout } from "@/components/Layout";
-import { useRouter } from "next/router";
-import { Box, Grid } from "theme-ui";
-import { AccountObject } from "@/components/account/AccountObject";
 import { AccountProfileResponse } from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import useSWR from "swr";
 import { AccountSideNavLinks } from "@/components/AccountSideNav";
-import { EditProfileForm } from "@/components/account/EditProfileForm";
-import { DangerBox } from "@/components/account/DangerBox";
-import { FlagsForm } from "@/components/account/FlagsForm";
+import { Layout } from "@/components/Layout";
 import { APIKeyForm } from "@/components/account/APIKeyForm";
 import { APIKeyList } from "@/components/account/APIKeyList";
-import { Invitations } from "@/components/account/Invitations";
+import { AccountObject } from "@/components/account/AccountObject";
 import { BrowserSettings } from "@/components/account/BrowserSettings";
-import { useState, useEffect } from "react";
+import { DangerBox } from "@/components/account/DangerBox";
+import { EditProfileForm } from "@/components/account/EditProfileForm";
+import { FlagsForm } from "@/components/account/FlagsForm";
+import { Invitations } from "@/components/account/Invitations";
+import { ClientError } from "@/lib/client/accounts";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { Box, Grid } from "theme-ui";
 
 export default function ManageAccount() {
   const router = useRouter();

@@ -1,10 +1,9 @@
-import useSWR from "swr";
-import { SWRResponse } from "swr";
 import {
   Repository,
   RepositoryList,
   RepositoryListResponse,
 } from "@/api/types";
+import useSWR, { SWRResponse } from "swr";
 
 export function listFeaturedRepositories(
   refreshInterval: number = 5,

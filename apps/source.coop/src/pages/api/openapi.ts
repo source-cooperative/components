@@ -1,9 +1,5 @@
 // @ts-nocheck
 
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
-import swaggerJSDoc from "swagger-jsdoc";
-import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import {
   AccountCreationRequestSchema,
   AccountSchema,
@@ -14,13 +10,17 @@ import {
   MembershipSchema,
   RedactedAPIKeySchema,
   RepositoryCreationRequestSchema,
+  RepositoryFeaturedUpdateRequestSchema,
+  RepositoryListSchema,
   RepositoryMetaSchema,
   RepositorySchema,
-  UserSessionSchema,
   RepositoryUpdateRequestSchema,
-  RepositoryListSchema,
-  RepositoryFeaturedUpdateRequestSchema,
+  UserSessionSchema,
 } from "@/api/types";
+import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
+import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
+import swaggerJSDoc from "swagger-jsdoc";
 
 export default async function handler(
   req: NextApiRequest,

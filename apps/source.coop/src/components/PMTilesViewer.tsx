@@ -1,21 +1,16 @@
 
+import { useEffect, useRef, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
-import { useRef } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
 
 
-import Overlay from 'ol/Overlay.js';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import XYZ from 'ol/source/XYZ';
-import { useGeographic } from 'ol/proj';
-import VectorTile from "ol/layer/VectorTile";
 import { PMTilesVectorSource } from "ol-pmtiles";
-import { Style, Stroke, Fill } from 'ol/style';
-import {Control, defaults as defaultControls} from 'ol/control.js';
-import SourceButton from "@/components/Button";
+import Map from 'ol/Map';
+import Overlay from 'ol/Overlay.js';
+import View from 'ol/View';
+import { Control } from 'ol/control.js';
+import VectorTile from "ol/layer/VectorTile";
+import { useGeographic } from 'ol/proj';
+import { Fill, Stroke, Style } from 'ol/style';
 
 class ZoomInControl extends Control {
     constructor(opt_options) {

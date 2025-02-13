@@ -1,27 +1,24 @@
 // source.coop/src/pages/api/v1/accounts/[account_id]/api-keys/api-keys.test.ts
 
+import { isAuthorized } from "@/api/authz";
+import { getAccount, getAPIKeys, putAPIKey } from "@/api/db";
+import {
+  BadRequestError,
+  MethodNotImplementedError,
+  NotFoundError,
+  UnauthorizedError,
+} from "@/api/errors";
+import {
+  Account,
+  AccountType,
+  Actions,
+  APIKey
+} from "@/api/types";
+import { getSession } from "@/api/utils";
+import { jsonBody, MockNextApiResponse } from "@/api/utils/mock";
+import { handler } from "@/pages/api/v1/accounts/[account_id]/api-keys";
 import { NextApiRequest } from "next";
 import httpMocks from "node-mocks-http";
-import { handler } from "@/pages/api/v1/accounts/[account_id]/api-keys";
-import { getSession } from "@/api/utils";
-import { isAuthorized } from "@/api/authz";
-import { getAccount, putAPIKey, getAPIKeys } from "@/api/db";
-import {
-  UnauthorizedError,
-  NotFoundError,
-  MethodNotImplementedError,
-  BadRequestError,
-} from "@/api/errors";
-import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
-import {
-  AccountType,
-  UserSession,
-  Account,
-  APIKey,
-  APIKeyRequest,
-  RedactedAPIKey,
-  Actions,
-} from "@/api/types";
 
 jest.mock("@/api/utils", () => ({
   getSession: jest.fn(),

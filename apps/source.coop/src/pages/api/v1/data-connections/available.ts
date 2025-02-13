@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@/api/utils";
-import { Actions, DataConnectionSchema, DataConnection } from "@/api/types";
-import { withErrorHandling } from "@/api/middleware";
-import { StatusCodes } from "http-status-codes";
-import { MethodNotImplementedError } from "@/api/errors";
 import { isAuthorized } from "@/api/authz";
 import { getDataConnections } from "@/api/db";
+import { MethodNotImplementedError } from "@/api/errors";
+import { withErrorHandling } from "@/api/middleware";
+import { Actions, DataConnection, DataConnectionSchema } from "@/api/types";
+import { getSession } from "@/api/utils";
+import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 /**
  * @openapi
  * /data-connections/available:

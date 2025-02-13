@@ -1,18 +1,16 @@
-import { APIKey, RedactedAPIKey } from "@/api/types";
+import { RedactedAPIKey } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
+import { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import {
-  Box,
-  Text,
-  Grid,
-  Button,
   Alert,
-  Paragraph,
+  Box,
+  Button,
   Card,
+  Grid,
   Input,
+  Text
 } from "theme-ui";
-import { useEffect, useRef, useState } from "react";
-import React from "react";
 import { useCopyToClipboard } from "usehooks-ts";
 
 function CopyableInput({ title, value }: { title: string; value: string }) {

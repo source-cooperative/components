@@ -1,6 +1,6 @@
-import { Box } from "theme-ui";
+import { Column, Row } from "@carbonplan/components";
 import { PoopSad } from "@carbonplan/emoji";
-import { Row, Column } from "@carbonplan/components";
+import { Box } from "theme-ui";
 
 export default function Error() {
   return (

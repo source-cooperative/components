@@ -1,17 +1,14 @@
+import { Repository } from "@/api/types";
 import { InviteMember } from "@/components/account/InviteMember";
 import { MemberList } from "@/components/account/MemberList";
-import { useRouter } from "next/router";
 import { Layout } from "@/components/Layout";
 import { RepositoryListing } from "@/components/repository/RepositoryListing";
-
-import { getRepository } from "@/lib/client/repositories";
 import { RepositorySideNavLinks } from "@/components/RepositorySideNav";
-import { useState, useEffect } from "react";
-import useSWR from "swr";
-import { Repository } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { Box, Grid } from "theme-ui";
-import { AccessData } from "@/components/repository/AccessData";
 
 export default function TenantDetails() {
   const router = useRouter();

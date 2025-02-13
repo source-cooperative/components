@@ -1,6 +1,18 @@
 // Import necessary modules and types
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@/api/utils";
+import { isAuthorized } from "@/api/authz";
+import {
+  getAccount,
+  getMemberships,
+  getRepository,
+  putMembership,
+} from "@/api/db";
+import {
+  BadRequestError,
+  MethodNotImplementedError,
+  NotFoundError,
+  UnauthorizedError,
+} from "@/api/errors";
+import { withErrorHandling } from "@/api/middleware";
 import {
   Actions,
   Membership,
@@ -8,21 +20,9 @@ import {
   MembershipInvitationSchema,
   MembershipState,
 } from "@/api/types";
-import { withErrorHandling } from "@/api/middleware";
+import { getSession } from "@/api/utils";
 import { StatusCodes } from "http-status-codes";
-import {
-  BadRequestError,
-  MethodNotImplementedError,
-  NotFoundError,
-  UnauthorizedError,
-} from "@/api/errors";
-import {
-  getMemberships,
-  getAccount,
-  getRepository,
-  putMembership,
-} from "@/api/db";
-import { isAuthorized } from "@/api/authz";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @openapi

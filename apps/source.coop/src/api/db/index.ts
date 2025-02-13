@@ -40,15 +40,15 @@ import {
   Repository,
   RepositoryFeatured,
 } from "@/api/types";
-import { marshall } from "@aws-sdk/util-dynamodb";
+import logger from "@/utils/logger";
 import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { awsCredentialsProvider } from "@vercel/functions/oidc";
 import {
-  ScanCommand,
   DynamoDBDocumentClient,
   QueryCommand,
+  ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
-import logger from "@/utils/logger";
+import { marshall } from "@aws-sdk/util-dynamodb";
+import { awsCredentialsProvider } from "@vercel/functions/oidc";
 
 const isProd = process.env.NEXT_PUBLIC_IS_PROD === "1";
 const AWS_ROLE_ARN = process.env.AWS_ROLE_ARN!;

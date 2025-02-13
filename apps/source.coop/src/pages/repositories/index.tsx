@@ -1,6 +1,6 @@
 import { Layout } from "@/components/Layout";
-import { useRouter } from "next/router";
 import { RepositoryList } from "@/components/repository/RepositoryList";
+import { useRouter } from "next/router";
 
 export default function Repositories() {
   const router = useRouter();

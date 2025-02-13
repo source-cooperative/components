@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from "react";
 import { Box } from "theme-ui";
 
 export default function SVG({ ...props }) {

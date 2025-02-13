@@ -1,14 +1,14 @@
 import { Layout } from "@/components/Layout";
+import { RepositoryList } from "@/components/repository/RepositoryList";
 import { useRouter } from "next/router";
 import { Box, Grid } from "theme-ui";
-import { RepositoryList } from "@/components/repository/RepositoryList";
 
-import { AccountObject } from "@/components/account/AccountObject";
 import { AccountProfileResponse } from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import useSWR from "swr";
+import { AccountObject } from "@/components/account/AccountObject";
 import { AccountSideNavLinks } from "@/components/AccountSideNav";
+import { ClientError } from "@/lib/client/accounts";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export default function TenantDetails() {
   const router = useRouter();

@@ -1,8 +1,3 @@
-import React, { useState, useEffect } from "react";
-import useSWR from "swr";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Text, Grid, Flex, Button, Alert, Divider } from "theme-ui";
 import {
   AccountFlags,
   AccountProfileResponse,
@@ -10,6 +5,11 @@ import {
   UserSession,
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import useSWR from "swr";
+import { Alert, Box, Button, Divider, Flex, Grid, Text } from "theme-ui";
 import { z } from "zod";
 
 export function FlagsForm({ account_id }: { account_id: string }) {

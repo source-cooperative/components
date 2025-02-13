@@ -1,6 +1,13 @@
 // Import necessary modules and types
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@/api/utils";
+import { isAuthorized } from "@/api/authz";
+import { getAccount, getAPIKeys, putAPIKey } from "@/api/db";
+import {
+  BadRequestError,
+  MethodNotImplementedError,
+  NotFoundError,
+  UnauthorizedError,
+} from "@/api/errors";
+import { withErrorHandling } from "@/api/middleware";
 import {
   Actions,
   APIKey,
@@ -9,17 +16,9 @@ import {
   RedactedAPIKey,
   RedactedAPIKeySchema,
 } from "@/api/types";
-import { withErrorHandling } from "@/api/middleware";
+import { generateAccessKeyID, generateSecretAccessKey, getSession } from "@/api/utils";
 import { StatusCodes } from "http-status-codes";
-import {
-  BadRequestError,
-  MethodNotImplementedError,
-  NotFoundError,
-  UnauthorizedError,
-} from "@/api/errors";
-import { putAPIKey, getAccount, getAPIKeys } from "@/api/db";
-import { isAuthorized } from "@/api/authz";
-import { generateAccessKeyID, generateSecretAccessKey } from "@/api/utils";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @openapi

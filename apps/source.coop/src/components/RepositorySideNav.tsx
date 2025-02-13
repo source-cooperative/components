@@ -1,15 +1,15 @@
-import useSWR from "swr";
-import { useState, useEffect } from "react";
 import {
   AccountFlags,
-  UserSession,
-  Repository,
   MembershipRole,
   MembershipState,
+  Repository,
+  UserSession,
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
 import { SideNavLink } from "@/lib/types";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export function RepositorySideNavLinks({
   account_id,

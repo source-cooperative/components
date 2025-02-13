@@ -1,8 +1,8 @@
-import { UserSession, MembershipState } from "@/api/types";
+import { MembershipState, UserSession } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
 import Link from "next/link";
-import { Alert, Box, Container, Flex, Grid, Spinner } from "theme-ui";
 import useSWR from "swr";
+import { Alert, Box, Container, Flex, Grid, Spinner } from "theme-ui";
 import Error from "./Error";
 import { Footer } from "./Footer";
 import { Logo } from "./Logo";

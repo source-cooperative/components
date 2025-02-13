@@ -1,15 +1,10 @@
-import React, { useState } from "react";
-import useSWR from "swr";
-import { Box, Text, Grid, Button, Alert } from "theme-ui";
 import {
-  AccountProfileResponse,
-  UserSession,
-  AccountFlags,
-  MembershipRole,
-  MembershipState,
+  UserSession
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
-import { useColorMode } from "theme-ui";
+import React, { useState } from "react";
+import useSWR from "swr";
+import { Alert, Box, Button, Grid, Text, useColorMode } from "theme-ui";
 
 export function BrowserSettings({ account_id }: { account_id: string }) {
   const [submitting, setSubmitting] = useState(false);

@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Box,
-  Text,
-  Grid,
-  Input,
-  Textarea,
-  Button,
-  Alert,
-  Select,
-} from "theme-ui";
-import {
-  AccountCreationRequestSchema,
   AccountCreationRequest,
+  AccountCreationRequestSchema,
   AccountType,
 } from "@/api/types";
 import { COUNTRIES } from "@/lib/constants";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Input,
+  Select,
+  Text,
+  Textarea,
+} from "theme-ui";
 
 export function NewAccountForm() {
   const [submitting, setSubmitting] = useState(false);

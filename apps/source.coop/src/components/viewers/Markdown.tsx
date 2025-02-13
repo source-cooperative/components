@@ -1,16 +1,14 @@
 /** @jsxImportSource theme-ui */
 
-import { useState, useEffect } from "react";
 import { SourceComponents } from "@/lib/provider";
-import { MDXProvider } from "@mdx-js/react";
+import { useEffect, useState } from "react";
 
-import * as runtime from "react/jsx-runtime";
-import { evaluate } from "@mdx-js/mdx";
 import { mdxOptions } from "@/lib/md";
+import { evaluate } from "@mdx-js/mdx";
 import Skeleton from "react-loading-skeleton";
-import { Heading, Paragraph } from "theme-ui";
+import * as runtime from "react/jsx-runtime";
+import { Box, Grid, Text } from "theme-ui";
 import SourceLink from "../SourceLink";
-import { Grid, Text, Box } from "theme-ui";
 
 export function Markdown({ url }) {
   const [mdxModule, setMdxModule] = useState(null);

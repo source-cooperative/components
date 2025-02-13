@@ -1,8 +1,7 @@
-import { Card, Box } from "theme-ui";
+import { useRef, useState } from "react";
+import { Box, Card } from "theme-ui";
 import { useCopyToClipboard } from "usehooks-ts";
 import SVG from "./SVG";
-import { toast } from "react-hot-toast";
-import { useRef, useState } from "react";
 
 export function ClipboardIcon() {
   return (

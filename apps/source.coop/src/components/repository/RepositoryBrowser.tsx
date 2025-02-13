@@ -1,4 +1,4 @@
-import { AzureDataConnectionSchema, DataConnection, DataConnectionDetails, Repository, S3DataConnectionSchema } from "@/api/types";
+import { AzureDataConnectionSchema, DataConnection, Repository, S3DataConnectionSchema } from "@/api/types";
 import { default as Button, default as SourceButton } from "@/components/Button";
 import SVG from "@/components/SVG";
 import SourceLink from "@/components/SourceLink";

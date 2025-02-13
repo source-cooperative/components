@@ -1,7 +1,6 @@
-import theme from "@/lib/theme";
-import { Box, Text, Card } from "theme-ui";
 import SourceLink from "@/components/SourceLink";
 import { transparentize } from "@theme-ui/color";
+import { Card, Text } from "theme-ui";
 
 const badgeColors = [
   {

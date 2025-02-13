@@ -1,12 +1,12 @@
-import { NextApiRequest } from "next";
-import httpMocks from "node-mocks-http";
-import { handler } from "@/pages/api/v1/accounts";
-import { getSession } from "@/api/utils";
 import { isAuthorized } from "@/api/authz";
 import { putAccount } from "@/api/db";
-import { UnauthorizedError, BadRequestError } from "@/api/errors";
+import { BadRequestError, UnauthorizedError } from "@/api/errors";
+import { Account, AccountFlags, AccountType, UserSession } from "@/api/types";
+import { getSession } from "@/api/utils";
 import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
-import { AccountType, AccountFlags, UserSession, Account } from "@/api/types";
+import { handler } from "@/pages/api/v1/accounts";
+import { NextApiRequest } from "next";
+import httpMocks from "node-mocks-http";
 import { ZodError } from "zod";
 
 jest.mock("@/api/utils", () => ({

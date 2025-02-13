@@ -1,4 +1,3 @@
-import prism from "@theme-ui/prism/presets/prism.json";
 
 export default {
   space: [0, 4, 8, 16, 24, 32, 48, 64, 96, 128, 172, 256, 512],

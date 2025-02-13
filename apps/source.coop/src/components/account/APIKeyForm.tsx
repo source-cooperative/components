@@ -1,18 +1,18 @@
 import {
-  UserSession,
-  MembershipRole,
-  MembershipState,
   AccountFlags,
   APIKeyRequest,
   APIKeyRequestSchema,
+  MembershipRole,
+  MembershipState,
   RedactedAPIKey,
+  UserSession,
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
-import useSWR from "swr";
-import { Box, Text, Grid, Select, Input, Alert, Button } from "theme-ui";
-import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import useSWR from "swr";
+import { Alert, Box, Button, Grid, Input, Text } from "theme-ui";
 
 export function APIKeyForm({
   account_id,

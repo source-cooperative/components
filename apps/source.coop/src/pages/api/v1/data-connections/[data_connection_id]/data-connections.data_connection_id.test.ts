@@ -1,25 +1,25 @@
-import { NextApiRequest } from "next";
-import httpMocks from "node-mocks-http";
-import { handler } from "@/pages/api/v1/data-connections/[data_connection_id]";
-import { getSession } from "@/api/utils";
 import { isAuthorized } from "@/api/authz";
 import { getDataConnection, putDataConnection } from "@/api/db";
 import {
-  UnauthorizedError,
-  NotFoundError,
   MethodNotImplementedError,
+  NotFoundError,
+  UnauthorizedError,
 } from "@/api/errors";
-import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
 import {
-  DataProvider,
-  S3Regions,
-  DataConnectionAuthenticationType,
   AccountFlags,
-  UserSession,
-  DataConnection,
   AccountType,
+  DataConnection,
+  DataConnectionAuthenticationType,
+  DataProvider,
   RepositoryDataMode,
+  S3Regions,
+  UserSession,
 } from "@/api/types";
+import { getSession } from "@/api/utils";
+import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
+import { handler } from "@/pages/api/v1/data-connections/[data_connection_id]";
+import { NextApiRequest } from "next";
+import httpMocks from "node-mocks-http";
 
 jest.mock("@/api/utils", () => ({
   getSession: jest.fn(),

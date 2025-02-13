@@ -1,4 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { isAuthorized } from "@/api/authz";
+import { getRepository } from "@/api/db";
+import { MethodNotImplementedError, NotFoundError } from "@/api/errors";
 import { withErrorHandling } from "@/api/middleware";
 import {
   Actions,
@@ -6,10 +8,8 @@ import {
   RepositoryPermissionsResponse,
 } from "@/api/types";
 import { getSession } from "@/api/utils";
-import { getRepository } from "@/api/db";
-import { NotFoundError, MethodNotImplementedError } from "@/api/errors";
-import { isAuthorized } from "@/api/authz";
 import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 async function getRepositoryPermissionsHandler(
   req: NextApiRequest,

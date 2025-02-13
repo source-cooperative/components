@@ -1,15 +1,13 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { Box, Grid } from "theme-ui";
-
-import { Layout } from "@/components/Layout";
+import { AccountProfileResponse } from "@/api/types";
 import { AccountObject } from "@/components/account/AccountObject";
 import { AccountSideNavLinks } from "@/components/AccountSideNav";
-import { AccountProfileResponse } from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
+import { Layout } from "@/components/Layout";
 import { NewRepositoryForm } from "@/components/repository/NewRepositoryForm";
-import { useEffect } from "react";
+import { ClientError } from "@/lib/client/accounts";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { Box, Grid } from "theme-ui";
 
 export default function TenantDetails() {
   const router = useRouter();

@@ -1,8 +1,8 @@
-import { Box, Heading, Image, Grid, Text } from "theme-ui";
 import { Account, AccountProfileResponse } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
+import { GoInfo, GoLink, GoLocation } from "react-icons/go";
 import useSWR from "swr";
-import { GoLocation, GoLink, GoInfo } from "react-icons/go";
+import { Box, Grid, Heading, Image, Text } from "theme-ui";
 import SourceLink from "../SourceLink";
 
 export function AccountObject({ account_id }: { account_id: string }) {

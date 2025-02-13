@@ -1,9 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@/api/utils";
-import { UserSession } from "@/api/types";
-import { withErrorHandling } from "@/api/middleware";
-import { StatusCodes } from "http-status-codes";
 import { MethodNotImplementedError, UnauthorizedError } from "@/api/errors";
+import { withErrorHandling } from "@/api/middleware";
+import { UserSession } from "@/api/types";
+import { getSession } from "@/api/utils";
+import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 async function whoamiHandler(
   req: NextApiRequest,

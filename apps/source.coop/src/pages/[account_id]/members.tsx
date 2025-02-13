@@ -1,14 +1,14 @@
 import { AccountProfileResponse } from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
 import { AccountObject } from "@/components/account/AccountObject";
-import { AccountSideNavLinks } from "@/components/AccountSideNav";
 import { InviteMember } from "@/components/account/InviteMember";
-import { Layout } from "@/components/Layout";
 import { MemberList } from "@/components/account/MemberList";
+import { AccountSideNavLinks } from "@/components/AccountSideNav";
+import { Layout } from "@/components/Layout";
+import { ClientError } from "@/lib/client/accounts";
 import { useRouter } from "next/router";
-import useSWR from "swr";
-import { Grid, Box } from "theme-ui";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { Box, Grid } from "theme-ui";
 
 export default function TenantDetails() {
   const router = useRouter();

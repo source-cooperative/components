@@ -1,6 +1,6 @@
-import React, { forwardRef } from "react";
-import { Box, Button } from "theme-ui";
 import Link from "next/link";
+import { forwardRef } from "react";
+import { Box, Button } from "theme-ui";
 
 const SourceButton = ({ children, suffix, href, ...props }, ref) => {
   if (href) {

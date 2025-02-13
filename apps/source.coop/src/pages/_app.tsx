@@ -6,16 +6,16 @@ import theme from "@/lib/theme";
 
 import Router from "next/router";
 import NProgress from "nprogress"; //nprogress module
-import "../styles/nprogress.css"; //styles of nprogress
 import { SkeletonTheme } from "react-loading-skeleton";
+import "../styles/nprogress.css"; //styles of nprogress
 
 import provider from "@mdx-js/react";
 
-import * as runtime from "react/jsx-runtime";
-import { evaluate } from "@mdx-js/mdx";
 import { mdxOptions } from "@/lib/md";
+import { evaluate } from "@mdx-js/mdx";
+import * as runtime from "react/jsx-runtime";
 
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 import { SWRConfig } from "swr";
 
@@ -81,10 +81,10 @@ Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
 
-import { SourceProvider, components as SourceComponents } from "@/lib/provider";
+import { components as SourceComponents, SourceProvider } from "@/lib/provider";
 
-import type { AppProps } from "next/app";
 import { Analytics } from "@vercel/analytics/react";
+import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

@@ -1,16 +1,16 @@
-import useSWR from "swr";
-import { useState, useEffect } from "react";
 import {
-  AccountProfileResponse,
   AccountFlags,
-  UserSession,
+  AccountProfileResponse,
   AccountType,
-  MembershipState,
   MembershipRole,
+  MembershipState,
+  UserSession,
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
 import { SideNavLink } from "@/lib/types";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export function AccountSideNavLinks({ account_id }: { account_id: string }) {
   const router = useRouter();

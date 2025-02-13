@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import useSWR from "swr";
-import { Box, Text, Grid, Button, Alert } from "theme-ui";
 import {
-  AccountProfileResponse,
-  UserSession,
   AccountFlags,
-  MembershipRole,
-  MembershipState,
   Repository,
+  UserSession
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
+import React, { useState } from "react";
+import useSWR from "swr";
+import { Alert, Box, Button, Grid, Text } from "theme-ui";
 
 export function AdminBox({
   account_id,

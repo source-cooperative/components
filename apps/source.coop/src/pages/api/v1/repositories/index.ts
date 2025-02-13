@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { withErrorHandling } from "@/api/middleware";
-import { Actions, RepositoryListResponse, AccountFlags } from "@/api/types";
-import { MethodNotImplementedError } from "@/api/errors";
-import { StatusCodes } from "http-status-codes";
-import { getRepositories } from "@/api/db";
-import { getSession } from "@/api/utils";
 import { isAuthorized } from "@/api/authz";
+import { getRepositories } from "@/api/db";
+import { MethodNotImplementedError } from "@/api/errors";
+import { withErrorHandling } from "@/api/middleware";
+import { AccountFlags, Actions, RepositoryListResponse } from "@/api/types";
+import { getSession } from "@/api/utils";
+import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export async function getRepositoriesHandler(
   req: NextApiRequest,

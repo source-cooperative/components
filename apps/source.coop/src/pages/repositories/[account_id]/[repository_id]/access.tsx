@@ -1,15 +1,13 @@
-import { useRouter } from "next/router";
-import { Layout } from "@/components/Layout";
-import { RepositoryListing } from "@/components/repository/RepositoryListing";
-
-import { getRepository } from "@/lib/client/repositories";
-import { RepositorySideNavLinks } from "@/components/RepositorySideNav";
-import { useState, useEffect } from "react";
-import useSWR from "swr";
 import { Repository } from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import { Box, Grid } from "theme-ui";
+import { Layout } from "@/components/Layout";
 import { AccessData } from "@/components/repository/AccessData";
+import { RepositoryListing } from "@/components/repository/RepositoryListing";
+import { RepositorySideNavLinks } from "@/components/RepositorySideNav";
+import { ClientError } from "@/lib/client/accounts";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { Box, Grid } from "theme-ui";
 
 export default function RepositoryDownload() {
   const router = useRouter();

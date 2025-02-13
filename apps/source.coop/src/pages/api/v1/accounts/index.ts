@@ -1,22 +1,22 @@
 // Import necessary modules and types
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@/api/utils";
-import {
-  Account,
-  AccountType,
-  AccountCreationRequestSchema,
-  Actions,
-  AccountFlags,
-} from "@/api/types";
-import { withErrorHandling } from "@/api/middleware";
-import { StatusCodes } from "http-status-codes";
+import { isAuthorized } from "@/api/authz";
+import { putAccount } from "@/api/db";
 import {
   BadRequestError,
   MethodNotImplementedError,
   UnauthorizedError,
 } from "@/api/errors";
-import { putAccount } from "@/api/db";
-import { isAuthorized } from "@/api/authz";
+import { withErrorHandling } from "@/api/middleware";
+import {
+  Account,
+  AccountCreationRequestSchema,
+  AccountFlags,
+  AccountType,
+  Actions,
+} from "@/api/types";
+import { getSession } from "@/api/utils";
+import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 const isProd = process.env.NEXT_PUBLIC_IS_PROD === "1";
 

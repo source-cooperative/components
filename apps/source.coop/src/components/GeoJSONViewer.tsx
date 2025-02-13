@@ -1,19 +1,15 @@
+import { useEffect, useRef, useState } from "react";
 import { Box, Text } from "theme-ui";
-import { useRef } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
 
 import Map from "ol/Map";
 import View from "ol/View";
-import TileLayer from "ol/layer/Tile";
-import XYZ from "ol/source/XYZ";
-import { useGeographic } from "ol/proj";
-import VectorTile from "ol/layer/VectorTile";
-import { PMTilesVectorSource } from "ol-pmtiles";
-import { Style, Stroke, Fill } from "ol/style";
 import GeoJSON from "ol/format/GeoJSON.js";
-import VectorSource from "ol/source/Vector";
+import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector.js";
+import { useGeographic } from "ol/proj";
+import VectorSource from "ol/source/Vector";
+import XYZ from "ol/source/XYZ";
+import { Fill, Stroke, Style } from "ol/style";
 
 import { defaults as defaultControls } from "ol/control.js";
 

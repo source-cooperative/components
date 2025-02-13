@@ -1,20 +1,20 @@
-import { isAuthorized } from "./index";
-import {
-  sessions,
-  mappedRepositories,
-  mappedAPIKeys,
-  memberships,
-} from "../utils/mock";
 import {
   Account,
-  Actions,
-  AccountType,
   AccountFlags,
+  AccountType,
+  Actions,
   DataConnection,
-  S3Regions,
   DataProvider,
   RepositoryDataMode,
+  S3Regions,
 } from "@/api/types";
+import {
+  mappedAPIKeys,
+  mappedRepositories,
+  memberships,
+  sessions,
+} from "../utils/mock";
+import { isAuthorized } from "./index";
 
 describe("Authorization Tests", () => {
   test("Action: repository:create", () => {

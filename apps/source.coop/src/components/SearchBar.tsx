@@ -1,9 +1,7 @@
-import { Input, Box, Image, Grid } from "theme-ui";
-import { Info, Globe } from "@carbonplan/icons";
-import Skeleton from "react-loading-skeleton";
-import Button from "./Button";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Box, Grid, Input } from "theme-ui";
+import Button from "./Button";
 
 export function SearchBar() {
   const router = useRouter();

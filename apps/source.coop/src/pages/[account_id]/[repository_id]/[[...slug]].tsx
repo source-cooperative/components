@@ -1,13 +1,13 @@
-import { useRouter } from "next/router";
+import { Repository } from "@/api/types";
 import { Layout } from "@/components/Layout";
 import RepositoryBrowser from "@/components/repository/RepositoryBrowser";
 import { RepositoryListing } from "@/components/repository/RepositoryListing";
-import { Grid } from "theme-ui";
 import { RepositorySideNavLinks } from "@/components/RepositorySideNav";
-import { useState, useEffect } from "react";
-import useSWR from "swr";
-import { Repository } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { Grid } from "theme-ui";
 
 export default function RepositoryDetail() {
   const router = useRouter();

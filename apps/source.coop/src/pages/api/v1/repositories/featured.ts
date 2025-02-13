@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { isAuthorized } from "@/api/authz";
+import { getFeaturedRepositories } from "@/api/db";
+import { MethodNotImplementedError } from "@/api/errors";
 import { withErrorHandling } from "@/api/middleware";
 import { Actions, RepositoryList } from "@/api/types";
-import { MethodNotImplementedError } from "@/api/errors";
 import { getSession } from "@/api/utils";
-import { getFeaturedRepositories } from "@/api/db";
-import { isAuthorized } from "@/api/authz";
 import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 async function featuredRepositoriesHandler(
   req: NextApiRequest,

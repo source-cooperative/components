@@ -1,9 +1,9 @@
+import { MethodNotImplementedError, UnauthorizedError } from "@/api/errors";
+import { getSession } from "@/api/utils";
+import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
+import { handler } from "@/pages/api/v1/whoami";
 import { NextApiRequest } from "next";
 import httpMocks from "node-mocks-http";
-import { handler } from "@/pages/api/v1/whoami";
-import { getSession } from "@/api/utils";
-import { UnauthorizedError, MethodNotImplementedError } from "@/api/errors";
-import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
 
 jest.mock("@/api/utils", () => ({
   getSession: jest.fn(),

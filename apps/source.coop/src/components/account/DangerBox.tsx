@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import useSWR from "swr";
-import { Box, Text, Grid, Button, Alert } from "theme-ui";
 import {
-  AccountProfileResponse,
-  UserSession,
   AccountFlags,
+  AccountProfileResponse,
   MembershipRole,
   MembershipState,
+  UserSession,
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
+import React, { useState } from "react";
+import useSWR from "swr";
+import { Alert, Box, Button, Grid, Text } from "theme-ui";
 
 export function DangerBox({ account_id }: { account_id: string }) {
   const [submitting, setSubmitting] = useState(false);

@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-import useSWR from "swr";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Box,
-  Text,
-  Grid,
-  Input,
-  Textarea,
-  Button,
-  Alert,
-  Select,
-} from "theme-ui";
-import {
-  AccountProfileResponse,
-  AccountProfile,
-  AccountProfileSchema,
-  UserSession,
   AccountFlags,
+  AccountProfile,
+  AccountProfileResponse,
+  AccountProfileSchema,
   MembershipRole,
   MembershipState,
+  UserSession,
 } from "@/api/types";
 import { ClientError } from "@/lib/client/accounts";
 import { COUNTRIES } from "@/lib/constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import useSWR from "swr";
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Input,
+  Select,
+  Text,
+  Textarea,
+} from "theme-ui";
 
 export function EditProfileForm({ account_id }: { account_id: string }) {
   const [submitting, setSubmitting] = useState(false);

@@ -1,11 +1,10 @@
-import useSWR from "swr";
-import useSWRImmutable from "swr/immutable";
-import { SWRResponse } from "swr";
 import {
   AccountFlags,
   AccountProfileResponse,
   RedactedAPIKey,
 } from "@/api/types";
+import useSWR, { SWRResponse } from "swr";
+import useSWRImmutable from "swr/immutable";
 
 export type ClientError = {
   status: number;

@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { StatusCodes } from "http-status-codes";
 import {
   BadRequestError,
   MethodNotImplementedError,
@@ -7,6 +5,8 @@ import {
   UnauthorizedError,
 } from "@/api/errors";
 import logger from "@/utils/logger";
+import { StatusCodes } from "http-status-codes";
+import { NextApiRequest, NextApiResponse } from "next";
 import { ZodError } from "zod";
 
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<void>;

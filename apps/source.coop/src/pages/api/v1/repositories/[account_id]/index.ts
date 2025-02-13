@@ -1,4 +1,16 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { isAuthorized } from "@/api/authz";
+import {
+  getAccount,
+  getDataConnection,
+  getRepositoriesByAccount,
+  putRepository,
+} from "@/api/db";
+import {
+  BadRequestError,
+  MethodNotImplementedError,
+  NotFoundError,
+  UnauthorizedError,
+} from "@/api/errors";
 import { withErrorHandling } from "@/api/middleware";
 import {
   Actions,
@@ -8,22 +20,10 @@ import {
   RepositoryList,
   RepositoryState,
 } from "@/api/types";
-import {
-  BadRequestError,
-  MethodNotImplementedError,
-  NotFoundError,
-  UnauthorizedError,
-} from "@/api/errors";
 import { getSession } from "@/api/utils";
-import {
-  getAccount,
-  getDataConnection,
-  getRepositoriesByAccount,
-  putRepository,
-} from "@/api/db";
-import { isAuthorized } from "@/api/authz";
 import Handlebars from "handlebars";
 import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 async function listRepositoriesHandler(
   req: NextApiRequest,
