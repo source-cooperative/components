@@ -109,96 +109,93 @@ export function APIKeyList({
                 </Box>
               </Card>
             }
-            {apiKeys &&
-              apiKeys
-                .sort((a, b) => {
-                  if (a.access_key_id === latestAPIKey?.access_key_id) {
-                    return -1
-                  } else return 1
-                })
-                .map((apiKey) => {
-                  return (
-                    <>
-                      <Box key={`api-key-${apiKey.access_key_id}`}>
-                        <Grid
-                          variant="form"
-                          sx={{ gridTemplateColumns: '1fr auto' }}
-                        >
-                          <Box variant="formField" sx={{ gridColumn: 1 }}>
-                            <Text variant="formLabel">Name</Text>
-                            <Input
-                              value={apiKey.name}
-                              variant="readonly"
-                              disabled={true}
-                            />
-                          </Box>
-                          <CopyableInput
-                            title="Access Key ID"
-                            value={apiKey.access_key_id}
-                          />
-                          <CopyableInput
-                            title="Secret Access Key"
-                            value={
-                              latestAPIKey &&
-                              latestAPIKey?.access_key_id ===
-                                apiKey.access_key_id
-                                ? latestAPIKey.secret_access_key
-                                : '<REDACTED>'
-                            }
-                          />
-                          <Box variant="formField" sx={{ gridColumn: 1 }}>
-                            <Text variant="formLabel">Expires On</Text>
-                            <Input
-                              value={apiKey.expires}
-                              variant="readonly"
-                              disabled={true}
-                            />
-                          </Box>
-                          <Box
-                            variant="cards.formButtonBox"
-                            sx={{
-                              gridColumn: '1 / -1',
-                              justifyContent: 'left',
-                            }}
-                          >
-                            <Button
-                              variant="formDestructive"
-                              sx={{
-                                height: 'fit-content',
-                                alignSelf: 'center',
-                              }}
-                              disabled={apiKey.disabled}
-                              onClick={async () => {
-                                setSubmitting(true)
-                                setErrorMessage(null)
-                                setSuccessMessage(null)
-                                fetch(
-                                  `/api/v1/api-keys/${apiKey.access_key_id}`,
-                                  {
-                                    method: 'DELETE',
-                                  },
-                                ).then((res) => {
-                                  if (res.ok) {
-                                    setSubmitting(false)
-                                    setSuccessMessage('API Key Revoked')
-                                    reloadAPIKeys()
-                                  } else {
-                                    res.json().then((data) => {
-                                      setSubmitting(false)
-                                      setErrorMessage(data.message)
-                                    })
-                                  }
-                                })
-                              }}
-                            >
-                              Revoke
-                            </Button>
-                          </Box>
-                        </Grid>
+            {apiKeys?.sort((a, b) => {
+              if (a.access_key_id === latestAPIKey?.access_key_id) {
+                return -1
+              } else return 1
+            }).map((apiKey) => {
+              return (
+                <>
+                  <Box key={`api-key-${apiKey.access_key_id}`}>
+                    <Grid
+                      variant="form"
+                      sx={{ gridTemplateColumns: '1fr auto' }}
+                    >
+                      <Box variant="formField" sx={{ gridColumn: 1 }}>
+                        <Text variant="formLabel">Name</Text>
+                        <Input
+                          value={apiKey.name}
+                          variant="readonly"
+                          disabled={true}
+                        />
                       </Box>
-                    </>
-                  )
-                })}
+                      <CopyableInput
+                        title="Access Key ID"
+                        value={apiKey.access_key_id}
+                      />
+                      <CopyableInput
+                        title="Secret Access Key"
+                        value={
+                          latestAPIKey &&
+                              latestAPIKey.access_key_id ===
+                                apiKey.access_key_id
+                            ? latestAPIKey.secret_access_key
+                            : '<REDACTED>'
+                        }
+                      />
+                      <Box variant="formField" sx={{ gridColumn: 1 }}>
+                        <Text variant="formLabel">Expires On</Text>
+                        <Input
+                          value={apiKey.expires}
+                          variant="readonly"
+                          disabled={true}
+                        />
+                      </Box>
+                      <Box
+                        variant="cards.formButtonBox"
+                        sx={{
+                          gridColumn: '1 / -1',
+                          justifyContent: 'left',
+                        }}
+                      >
+                        <Button
+                          variant="formDestructive"
+                          sx={{
+                            height: 'fit-content',
+                            alignSelf: 'center',
+                          }}
+                          disabled={apiKey.disabled}
+                          onClick={async () => {
+                            setSubmitting(true)
+                            setErrorMessage(null)
+                            setSuccessMessage(null)
+                            fetch(
+                              `/api/v1/api-keys/${apiKey.access_key_id}`,
+                              {
+                                method: 'DELETE',
+                              },
+                            ).then((res) => {
+                              if (res.ok) {
+                                setSubmitting(false)
+                                setSuccessMessage('API Key Revoked')
+                                reloadAPIKeys()
+                              } else {
+                                res.json().then((data) => {
+                                  setSubmitting(false)
+                                  setErrorMessage(data.message)
+                                })
+                              }
+                            })
+                          }}
+                        >
+                              Revoke
+                        </Button>
+                      </Box>
+                    </Grid>
+                  </Box>
+                </>
+              )
+            })}
           </Grid>
         </fieldset>
       </Box>

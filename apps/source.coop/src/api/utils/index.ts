@@ -35,7 +35,7 @@ import {
   getAccountByIdentityId,
   getMembershipsForUser,
 } from '@/api/db'
-import { Account, AccountFlags, Actions, UserSession } from '@/api/types'
+import { AccountFlags, Actions, UserSession } from '@/api/types'
 import * as crypto from 'crypto'
 import type { NextApiRequest } from 'next'
 

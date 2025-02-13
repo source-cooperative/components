@@ -34,7 +34,7 @@ export function DangerBox({ account_id }: { account_id: string }) {
   )
 
   let hasEditPermissions = false
-  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+  if (user?.account.flags.includes(AccountFlags.ADMIN)) {
     hasEditPermissions = true
   } else if (user && user.account.account_id === account_id) {
     hasEditPermissions = true

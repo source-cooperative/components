@@ -34,7 +34,7 @@ export function SearchBar() {
   }
 
   useEffect(() => {
-    if (router.query && router.query.q) {
+    if (router.query.q) {
       setQuery(router.query.q)
     }
   }, [router.query])

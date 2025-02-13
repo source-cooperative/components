@@ -41,7 +41,7 @@ export function AdminBox({
   )
 
   let hasAdminPermissions = false
-  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+  if (user?.account.flags.includes(AccountFlags.ADMIN)) {
     hasAdminPermissions = true
   }
 

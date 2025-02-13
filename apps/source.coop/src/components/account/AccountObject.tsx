@@ -27,7 +27,7 @@ export function AccountObject({ account_id }: { account_id: string }) {
         gap: 2,
       }}
     >
-      {profile && profile.profile_image ?
+      {profile?.profile_image ?
         <Image
           sx={{
             borderWidth: 4,

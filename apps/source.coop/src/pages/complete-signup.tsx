@@ -69,7 +69,7 @@ export default function AccountForm() {
     },
   )
 
-  if (user && user.account) {
+  if (user?.account) {
     router.push(`/${user.account.account_id}`)
   }
 
