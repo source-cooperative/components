@@ -1,59 +1,59 @@
-import { isAuthorized } from "@/api/authz";
-import { putAccount } from "@/api/db";
-import { BadRequestError, UnauthorizedError } from "@/api/errors";
-import { Account, AccountFlags, AccountType, UserSession } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
-import { handler } from "@/pages/api/v1/accounts";
-import { NextApiRequest } from "next";
-import httpMocks from "node-mocks-http";
-import { ZodError } from "zod";
+import { isAuthorized } from '@/api/authz'
+import { putAccount } from '@/api/db'
+import { BadRequestError, UnauthorizedError } from '@/api/errors'
+import { Account, AccountFlags, AccountType, UserSession } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { MockNextApiResponse, jsonBody } from '@/api/utils/mock'
+import { handler } from '@/pages/api/v1/accounts'
+import { NextApiRequest } from 'next'
+import httpMocks from 'node-mocks-http'
+import { ZodError } from 'zod'
 
-jest.mock("@/api/utils", () => ({
+jest.mock('@/api/utils', () => ({
   getSession: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/authz", () => ({
+jest.mock('@/api/authz', () => ({
   isAuthorized: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/db", () => ({
+jest.mock('@/api/db', () => ({
   putAccount: jest.fn(),
-}));
+}))
 
-describe("/api/v1/accounts", () => {
-  let req: NextApiRequest;
-  let res: MockNextApiResponse;
+describe('/api/v1/accounts', () => {
+  let req: NextApiRequest
+  let res: MockNextApiResponse
 
   beforeEach(() => {
-    req = httpMocks.createRequest();
-    res = httpMocks.createResponse() as MockNextApiResponse;
-    req.method = "POST";
-  });
+    req = httpMocks.createRequest()
+    res = httpMocks.createResponse() as MockNextApiResponse
+    req.method = 'POST'
+  })
 
   afterEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
-  it("should throw UnauthorizedError when user is not signed in", async () => {
-    (getSession as jest.Mock).mockResolvedValue(null);
+  it('should throw UnauthorizedError when user is not signed in', async () => {
+    (getSession as jest.Mock).mockResolvedValue(null)
 
     req.body = {
-      account_id: "new-user-account",
+      account_id: 'new-user-account',
       account_type: AccountType.USER,
       profile: {
-        name: "New User",
+        name: 'New User',
       },
-    };
+    }
 
-    await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-  });
+    await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+  })
 
-  it("should throw UnauthorizedError when user is already associated with an account and tries to create a user account", async () => {
+  it('should throw UnauthorizedError when user is already associated with an account and tries to create a user account', async () => {
     const mockSession: UserSession = {
-      identity_id: "existing-user",
+      identity_id: 'existing-user',
       account: {
-        account_id: "existing-account",
+        account_id: 'existing-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
@@ -61,24 +61,24 @@ describe("/api/v1/accounts", () => {
       },
     };
     (getSession as jest.Mock).mockResolvedValue(mockSession);
-    (isAuthorized as jest.Mock).mockReturnValue(false);
+    (isAuthorized as jest.Mock).mockReturnValue(false)
 
     req.body = {
-      account_id: "new-user-account",
+      account_id: 'new-user-account',
       account_type: AccountType.USER,
       profile: {
-        name: "New User",
+        name: 'New User',
       },
-    };
+    }
 
-    await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-  });
+    await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+  })
 
-  it("should throw UnauthorizedError when user tries to create an account without required permissions", async () => {
+  it('should throw UnauthorizedError when user tries to create an account without required permissions', async () => {
     const mockSession: UserSession = {
-      identity_id: "user-without-perms",
+      identity_id: 'user-without-perms',
       account: {
-        account_id: "user-account",
+        account_id: 'user-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
@@ -86,58 +86,58 @@ describe("/api/v1/accounts", () => {
       },
     };
     (getSession as jest.Mock).mockResolvedValue(mockSession);
-    (isAuthorized as jest.Mock).mockReturnValue(false);
+    (isAuthorized as jest.Mock).mockReturnValue(false)
 
     req.body = {
-      account_id: "org-account",
+      account_id: 'org-account',
       account_type: AccountType.ORGANIZATION,
       profile: {
-        name: "New Org",
+        name: 'New Org',
       },
-    };
+    }
 
-    await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-  });
+    await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+  })
 
-  it("should create a user account successfully when authorized", async () => {
+  it('should create a user account successfully when authorized', async () => {
     const mockSession: UserSession = {
-      identity_id: "authorized-user",
+      identity_id: 'authorized-user',
     };
     (getSession as jest.Mock).mockResolvedValue(mockSession);
-    (isAuthorized as jest.Mock).mockReturnValue(true);
+    (isAuthorized as jest.Mock).mockReturnValue(true)
 
     const newAccount: Account = {
-      account_id: "new-user-account",
+      account_id: 'new-user-account',
       account_type: AccountType.USER,
       disabled: false,
       profile: {
-        name: "New User",
+        name: 'New User',
       },
       flags: [],
-      identity_id: "authorized-user",
+      identity_id: 'authorized-user',
     };
 
-    (putAccount as jest.Mock).mockResolvedValue([newAccount, true]);
+    (putAccount as jest.Mock).mockResolvedValue([newAccount, true])
 
     req.body = {
-      account_id: "new-user-account",
+      account_id: 'new-user-account',
       account_type: AccountType.USER,
       profile: {
-        name: "New User",
+        name: 'New User',
       },
-    };
+    }
 
-    await handler(req, res);
+    await handler(req, res)
 
-    expect(res.statusCode).toBe(200);
-    expect(jsonBody(res)).toEqual(newAccount);
-  });
+    expect(res.statusCode).toBe(200)
+    expect(jsonBody(res)).toEqual(newAccount)
+  })
 
-  it("should create an organization account successfully when authorized", async () => {
+  it('should create an organization account successfully when authorized', async () => {
     const mockSession: UserSession = {
-      identity_id: "authorized-user",
+      identity_id: 'authorized-user',
       account: {
-        account_id: "user-account",
+        account_id: 'user-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
@@ -145,39 +145,39 @@ describe("/api/v1/accounts", () => {
       },
     };
     (getSession as jest.Mock).mockResolvedValue(mockSession);
-    (isAuthorized as jest.Mock).mockReturnValue(true);
+    (isAuthorized as jest.Mock).mockReturnValue(true)
 
     const newAccount: Account = {
-      account_id: "new-org-account",
+      account_id: 'new-org-account',
       account_type: AccountType.ORGANIZATION,
       disabled: false,
       profile: {
-        name: "New Org",
+        name: 'New Org',
       },
       flags: [],
     };
 
-    (putAccount as jest.Mock).mockResolvedValue([newAccount, true]);
+    (putAccount as jest.Mock).mockResolvedValue([newAccount, true])
 
     req.body = {
-      account_id: "new-org-account",
+      account_id: 'new-org-account',
       account_type: AccountType.ORGANIZATION,
       profile: {
-        name: "New Org",
+        name: 'New Org',
       },
-    };
+    }
 
-    await handler(req, res);
+    await handler(req, res)
 
-    expect(res.statusCode).toBe(200);
-    expect(jsonBody(res)).toEqual(newAccount);
-  });
+    expect(res.statusCode).toBe(200)
+    expect(jsonBody(res)).toEqual(newAccount)
+  })
 
-  it("should create a service account successfully when user is an admin", async () => {
+  it('should create a service account successfully when user is an admin', async () => {
     const mockSession: UserSession = {
-      identity_id: "admin-user",
+      identity_id: 'admin-user',
       account: {
-        account_id: "admin-account",
+        account_id: 'admin-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
@@ -185,39 +185,39 @@ describe("/api/v1/accounts", () => {
       },
     };
     (getSession as jest.Mock).mockResolvedValue(mockSession);
-    (isAuthorized as jest.Mock).mockReturnValue(true);
+    (isAuthorized as jest.Mock).mockReturnValue(true)
 
     const newAccount: Account = {
-      account_id: "new-service-account",
+      account_id: 'new-service-account',
       account_type: AccountType.SERVICE,
       disabled: false,
       profile: {
-        name: "New Service",
+        name: 'New Service',
       },
       flags: [],
     };
 
-    (putAccount as jest.Mock).mockResolvedValue([newAccount, true]);
+    (putAccount as jest.Mock).mockResolvedValue([newAccount, true])
 
     req.body = {
-      account_id: "new-service-account",
+      account_id: 'new-service-account',
       account_type: AccountType.SERVICE,
       profile: {
-        name: "New Service",
+        name: 'New Service',
       },
-    };
+    }
 
-    await handler(req, res);
+    await handler(req, res)
 
-    expect(res.statusCode).toBe(200);
-    expect(jsonBody(res)).toEqual(newAccount);
-  });
+    expect(res.statusCode).toBe(200)
+    expect(jsonBody(res)).toEqual(newAccount)
+  })
 
-  it("should throw BadRequestError when account with same ID already exists", async () => {
+  it('should throw BadRequestError when account with same ID already exists', async () => {
     const mockSession: UserSession = {
-      identity_id: "authorized-user",
+      identity_id: 'authorized-user',
       account: {
-        account_id: "user-account",
+        account_id: 'user-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
@@ -227,26 +227,26 @@ describe("/api/v1/accounts", () => {
     (getSession as jest.Mock).mockResolvedValue(mockSession);
     (isAuthorized as jest.Mock).mockReturnValue(true);
     (putAccount as jest.Mock).mockResolvedValue([
-      { account_id: "existing-account" },
+      { account_id: 'existing-account' },
       false,
-    ]);
+    ])
 
     req.body = {
-      account_id: "existing-account",
+      account_id: 'existing-account',
       account_type: AccountType.USER,
       profile: {
-        name: "Existing User",
+        name: 'Existing User',
       },
-    };
+    }
 
-    await expect(handler(req, res)).rejects.toThrow(BadRequestError);
-  });
+    await expect(handler(req, res)).rejects.toThrow(BadRequestError)
+  })
 
-  it("should throw ZodError when provided with invalid data", async () => {
+  it('should throw ZodError when provided with invalid data', async () => {
     const mockSession: UserSession = {
-      identity_id: "authorized-user",
+      identity_id: 'authorized-user',
       account: {
-        account_id: "user-account",
+        account_id: 'user-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
@@ -254,16 +254,16 @@ describe("/api/v1/accounts", () => {
       },
     };
     (getSession as jest.Mock).mockResolvedValue(mockSession);
-    (isAuthorized as jest.Mock).mockReturnValue(true);
+    (isAuthorized as jest.Mock).mockReturnValue(true)
 
     req.body = {
-      account_id: "invalid!account@id",
-      account_type: "invalid_type",
+      account_id: 'invalid!account@id',
+      account_type: 'invalid_type',
       profile: {
-        name: "Invalid Account",
+        name: 'Invalid Account',
       },
-    };
+    }
 
-    await expect(handler(req, res)).rejects.toThrow(ZodError);
-  });
-});
+    await expect(handler(req, res)).rejects.toThrow(ZodError)
+  })
+})

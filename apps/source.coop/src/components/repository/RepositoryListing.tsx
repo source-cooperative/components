@@ -1,10 +1,10 @@
-import { Repository, RepositoryDataMode, RepositoryState } from "@/api/types";
-import SourceLink from "@/components/SourceLink";
-import RepositoryTag from "@/components/repository/RepositoryTag";
-import moment from "moment";
-import { useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import { Card, Flex, Heading, Paragraph, Text } from "theme-ui";
+import { Repository, RepositoryDataMode, RepositoryState } from '@/api/types'
+import SourceLink from '@/components/SourceLink'
+import RepositoryTag from '@/components/repository/RepositoryTag'
+import moment from 'moment'
+import { useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
+import { Card, Flex, Heading, Paragraph, Text } from 'theme-ui'
 
 export function RepositoryListing({
   repository,
@@ -13,84 +13,84 @@ export function RepositoryListing({
   repository: Repository;
   truncate: boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
-  var description,
+  let description,
     title,
     details,
-    tags = null;
-  var unlisted,
+    tags = null
+  let unlisted,
     priv,
     disabled,
-    featured = false;
+    featured = false
 
   if (repository) {
     const showExpandOption =
-      truncate && repository.meta.description.length > 300;
-    title = (
+      truncate && repository.meta.description.length > 300
+    title =
       <SourceLink
-        sx={{ display: "inline" }}
+        sx={{ display: 'inline' }}
         href={
-          "/repositories/" +
+          '/repositories/' +
           repository.account_id +
-          "/" +
+          '/' +
           repository.repository_id +
-          "/description"
+          '/description'
         }
       >
         {repository.meta.title}
       </SourceLink>
-    );
-    details = (
+
+    details =
       <>
-        Provided By{" "}
-        <SourceLink href={"/" + repository.account_id}>
-          {"@" + repository.account_id}
-        </SourceLink>{" "}
-        • Published on {moment(repository.published).format("MMMM DD, YYYY")}
+        Provided By{' '}
+        <SourceLink href={'/' + repository.account_id}>
+          {'@' + repository.account_id}
+        </SourceLink>{' '}
+        • Published on {moment(repository.published).format('MMMM DD, YYYY')}
       </>
-    );
+
     tags = repository.meta.tags.map((tag, i) => {
-      return tag.length > 0 ? (
-        <RepositoryTag key={"tag-" + i} tag={tag} />
-      ) : (
+      return tag.length > 0 ?
+        <RepositoryTag key={'tag-' + i} tag={tag} />
+        :
         <></>
-      );
-    });
-    unlisted = repository.state === RepositoryState.Unlisted;
-    priv = repository.data_mode === RepositoryDataMode.Private;
-    disabled = repository.disabled;
-    featured = repository.featured == 1;
+
+    })
+    unlisted = repository.state === RepositoryState.Unlisted
+    priv = repository.data_mode === RepositoryDataMode.Private
+    disabled = repository.disabled
+    featured = repository.featured == 1
 
     if (!showExpandOption) {
-      description = repository.meta.description;
+      description = repository.meta.description
     } else {
       if (expanded) {
-        description = (
+        description =
           <>
-            {repository.meta.description}{" "}
+            {repository.meta.description}{' '}
             <SourceLink
               variant="link"
-              onClick={(e) => setExpanded(false)}
+              onClick={(e) => { setExpanded(false) }}
               sx={{ ml: 1, fontSize: 0 }}
             >
               [View Less]
             </SourceLink>
           </>
-        );
+
       } else {
-        description = (
+        description =
           <>
-            {repository.meta.description.substring(0, 300)}...{" "}
+            {repository.meta.description.substring(0, 300)}...{' '}
             <SourceLink
               variant="link"
-              onClick={(e) => setExpanded(true)}
+              onClick={(e) => { setExpanded(true) }}
               sx={{ ml: 1, fontSize: 0 }}
             >
               [View More]
             </SourceLink>
           </>
-        );
+
       }
     }
   }
@@ -99,33 +99,33 @@ export function RepositoryListing({
     <Card
       key={
         repository
-          ? repository.account_id + "/" + repository.repository_id
+          ? repository.account_id + '/' + repository.repository_id
           : null
       }
       variant="listing"
     >
       <Heading variant="title">
         {title || <Skeleton />}
-        {featured ? <RepositoryTag tag={"Featured"} /> : <></>}
-        {unlisted ? <RepositoryTag tag={"Unlisted"} /> : <></>}
-        {priv ? <RepositoryTag tag={"Private"} /> : <></>}
-        {disabled ? <RepositoryTag tag={"Disabled"} /> : <></>}
+        {featured ? <RepositoryTag tag={'Featured'} /> : <></>}
+        {unlisted ? <RepositoryTag tag={'Unlisted'} /> : <></>}
+        {priv ? <RepositoryTag tag={'Private'} /> : <></>}
+        {disabled ? <RepositoryTag tag={'Disabled'} /> : <></>}
       </Heading>
       <Paragraph variant="description">
-        {description != null ? (
-          repository.meta.description.length > 0 ? (
+        {description != null ?
+          repository.meta.description.length > 0 ?
             description
-          ) : (
-            "No Description Provided"
-          )
-        ) : (
+            :
+            'No Description Provided'
+
+          :
           <Skeleton count={2} />
-        )}
+        }
       </Paragraph>
       <Text variant="detail">{details || <Skeleton />}</Text>
-      <Flex sx={{ flexWrap: "wrap", gap: 2, mt: 1, alignItems: "center" }}>
+      <Flex sx={{ flexWrap: 'wrap', gap: 2, mt: 1, alignItems: 'center' }}>
         {tags != null ? tags : <Skeleton />}
       </Flex>
     </Card>
-  );
+  )
 }

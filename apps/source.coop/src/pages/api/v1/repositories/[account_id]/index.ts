@@ -1,17 +1,17 @@
-import { isAuthorized } from "@/api/authz";
+import { isAuthorized } from '@/api/authz'
 import {
   getAccount,
   getDataConnection,
   getRepositoriesByAccount,
   putRepository,
-} from "@/api/db";
+} from '@/api/db'
 import {
   BadRequestError,
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
 import {
   Actions,
   Repository,
@@ -19,39 +19,39 @@ import {
   RepositoryFeatured,
   RepositoryList,
   RepositoryState,
-} from "@/api/types";
-import { getSession } from "@/api/utils";
-import Handlebars from "handlebars";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/types'
+import { getSession } from '@/api/utils'
+import Handlebars from 'handlebars'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 async function listRepositoriesHandler(
   req: NextApiRequest,
-  res: NextApiResponse<RepositoryList>
+  res: NextApiResponse<RepositoryList>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
 
-  const { account_id } = req.query;
+  const { account_id } = req.query
 
-  const account = await getAccount(account_id as string);
+  const account = await getAccount(account_id as string)
 
   if (!account) {
-    throw new NotFoundError(`Account with ID ${account_id} not found`);
+    throw new NotFoundError(`Account with ID ${account_id} not found`)
   }
 
   const repositories: Repository[] = await getRepositoriesByAccount(
-    account_id as string
-  );
+    account_id as string,
+  )
 
   const filteredRepositories = repositories.filter((repository) => {
-    return isAuthorized(session, repository, Actions.ListRepository);
-  });
+    return isAuthorized(session, repository, Actions.ListRepository)
+  })
 
   const response: RepositoryList = {
     repositories: filteredRepositories,
-  };
+  }
 
-  res.status(StatusCodes.OK).json(response);
+  res.status(StatusCodes.OK).json(response)
 }
 
 /**
@@ -99,67 +99,67 @@ async function listRepositoriesHandler(
  */
 async function createRepositoryHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository>
+  res: NextApiResponse<Repository>,
 ): Promise<void> {
-  const session = await getSession(req);
-  const { account_id } = req.query;
+  const session = await getSession(req)
+  const { account_id } = req.query
 
   const repositoryCreateRequest = RepositoryCreationRequestSchema.parse(
-    req.body
-  );
+    req.body,
+  )
 
-  const account = await getAccount(account_id as string);
+  const account = await getAccount(account_id as string)
 
   if (!account) {
-    throw new NotFoundError(`Account with ID ${account_id} not found`);
+    throw new NotFoundError(`Account with ID ${account_id} not found`)
   }
 
   const dataConnection = await getDataConnection(
-    repositoryCreateRequest.data_connection_id
-  );
+    repositoryCreateRequest.data_connection_id,
+  )
 
   if (!dataConnection) {
     throw new BadRequestError(
-      `Data connection with ID ${repositoryCreateRequest.data_connection_id} not found`
-    );
+      `Data connection with ID ${repositoryCreateRequest.data_connection_id} not found`,
+    )
   }
 
   if (dataConnection.read_only) {
-    throw new BadRequestError(`Data connection is in read-only mode`);
+    throw new BadRequestError('Data connection is in read-only mode')
   }
 
   if (
     !dataConnection.allowed_data_modes.includes(
-      repositoryCreateRequest.data_mode
+      repositoryCreateRequest.data_mode,
     )
   ) {
     throw new BadRequestError(
-      `Data connection does not support data mode ${repositoryCreateRequest.data_mode}`
-    );
+      `Data connection does not support data mode ${repositoryCreateRequest.data_mode}`,
+    )
   }
 
   if (
     dataConnection.required_flag &&
-    !account.flags?.includes(dataConnection.required_flag)
+    !account.flags.includes(dataConnection.required_flag)
   ) {
     throw new BadRequestError(
-      `Account does not have required flag ${dataConnection.required_flag} for the data connection`
-    );
+      `Account does not have required flag ${dataConnection.required_flag} for the data connection`,
+    )
   }
 
-  let prefix: string;
+  let prefix: string
 
   if (!dataConnection.prefix_template) {
-    prefix = `${account.account_id}/${repositoryCreateRequest.repository_id}/`;
+    prefix = `${account.account_id}/${repositoryCreateRequest.repository_id}/`
   } else {
     const ctx = {
       repository: {
         account_id: account.account_id,
         repository_id: repositoryCreateRequest.repository_id,
       },
-    };
-    const template = Handlebars.compile(dataConnection.prefix_template);
-    prefix = template(ctx);
+    }
+    const template = Handlebars.compile(dataConnection.prefix_template)
+    prefix = template(ctx)
   }
 
   const newRepository: Repository = {
@@ -178,36 +178,36 @@ async function createRepositoryHandler(
         },
       },
     },
-  };
-
-  if (!isAuthorized(session, newRepository, Actions.CreateRepository)) {
-    throw new UnauthorizedError();
   }
 
-  const [repository, success] = await putRepository(newRepository, true);
+  if (!isAuthorized(session, newRepository, Actions.CreateRepository)) {
+    throw new UnauthorizedError()
+  }
+
+  const [repository, success] = await putRepository(newRepository, true)
 
   if (!success) {
     throw new BadRequestError(
-      `Repository with ID ${newRepository.repository_id} already exists`
-    );
+      `Repository with ID ${newRepository.repository_id} already exists`,
+    )
   }
 
-  res.status(StatusCodes.OK).json(repository);
+  res.status(StatusCodes.OK).json(repository)
 }
 
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository | RepositoryList>
+  res: NextApiResponse<Repository | RepositoryList>,
 ) {
   // Check if the request method is POST or GET
-  if (req.method === "POST") {
-    return createRepositoryHandler(req, res);
-  } else if (req.method === "GET") {
-    return listRepositoriesHandler(req, res);
+  if (req.method === 'POST') {
+    return createRepositoryHandler(req, res)
+  } else if (req.method === 'GET') {
+    return listRepositoriesHandler(req, res)
   }
 
   // If the method is neither POST nor GET, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

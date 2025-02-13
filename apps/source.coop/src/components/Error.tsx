@@ -1,6 +1,6 @@
-import { Column, Row } from "@carbonplan/components";
-import { PoopSad } from "@carbonplan/emoji";
-import { Box } from "theme-ui";
+import { Column, Row } from '@carbonplan/components'
+import { PoopSad } from '@carbonplan/emoji'
+import { Box } from 'theme-ui'
 
 export default function Error() {
   return (
@@ -12,10 +12,10 @@ export default function Error() {
         <Box
           sx={{
             fontSize: [4, 4, 4, 5],
-            lineHeight: "h3",
+            lineHeight: 'h3',
             mt: [3, 4, 4],
             mb: [2, 3, 3],
-            maxWidth: ["90%", "90%", "400px"],
+            maxWidth: ['90%', '90%', '400px'],
           }}
         >
           Whoops, our bad. Something's not working right and we're working to
@@ -23,9 +23,9 @@ export default function Error() {
         </Box>
         <Box
           sx={{
-            color: "secondary",
-            fontFamily: "mono",
-            letterSpacing: "mono",
+            color: 'secondary',
+            fontFamily: 'mono',
+            letterSpacing: 'mono',
             fontSize: [2, 2, 2, 3],
             mt: [4, 5, 5],
           }}
@@ -36,14 +36,14 @@ export default function Error() {
       <Column start={[2, 5, 7, 7]} width={[4, 4, 4, 4]}>
         <Box
           sx={{
-            width: ["100%"],
+            width: ['100%'],
             mt: [2, 4, 4, 5],
-            fill: "primary",
+            fill: 'primary',
           }}
         >
-          <PoopSad sx={{ width: "100%", height: "auto" }} />
+          <PoopSad sx={{ width: '100%', height: 'auto' }} />
         </Box>
       </Column>
     </Row>
-  );
+  )
 }

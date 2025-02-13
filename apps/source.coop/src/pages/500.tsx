@@ -1,5 +1,5 @@
-import Error from "@/components/Error";
-import { Layout } from "@/components/Layout";
+import Error from '@/components/Error'
+import { Layout } from '@/components/Layout'
 
 export default function ServerError() {
   return (
@@ -8,5 +8,5 @@ export default function ServerError() {
         <Error />
       </Layout>
     </>
-  );
+  )
 }

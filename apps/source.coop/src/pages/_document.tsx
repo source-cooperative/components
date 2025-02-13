@@ -1,5 +1,5 @@
-import { Head, Html, Main, NextScript } from "next/document";
-import { InitializeColorMode } from "theme-ui";
+import { Head, Html, Main, NextScript } from 'next/document'
+import { InitializeColorMode } from 'theme-ui'
 
 export default function Document() {
   return (
@@ -16,5 +16,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  );
+  )
 }

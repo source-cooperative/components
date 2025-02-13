@@ -1,26 +1,26 @@
-import { Repository } from "@/api/types";
-import { Layout } from "@/components/Layout";
-import RepositoryBrowser from "@/components/repository/RepositoryBrowser";
-import { RepositoryListing } from "@/components/repository/RepositoryListing";
-import { RepositorySideNavLinks } from "@/components/RepositorySideNav";
-import { ClientError } from "@/lib/client/accounts";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import { Grid } from "theme-ui";
+import { Repository } from '@/api/types'
+import { Layout } from '@/components/Layout'
+import RepositoryBrowser from '@/components/repository/RepositoryBrowser'
+import { RepositoryListing } from '@/components/repository/RepositoryListing'
+import { RepositorySideNavLinks } from '@/components/RepositorySideNav'
+import { ClientError } from '@/lib/client/accounts'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import useSWR from 'swr'
+import { Grid } from 'theme-ui'
 
 export default function RepositoryDetail() {
-  const router = useRouter();
-  const [accountId, setAccountId] = useState<string>(null);
-  const [repositoryId, setRepositoryId] = useState<string>(null);
+  const router = useRouter()
+  const [accountId, setAccountId] = useState<string>(null)
+  const [repositoryId, setRepositoryId] = useState<string>(null)
 
   useEffect(() => {
     if(router.isReady){
-      const { account_id, repository_id } = router.query;
-      setAccountId(account_id as string);
-      setRepositoryId(repository_id as string);
+      const { account_id, repository_id } = router.query
+      setAccountId(account_id as string)
+      setRepositoryId(repository_id as string)
     }
-  }, [router.isReady, router.query]);
+  }, [router.isReady, router.query])
 
   const { data: repository, error: repositoryError } = useSWR<
     Repository,
@@ -31,16 +31,16 @@ export default function RepositoryDetail() {
       : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const sideNavLinks = RepositorySideNavLinks({
     account_id: accountId,
     repository_id: repositoryId,
-  });
+  })
 
   if (!accountId || !repositoryId) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
   return (
     <Layout
@@ -55,5 +55,5 @@ export default function RepositoryDetail() {
         />
       </Grid>
     </Layout>
-  );
+  )
 }

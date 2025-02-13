@@ -1,15 +1,15 @@
-import { Layout } from "@/components/Layout";
-import { RepositoryList } from "@/components/repository/RepositoryList";
-import { useRouter } from "next/router";
+import { Layout } from '@/components/Layout'
+import { RepositoryList } from '@/components/repository/RepositoryList'
+import { useRouter } from 'next/router'
 
 export default function Repositories() {
-  const router = useRouter();
-  const { page, limit, tags, q } = router.query;
+  const router = useRouter()
+  const { page, limit, tags, q } = router.query
 
-  const query_page = page ? parseInt(page as string) : 1;
-  const query_limit = limit ? parseInt(limit as string) : 10;
-  const query_search_term = q as string;
-  const query_tags = tags ? (tags as string).split(",") : [];
+  const query_page = page ? parseInt(page as string) : 1
+  const query_limit = limit ? parseInt(limit as string) : 10
+  const query_search_term = q as string
+  const query_tags = tags ? (tags as string).split(',') : []
 
   return (
     <>
@@ -22,5 +22,5 @@ export default function Repositories() {
         />
       </Layout>
     </>
-  );
+  )
 }

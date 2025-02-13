@@ -1,17 +1,17 @@
 // Import necessary modules and types
-import { isAuthorized } from "@/api/authz";
-import { getMembership, putMembership } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getMembership, putMembership } from '@/api/db'
 import {
   BadRequestError,
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { Actions, Membership, MembershipState } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { Actions, Membership, MembershipState } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -47,28 +47,28 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function revokeMembershipHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Membership>
+  res: NextApiResponse<Membership>,
 ): Promise<void> {
   // Get the current session and membership ID
-  const session = await getSession(req);
-  const { membership_id } = req.query;
+  const session = await getSession(req)
+  const { membership_id } = req.query
 
   // Fetch the membership
-  const membership = await getMembership(membership_id as string);
+  const membership = await getMembership(membership_id as string)
 
   if (!membership) {
-    throw new NotFoundError(`Membership with ID ${membership_id} not found`);
+    throw new NotFoundError(`Membership with ID ${membership_id} not found`)
   }
 
   // Check if the user is authorized to accept the membership
   if (!isAuthorized(session, membership, Actions.RevokeMembership)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   if (membership.state === MembershipState.Revoked) {
     throw new BadRequestError(
-      `Membership with ID ${membership_id} is already revoked`
-    );
+      `Membership with ID ${membership_id} is already revoked`,
+    )
   }
 
   // Update membership state
@@ -76,27 +76,27 @@ async function revokeMembershipHandler(
     ...membership,
     state: MembershipState.Revoked,
     state_changed: new Date().toISOString(),
-  };
+  }
 
   // Save updated membership
-  await putMembership(updatedMembership);
+  await putMembership(updatedMembership)
 
-  res.status(StatusCodes.OK).json(updatedMembership);
+  res.status(StatusCodes.OK).json(updatedMembership)
 }
 
 // Handler function for the API route
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Membership>
+  res: NextApiResponse<Membership>,
 ) {
   // Check if the request method is POST
-  if (req.method === "POST") {
-    return revokeMembershipHandler(req, res);
+  if (req.method === 'POST') {
+    return revokeMembershipHandler(req, res)
   }
 
   // If the method is not POST, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
 // Export the handler with error handling middleware
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

@@ -1,15 +1,15 @@
-import { isAuthorized } from "@/api/authz";
-import { getAccount, putAccount } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getAccount, putAccount } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { AccountFlags, AccountFlagsSchema, Actions } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { AccountFlags, AccountFlagsSchema, Actions } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -44,21 +44,21 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function getAccountFlagsHandler(
   req: NextApiRequest,
-  res: NextApiResponse<AccountFlags[]>
+  res: NextApiResponse<AccountFlags[]>,
 ): Promise<void> {
-  const { account_id } = req.query;
-  const session = await getSession(req);
+  const { account_id } = req.query
+  const session = await getSession(req)
 
-  const account = await getAccount(account_id as string);
+  const account = await getAccount(account_id as string)
   if (!account) {
-    throw new NotFoundError(`Account ${account_id} not found`);
+    throw new NotFoundError(`Account ${account_id} not found`)
   }
 
   if (!isAuthorized(session, account, Actions.GetAccountFlags)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  res.status(StatusCodes.OK).json(account.flags);
+  res.status(StatusCodes.OK).json(account.flags)
 }
 
 /**
@@ -99,40 +99,40 @@ async function getAccountFlagsHandler(
  */
 async function putAccountFlagsHandler(
   req: NextApiRequest,
-  res: NextApiResponse<AccountFlags[]>
+  res: NextApiResponse<AccountFlags[]>,
 ): Promise<void> {
-  const { account_id } = req.query;
-  const session = await getSession(req);
+  const { account_id } = req.query
+  const session = await getSession(req)
 
-  const flagsRequest = AccountFlagsSchema.parse(req.body);
+  const flagsRequest = AccountFlagsSchema.parse(req.body)
 
-  var updateFlagsAccount = await getAccount(account_id as string);
+  const updateFlagsAccount = await getAccount(account_id as string)
   if (!updateFlagsAccount) {
-    throw new NotFoundError(`Account ${account_id} not found`);
+    throw new NotFoundError(`Account ${account_id} not found`)
   }
 
   if (!isAuthorized(session, updateFlagsAccount, Actions.PutAccountFlags)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  updateFlagsAccount.flags = flagsRequest;
+  updateFlagsAccount.flags = flagsRequest
 
-  const [account, _success] = await putAccount(updateFlagsAccount);
+  const [account, _success] = await putAccount(updateFlagsAccount)
 
-  res.status(StatusCodes.OK).json(account.flags);
+  res.status(StatusCodes.OK).json(account.flags)
 }
 
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<AccountFlags[]>
+  res: NextApiResponse<AccountFlags[]>,
 ) {
-  if (req.method === "GET") {
-    return getAccountFlagsHandler(req, res);
-  } else if (req.method === "PUT") {
-    return putAccountFlagsHandler(req, res);
+  if (req.method === 'GET') {
+    return getAccountFlagsHandler(req, res)
+  } else if (req.method === 'PUT') {
+    return putAccountFlagsHandler(req, res)
   }
 
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

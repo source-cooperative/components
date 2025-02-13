@@ -1,20 +1,20 @@
 // Import necessary modules and types
-import { isAuthorized } from "@/api/authz";
-import { getAccount, putAccount } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getAccount, putAccount } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
 import {
   AccountProfileResponse,
   AccountProfileSchema,
-  Actions
-} from "@/api/types";
-import { getEmail, getProfileImage, getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+  Actions,
+} from '@/api/types'
+import { getEmail, getProfileImage, getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -46,37 +46,37 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function getAccountProfileHandler(
   req: NextApiRequest,
-  res: NextApiResponse<AccountProfileResponse>
+  res: NextApiResponse<AccountProfileResponse>,
 ): Promise<void> {
   // Extract account_id from request query
-  const { account_id } = req.query;
+  const { account_id } = req.query
   // Get user session
-  const session = await getSession(req);
+  const session = await getSession(req)
 
   // Fetch account from database
-  const account = await getAccount(account_id as string);
+  const account = await getAccount(account_id as string)
   // If account not found, throw NotFoundError
   if (!account) {
-    throw new NotFoundError(`Account ${account_id} not found`);
+    throw new NotFoundError(`Account ${account_id} not found`)
   }
 
   // Check if user is authorized to get account profile
   if (!isAuthorized(session, account, Actions.GetAccountProfile)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   const email = account.identity_id
     ? await getEmail(account.identity_id)
-    : null;
+    : null
 
   const profile: AccountProfileResponse = {
     ...account.profile,
     profile_image: email ? getProfileImage(email) : undefined,
     account_type: account.account_type,
-  };
+  }
 
   // Send successful response with account profile
-  res.status(StatusCodes.OK).json(profile);
+  res.status(StatusCodes.OK).json(profile)
 }
 
 /**
@@ -120,52 +120,52 @@ async function getAccountProfileHandler(
  */
 async function putAccountProfileHandler(
   req: NextApiRequest,
-  res: NextApiResponse<AccountProfileResponse>
+  res: NextApiResponse<AccountProfileResponse>,
 ): Promise<void> {
   // Extract account_id from request query
-  const { account_id } = req.query;
+  const { account_id } = req.query
   // Get user session
-  const session = await getSession(req);
+  const session = await getSession(req)
 
   // Parse and validate the account profile update request
-  const profileRequest = AccountProfileSchema.parse(req.body);
+  const profileRequest = AccountProfileSchema.parse(req.body)
 
   // Fetch account to be updated from database
-  var updateProfileAccount = await getAccount(account_id as string);
+  const updateProfileAccount = await getAccount(account_id as string)
   // If account not found, throw NotFoundError
   if (!updateProfileAccount) {
-    throw new NotFoundError(`Account ${account_id} not found`);
+    throw new NotFoundError(`Account ${account_id} not found`)
   }
 
   // Check if user is authorized to update the account profile
   if (!isAuthorized(session, updateProfileAccount, Actions.PutAccountProfile)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  updateProfileAccount.profile = profileRequest;
+  updateProfileAccount.profile = profileRequest
 
   // Update the account in the database
-  const [account, _success] = await putAccount(updateProfileAccount);
+  const [account, _success] = await putAccount(updateProfileAccount)
 
   // Send successful response with updated account profile
-  res.status(StatusCodes.OK).json(account.profile);
+  res.status(StatusCodes.OK).json(account.profile)
 }
 
 // Main handler function for the API endpoint
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<AccountProfileResponse>
+  res: NextApiResponse<AccountProfileResponse>,
 ) {
   // Route request based on HTTP method
-  if (req.method === "GET") {
-    return getAccountProfileHandler(req, res);
-  } else if (req.method === "PUT") {
-    return putAccountProfileHandler(req, res);
+  if (req.method === 'GET') {
+    return getAccountProfileHandler(req, res)
+  } else if (req.method === 'PUT') {
+    return putAccountProfileHandler(req, res)
   }
 
   // Throw error for unsupported methods
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
 // Export the handler with error handling middleware
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

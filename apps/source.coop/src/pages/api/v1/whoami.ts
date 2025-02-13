@@ -1,20 +1,20 @@
-import { MethodNotImplementedError, UnauthorizedError } from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { UserSession } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { MethodNotImplementedError, UnauthorizedError } from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { UserSession } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 async function whoamiHandler(
   req: NextApiRequest,
-  res: NextApiResponse<UserSession>
+  res: NextApiResponse<UserSession>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
   if (!session) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  res.status(StatusCodes.OK).json(session);
+  res.status(StatusCodes.OK).json(session)
 }
 
 /**
@@ -38,13 +38,13 @@ async function whoamiHandler(
  */
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<UserSession>
+  res: NextApiResponse<UserSession>,
 ) {
-  if (req.method === "GET") {
-    return whoamiHandler(req, res);
+  if (req.method === 'GET') {
+    return whoamiHandler(req, res)
   }
 
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

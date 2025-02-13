@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 import {
-  AccountCreationRequestSchema,
-  AccountSchema,
   APIKeyRequestSchema,
   APIKeySchema,
+  AccountCreationRequestSchema,
+  AccountSchema,
   DataConnectionSchema,
   MembershipInvitationSchema,
   MembershipSchema,
@@ -16,34 +16,34 @@ import {
   RepositorySchema,
   RepositoryUpdateRequestSchema,
   UserSessionSchema,
-} from "@/api/types";
-import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
-import swaggerJSDoc from "swagger-jsdoc";
+} from '@/api/types'
+import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import swaggerJSDoc from 'swagger-jsdoc'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const options = {
     definition: {
-      openapi: "3.0.0",
+      openapi: '3.0.0',
       info: {
-        title: "Source Cooperative API",
-        version: "1.0.0",
+        title: 'Source Cooperative API',
+        version: '1.0.0',
       },
       servers: [
         {
-          url: "https://source.coop/api/v1",
-          description: "Source Cooperative",
+          url: 'https://source.coop/api/v1',
+          description: 'Source Cooperative',
         },
       ],
     },
-    apis: ["./src/pages/api/v1/**/*.ts"],
-  };
+    apis: ['./src/pages/api/v1/**/*.ts'],
+  }
 
-  var openapiSpecification = swaggerJSDoc(options);
+  const openapiSpecification = swaggerJSDoc(options)
 
   const generator = new OpenApiGeneratorV3([
     UserSessionSchema,
@@ -61,21 +61,21 @@ export default async function handler(
     RepositoryUpdateRequestSchema,
     RepositoryListSchema,
     RepositoryFeaturedUpdateRequestSchema,
-  ]);
-  openapiSpecification["components"] = {
+  ])
+  openapiSpecification.components = {
     securitySchemes: {
       ApiKeyAuth: {
-        type: "apiKey",
-        in: "header",
-        name: "Authorization",
-        description: "Follows the format `<access-key-id> <secret-access-key>`",
+        type: 'apiKey',
+        in: 'header',
+        name: 'Authorization',
+        description: 'Follows the format `<access-key-id> <secret-access-key>`',
       },
     },
-  };
-  openapiSpecification["security"] = [{ ApiKeyAuth: [] }];
+  }
+  openapiSpecification.security = [{ ApiKeyAuth: [] }]
 
-  openapiSpecification["components"]["schemas"] =
-    generator.generateComponents().components.schemas;
+  openapiSpecification.components.schemas =
+    generator.generateComponents().components.schemas
 
-  return res.status(StatusCodes.OK).json(openapiSpecification);
+  res.status(StatusCodes.OK).json(openapiSpecification)
 }

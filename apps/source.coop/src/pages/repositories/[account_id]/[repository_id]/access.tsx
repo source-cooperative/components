@@ -1,27 +1,27 @@
-import { Repository } from "@/api/types";
-import { Layout } from "@/components/Layout";
-import { AccessData } from "@/components/repository/AccessData";
-import { RepositoryListing } from "@/components/repository/RepositoryListing";
-import { RepositorySideNavLinks } from "@/components/RepositorySideNav";
-import { ClientError } from "@/lib/client/accounts";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import { Box, Grid } from "theme-ui";
+import { Repository } from '@/api/types'
+import { Layout } from '@/components/Layout'
+import { AccessData } from '@/components/repository/AccessData'
+import { RepositoryListing } from '@/components/repository/RepositoryListing'
+import { RepositorySideNavLinks } from '@/components/RepositorySideNav'
+import { ClientError } from '@/lib/client/accounts'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import useSWR from 'swr'
+import { Box, Grid } from 'theme-ui'
 
 export default function RepositoryDownload() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const { account_id, repository_id } = router.query;
-  const [accountId, setAccountId] = useState<string>(account_id as string);
+  const { account_id, repository_id } = router.query
+  const [accountId, setAccountId] = useState<string>(account_id as string)
   const [repositoryId, setRepositoryId] = useState<string>(
-    repository_id as string
-  );
+    repository_id as string,
+  )
 
   useEffect(() => {
-    setAccountId(account_id as string);
-    setRepositoryId(repository_id as string);
-  }, [account_id, repository_id]);
+    setAccountId(account_id as string)
+    setRepositoryId(repository_id as string)
+  }, [account_id, repository_id])
 
   const {
     data: repository,
@@ -34,13 +34,13 @@ export default function RepositoryDownload() {
       : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const sideNavLinks = RepositorySideNavLinks({
     account_id: accountId,
     repository_id: repositoryId,
-  });
+  })
 
   return (
     <Layout
@@ -50,14 +50,14 @@ export default function RepositoryDownload() {
       <Grid
         sx={{
           gap: 4,
-          gridTemplateColumns: "1fr",
+          gridTemplateColumns: '1fr',
         }}
       >
-        <Box sx={{ gridColumn: "1 / -1" }}>
+        <Box sx={{ gridColumn: '1 / -1' }}>
           <RepositoryListing repository={repository} truncate={false} />
         </Box>
         <AccessData repository_id={repositoryId} account_id={accountId} />
       </Grid>
     </Layout>
-  );
+  )
 }

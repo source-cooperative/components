@@ -6,13 +6,13 @@ import {
   MembershipRole,
   MembershipState,
   UserSession,
-} from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import { COUNTRIES } from "@/lib/constants";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import useSWR from "swr";
+} from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import { COUNTRIES } from '@/lib/constants'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import useSWR from 'swr'
 import {
   Alert,
   Box,
@@ -22,12 +22,12 @@ import {
   Select,
   Text,
   Textarea,
-} from "theme-ui";
+} from 'theme-ui'
 
 export function EditProfileForm({ account_id }: { account_id: string }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const {
     data: profile,
@@ -38,15 +38,15 @@ export function EditProfileForm({ account_id }: { account_id: string }) {
     account_id ? { path: `/api/v1/accounts/${account_id}/profile` } : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const { data: user } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const {
     register,
@@ -56,69 +56,69 @@ export function EditProfileForm({ account_id }: { account_id: string }) {
   } = useForm<AccountProfile>({
     resolver: zodResolver(AccountProfileSchema),
     defaultValues: profile,
-  });
+  })
 
   useEffect(() => {
-    reset(profile);
-  }, [profile]);
+    reset(profile)
+  }, [profile])
 
   const onSubmit: SubmitHandler<AccountProfile> = (data) => {
-    setSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
     fetch(`/api/v1/accounts/${account_id}/profile`, {
-      method: "PUT",
-      credentials: "include",
+      method: 'PUT',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     }).then((res) => {
-      setSubmitting(false);
+      setSubmitting(false)
       if (!res.ok) {
         res.json().then((data) => {
-          setErrorMessage(data.message);
-        });
+          setErrorMessage(data.message)
+        })
       } else {
-        setSuccessMessage("Saved");
-        refreshProfile();
+        setSuccessMessage('Saved')
+        refreshProfile()
       }
-    });
-  };
+    })
+  }
 
-  let hasEditPermissions = false;
-  if (user && user?.account?.flags?.includes(AccountFlags.ADMIN)) {
-    hasEditPermissions = true;
-  } else if (user && user?.account?.account_id === account_id) {
-    hasEditPermissions = true;
+  let hasEditPermissions = false
+  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+    hasEditPermissions = true
+  } else if (user && user.account.account_id === account_id) {
+    hasEditPermissions = true
   } else {
     if (user) {
-      for (const membership of user?.memberships) {
+      for (const membership of user.memberships) {
         if (
           membership.membership_account_id === account_id &&
           membership.state === MembershipState.Member &&
           (membership.role === MembershipRole.Owners ||
             membership.role === MembershipRole.Maintainers)
         ) {
-          hasEditPermissions = true;
-          break;
+          hasEditPermissions = true
+          break
         }
       }
     }
   }
 
   if (!hasEditPermissions) {
-    return <></>;
+    return <></>
   }
 
   if (profileError && profileError.status === 404) {
-    return <></>;
+    return <></>
   }
 
   if (profileError) {
     return (
       <Box variant="cards.componentMessage">Error loading account profile</Box>
-    );
+    )
   }
 
   return (
@@ -129,54 +129,54 @@ export function EditProfileForm({ account_id }: { account_id: string }) {
           <Grid
             variant="form"
             sx={{
-              gridTemplateColumns: ["1fr", "1fr", "1fr 1fr", "1fr 1fr 1fr 1fr"],
+              gridTemplateColumns: ['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr 1fr'],
             }}
           >
-            {(errorMessage || successMessage) && (
+            {(errorMessage || successMessage) &&
               <Box variant="cards.formMessageBox">
                 {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
-                {successMessage && (
+                {successMessage &&
                   <Alert variant="success">{successMessage}</Alert>
-                )}
+                }
               </Box>
-            )}
-            <Box variant="formField" sx={{ gridColumn: "1 / span 1" }}>
+            }
+            <Box variant="formField" sx={{ gridColumn: '1 / span 1' }}>
               <Text variant="formLabel">Account ID</Text>
               <Input disabled={true} value={account_id} />
             </Box>
-            <Box variant="formField" sx={{ gridColumn: "1 / span 2" }}>
+            <Box variant="formField" sx={{ gridColumn: '1 / span 2' }}>
               <Text variant="formLabel">Name</Text>
-              <Input {...register("name")} />
-              <Text variant="formError">{errors.name?.message}</Text>
+              <Input {...register('name')} />
+              <Text variant="formError">{errors.name.message}</Text>
             </Box>
-            <Box variant="formField" sx={{ gridColumn: "1 / -1" }}>
+            <Box variant="formField" sx={{ gridColumn: '1 / -1' }}>
               <Text variant="formLabel">Bio</Text>
-              <Textarea rows={8} {...register("bio")} />
-              <Text variant="formError">{errors.bio?.message}</Text>
+              <Textarea rows={8} {...register('bio')} />
+              <Text variant="formError">{errors.bio.message}</Text>
             </Box>
             <Box variant="formField" sx={{ gridColumn: 1 }}>
               <Text variant="formLabel">Location</Text>
-              <Select {...register("location")}>
+              <Select {...register('location')}>
                 {COUNTRIES.map((country, i) => {
                   return (
                     <option key={i} value={country.value}>
                       {country.label}
                     </option>
-                  );
+                  )
                 })}
               </Select>
             </Box>
             <Box variant="formField" sx={{ gridColumn: 1 }}>
               <Text variant="formLabel">URL</Text>
-              <Input {...register("url")} />
-              <Text variant="formError">{errors.url?.message}</Text>
+              <Input {...register('url')} />
+              <Text variant="formError">{errors.url.message}</Text>
             </Box>
-            <Box variant="cards.formButtonBox" sx={{ gridColumn: "1 / -1" }}>
+            <Box variant="cards.formButtonBox" sx={{ gridColumn: '1 / -1' }}>
               <Button variant="formSubmit">Save</Button>
             </Box>
           </Grid>
         </fieldset>
       </Box>
     </Box>
-  );
+  )
 }

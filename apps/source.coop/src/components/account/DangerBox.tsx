@@ -4,16 +4,16 @@ import {
   MembershipRole,
   MembershipState,
   UserSession,
-} from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import React, { useState } from "react";
-import useSWR from "swr";
-import { Alert, Box, Button, Grid, Text } from "theme-ui";
+} from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import React, { useState } from 'react'
+import useSWR from 'swr'
+import { Alert, Box, Button, Grid, Text } from 'theme-ui'
 
 export function DangerBox({ account_id }: { account_id: string }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const {
     mutate: refreshProfile,
@@ -23,76 +23,76 @@ export function DangerBox({ account_id }: { account_id: string }) {
     account_id ? { path: `/api/v1/accounts/${account_id}/profile` } : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const { data: user } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
-  let hasEditPermissions = false;
-  if (user && user?.account?.flags?.includes(AccountFlags.ADMIN)) {
-    hasEditPermissions = true;
-  } else if (user && user?.account?.account_id === account_id) {
-    hasEditPermissions = true;
+  let hasEditPermissions = false
+  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+    hasEditPermissions = true
+  } else if (user && user.account.account_id === account_id) {
+    hasEditPermissions = true
   } else {
     if (user) {
-      for (const membership of user?.memberships) {
+      for (const membership of user.memberships) {
         if (
           membership.membership_account_id === account_id &&
           membership.state === MembershipState.Member &&
           (membership.role === MembershipRole.Owners ||
             membership.role === MembershipRole.Maintainers)
         ) {
-          hasEditPermissions = true;
-          break;
+          hasEditPermissions = true
+          break
         }
       }
     }
   }
 
   if (!hasEditPermissions) {
-    return <></>;
+    return <></>
   }
 
   if (profileError && profileError.status === 404) {
-    return <></>;
+    return <></>
   }
 
   if (profileError) {
-    return <Box variant="cards.componentMessage">Error loading profile</Box>;
+    return <Box variant="cards.componentMessage">Error loading profile</Box>
   }
 
   function disableAccount() {
     const confirmed = confirm(
-      "Are you sure you want to disable this account? This action cannot be undone."
-    );
+      'Are you sure you want to disable this account? This action cannot be undone.',
+    )
 
     if (!confirmed) {
-      return;
+      return
     }
 
-    setSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
     fetch(`/api/v1/accounts/${account_id}`, {
-      method: "DELETE",
-      credentials: "include",
+      method: 'DELETE',
+      credentials: 'include',
     }).then((res) => {
       if (!res.ok) {
         res.json().then((data) => {
-          setErrorMessage(data.message);
-          setSubmitting(false);
-        });
+          setErrorMessage(data.message)
+          setSubmitting(false)
+        })
       } else {
-        setSubmitting(false);
-        setSuccessMessage("Account Disabled");
-        refreshProfile();
+        setSubmitting(false)
+        setSuccessMessage('Account Disabled')
+        refreshProfile()
       }
-    });
+    })
   }
 
   return (
@@ -100,25 +100,25 @@ export function DangerBox({ account_id }: { account_id: string }) {
       <Box
         as="form"
         onSubmit={(e) => {
-          e.preventDefault();
+          e.preventDefault()
         }}
       >
         <fieldset disabled={submitting}>
           <Text variant="formTitle">Danger Box</Text>
           <Grid variant="form">
-            {(errorMessage || successMessage) && (
+            {(errorMessage || successMessage) &&
               <Box variant="cards.formMessageBox">
                 {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
-                {successMessage && (
+                {successMessage &&
                   <Alert variant="success">{successMessage}</Alert>
-                )}
+                }
               </Box>
-            )}
+            }
             <Button
               variant="formDestructive"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                disableAccount();
+                e.preventDefault()
+                disableAccount()
               }}
             >
               Disable Account
@@ -127,5 +127,5 @@ export function DangerBox({ account_id }: { account_id: string }) {
         </fieldset>
       </Box>
     </Box>
-  );
+  )
 }

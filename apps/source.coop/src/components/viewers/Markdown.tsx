@@ -1,23 +1,23 @@
 /** @jsxImportSource theme-ui */
 
-import { SourceComponents } from "@/lib/provider";
-import { useEffect, useState } from "react";
+import { SourceComponents } from '@/lib/provider'
+import { useEffect, useState } from 'react'
 
-import { mdxOptions } from "@/lib/md";
-import { evaluate } from "@mdx-js/mdx";
-import Skeleton from "react-loading-skeleton";
-import * as runtime from "react/jsx-runtime";
-import { Box, Grid, Text } from "theme-ui";
-import SourceLink from "../SourceLink";
+import { mdxOptions } from '@/lib/md'
+import { evaluate } from '@mdx-js/mdx'
+import Skeleton from 'react-loading-skeleton'
+import * as runtime from 'react/jsx-runtime'
+import { Box, Grid, Text } from 'theme-ui'
+import SourceLink from '../SourceLink'
 
 export function Markdown({ url }) {
-  const [mdxModule, setMdxModule] = useState(null);
-  const Content = mdxModule ? mdxModule.default : <></>;
-  const [notFound, setNotFound] = useState(false);
+  const [mdxModule, setMdxModule] = useState(null)
+  const Content = mdxModule ? mdxModule.default : <></>
+  const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
     if (!url) {
-      return;
+      return
     }
     fetch(url).then((res) => {
       if (res.ok) {
@@ -27,14 +27,14 @@ export function Markdown({ url }) {
             useMDXComponents: SourceComponents,
             ...mdxOptions,
           } as any).then((module) => {
-            setMdxModule(module);
-          });
-        });
+            setMdxModule(module)
+          })
+        })
       } else {
-        setNotFound(true);
+        setNotFound(true)
       }
-    });
-  }, [url]);
+    })
+  }, [url])
 
   if (notFound) {
     return (
@@ -44,40 +44,40 @@ export function Markdown({ url }) {
           <Box variant="cards.componentMessage">
             <Text>
               This Repository Does Not Contain a README. If you are the owner of
-              this repository, follow the instructions{" "}
+              this repository, follow the instructions{' '}
               <SourceLink
                 href={
-                  "https://github.com/radiantearth/source-cooperative/wiki/Repositories#readme-markdown-files"
+                  'https://github.com/radiantearth/source-cooperative/wiki/Repositories#readme-markdown-files'
                 }
               >
                 here
-              </SourceLink>{" "}
+              </SourceLink>{' '}
               to create a README.md
             </Text>
           </Box>
         </Grid>
       </Box>
-    );
+    )
   }
 
   if (mdxModule) {
     return (
-      <Box sx={{ 
+      <Box sx={{
         width: '100%',
-        '& img': {  // Target all images within the markdown
+        '& img': { // Target all images within the markdown
           maxWidth: '100%',
           height: 'auto',
-          display: 'block'
-        }
+          display: 'block',
+        },
       }}>
         <Content />
       </Box>
-    );
+    )
   }
 
   return (
     <Box>
       <Skeleton count={10} />
     </Box>
-  );
+  )
 }

@@ -1,12 +1,12 @@
 import {
   AccountFlags,
   Repository,
-  UserSession
-} from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import React, { useState } from "react";
-import useSWR from "swr";
-import { Alert, Box, Button, Grid, Text } from "theme-ui";
+  UserSession,
+} from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import React, { useState } from 'react'
+import useSWR from 'swr'
+import { Alert, Box, Button, Grid, Text } from 'theme-ui'
 
 export function AdminBox({
   account_id,
@@ -15,9 +15,9 @@ export function AdminBox({
   account_id: string;
   repository_id: string;
 }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const {
     data: repository,
@@ -30,47 +30,47 @@ export function AdminBox({
       : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const { data: user } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
-  let hasAdminPermissions = false;
-  if (user && user?.account?.flags?.includes(AccountFlags.ADMIN)) {
-    hasAdminPermissions = true;
+  let hasAdminPermissions = false
+  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+    hasAdminPermissions = true
   }
 
   if (!hasAdminPermissions) {
-    return <></>;
+    return <></>
   }
 
   if (repositoryError && repositoryError.status === 404) {
-    return <></>;
+    return <></>
   }
 
   if (repositoryError) {
-    return <Box variant="cards.componentMessage">Error loading repository</Box>;
+    return <Box variant="cards.componentMessage">Error loading repository</Box>
   }
 
   if (!repository) {
-    return <></>;
+    return <></>
   }
 
   function featureRepository() {
-    setSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
 
     fetch(`/api/v1/repositories/${account_id}/${repository_id}/featured`, {
-      method: "PUT",
-      credentials: "include",
+      method: 'PUT',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         featured: repository.featured === 1 ? 0 : 1,
@@ -78,15 +78,15 @@ export function AdminBox({
     }).then((res) => {
       if (!res.ok) {
         res.json().then((data) => {
-          setErrorMessage(data.message);
-          setSubmitting(false);
-        });
+          setErrorMessage(data.message)
+          setSubmitting(false)
+        })
       } else {
-        setSubmitting(false);
-        setSuccessMessage("Saved");
-        refreshRepository();
+        setSubmitting(false)
+        setSuccessMessage('Saved')
+        refreshRepository()
       }
-    });
+    })
   }
 
   return (
@@ -94,34 +94,34 @@ export function AdminBox({
       <Box
         as="form"
         onSubmit={(e) => {
-          e.preventDefault();
+          e.preventDefault()
         }}
       >
         <fieldset disabled={submitting}>
           <Text variant="formTitle">Admin</Text>
           <Grid variant="form">
-            {(errorMessage || successMessage) && (
+            {(errorMessage || successMessage) &&
               <Box variant="cards.formMessageBox">
                 {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
-                {successMessage && (
+                {successMessage &&
                   <Alert variant="success">{successMessage}</Alert>
-                )}
+                }
               </Box>
-            )}
+            }
             <Button
               variant={
-                repository.featured === 1 ? "formDestructive" : "formSuccess"
+                repository.featured === 1 ? 'formDestructive' : 'formSuccess'
               }
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                featureRepository();
+                e.preventDefault()
+                featureRepository()
               }}
             >
-              {repository.featured === 1 ? "Unfeature" : "Feature"}
+              {repository.featured === 1 ? 'Unfeature' : 'Feature'}
             </Button>
           </Grid>
         </fieldset>
       </Box>
     </Box>
-  );
+  )
 }

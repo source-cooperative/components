@@ -1,26 +1,26 @@
 import {
-  AccountFlags,
   APIKey,
   APIKeyRequest,
+  AccountFlags,
   MembershipState,
   UserSession,
-} from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import { edgeConfig } from "@ory/integrations/next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import { Box, useColorMode } from "theme-ui";
-import Button from "./Button";
-import SVG from "./SVG";
+} from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import { edgeConfig } from '@ory/integrations/next'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import useSWR from 'swr'
+import { Box, useColorMode } from 'theme-ui'
+import Button from './Button'
+import SVG from './SVG'
 
-import { Configuration, FrontendApi } from "@ory/client";
+import { Configuration, FrontendApi } from '@ory/client'
 
 const baseUrl: string = process.env.NEXT_PUBLIC_IS_PROD
   ? process.env.NEXT_PUBLIC_ORY_SDK_URL
-  : "http://localhost:3000/api/.ory";
+  : 'http://localhost:3000/api/.ory'
 
-let ory: FrontendApi;
+let ory: FrontendApi
 if (process.env.NEXT_PUBLIC_IS_PROD) {
   ory = new FrontendApi(
     new Configuration({
@@ -30,10 +30,10 @@ if (process.env.NEXT_PUBLIC_IS_PROD) {
         withCredentials: true, // Important for CORS
         timeout: 30000, // 30 seconds
       },
-    })
-  );
+    }),
+  )
 } else {
-  ory = new FrontendApi(new Configuration(edgeConfig));
+  ory = new FrontendApi(new Configuration(edgeConfig))
 }
 
 function DownArrow({ ...props }) {
@@ -43,119 +43,119 @@ function DownArrow({ ...props }) {
         viewBox="0 0 16 16"
         sx={{
           ml: 0,
-          width: ["8px", "8px", "12px", "12px"],
-          height: ["8px", "8px", "12px", "12px"],
-          fill: "background",
+          width: ['8px', '8px', '12px', '12px'],
+          height: ['8px', '8px', '12px', '12px'],
+          fill: 'background',
           transform: [
-            "translate(0, 0px)",
-            "translate(0, 0px)",
-            "translate(0, 1px)",
-            "translate(0, 1px)",
+            'translate(0, 0px)',
+            'translate(0, 0px)',
+            'translate(0, 1px)',
+            'translate(0, 1px)',
           ],
         }}
       >
         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
       </SVG>
     </>
-  );
+  )
 }
 
 function generateNewKey(account_id: string) {
   const keyRequest: APIKeyRequest = {
     name: `Automatically generated key used for browser-based authentication (${
-      navigator.userAgent.includes("Chrome")
-        ? "Chrome"
-        : navigator.userAgent.includes("Firefox")
-        ? "Firefox"
-        : navigator.userAgent.includes("Safari")
-        ? "Safari"
-        : "Unknown"
+      navigator.userAgent.includes('Chrome')
+        ? 'Chrome'
+        : navigator.userAgent.includes('Firefox')
+          ? 'Firefox'
+          : navigator.userAgent.includes('Safari')
+            ? 'Safari'
+            : 'Unknown'
     } on ${
-      /Windows/.test(navigator.userAgent)
-        ? "Windows"
-        : /Mac/.test(navigator.userAgent)
-        ? "macOS"
-        : /Linux/.test(navigator.userAgent)
-        ? "Linux"
-        : /Android/.test(navigator.userAgent)
-        ? "Android"
-        : /iOS/.test(navigator.userAgent)
-        ? "iOS"
-        : "Unknown"
+      navigator.userAgent.includes('Windows')
+        ? 'Windows'
+        : navigator.userAgent.includes('Mac')
+          ? 'macOS'
+          : navigator.userAgent.includes('Linux')
+            ? 'Linux'
+            : navigator.userAgent.includes('Android')
+              ? 'Android'
+              : navigator.userAgent.includes('iOS')
+                ? 'iOS'
+                : 'Unknown'
     })`,
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // Valid for 30 days
-  };
+  }
 
   fetch(`/api/v1/accounts/${account_id}/api-keys`, {
-    credentials: "include",
-    method: "POST",
+    credentials: 'include',
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(keyRequest),
   }).then((res) => {
     if (res.ok) {
       res.json().then((data) => {
-        localStorage.setItem(`sc-api-key-${account_id}`, JSON.stringify(data));
-      });
+        localStorage.setItem(`sc-api-key-${account_id}`, JSON.stringify(data))
+      })
     }
-  });
+  })
 }
 
 export default function UserNavButton() {
-  const router = useRouter();
-  const [expanded, setExpanded] = useState(false);
-  const [colorMode, setColorMode] = useColorMode();
-  const [logoutUrl, setLogoutUrl] = useState<string | null>(null);
+  const router = useRouter()
+  const [expanded, setExpanded] = useState(false)
+  const [colorMode, setColorMode] = useColorMode()
+  const [logoutUrl, setLogoutUrl] = useState<string | null>(null)
 
   const {
     data: user,
     isLoading: _userIsLoading,
     error: _userError,
   } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   useEffect(() => {
     if (!user) {
-      return;
+      return
     }
     ory.createBrowserLogoutFlow().then(({ data }) => {
-      setLogoutUrl(data.logout_url);
-    });
-  }, [router, user]);
+      setLogoutUrl(data.logout_url)
+    })
+  }, [router, user])
 
   useEffect(() => {
     if (user && !user.account) {
-      router.push("/complete-signup");
-      return;
+      router.push('/complete-signup')
+      return
     }
 
-    if (!user || !user?.account) {
-      return;
+    if (!user.account) {
+      return
     }
 
-    var existingKey = localStorage.getItem(
-      `sc-api-key-${user.account.account_id}`
-    );
+    const existingKey = localStorage.getItem(
+      `sc-api-key-${user.account.account_id}`,
+    )
     if (existingKey) {
-      const apiKey: APIKey = JSON.parse(existingKey);
+      const apiKey: APIKey = JSON.parse(existingKey)
       if (new Date(apiKey.expires) < new Date()) {
-        localStorage.removeItem(`sc-api-key-${user.account.account_id}`);
-        generateNewKey(user.account.account_id);
-        return;
+        localStorage.removeItem(`sc-api-key-${user.account.account_id}`)
+        generateNewKey(user.account.account_id)
+
       }
     } else {
-      generateNewKey(user.account.account_id);
+      generateNewKey(user.account.account_id)
     }
-  }, [user]);
+  }, [user])
 
   if (!user) {
     return (
-      <Box sx={{ justifySelf: "center", display: "inline-block" }}>
+      <Box sx={{ justifySelf: 'center', display: 'inline-block' }}>
         <Button
           variant="nav"
           href={`${process.env.NEXT_PUBLIC_ORY_SDK_URL}/ui/login`}
@@ -163,37 +163,37 @@ export default function UserNavButton() {
           Sign In / Register
         </Button>
       </Box>
-    );
+    )
   } else if (user.account) {
     return (
       <Box
-        sx={{ justifySelf: "center", display: "inline-block" }}
-        onMouseOut={(e) => setExpanded(false)}
-        onMouseOver={(e) => setExpanded(true)}
+        sx={{ justifySelf: 'center', display: 'inline-block' }}
+        onMouseOut={(e) => { setExpanded(false) }}
+        onMouseOver={(e) => { setExpanded(true) }}
       >
         <Button
           variant="nav"
           onClick={(e) => {
-            setExpanded(!expanded);
+            setExpanded(!expanded)
           }}
         >
-          {user?.account?.profile?.name
-            ? user?.account?.profile?.name
-            : "Source User"}{" "}
+          {user.account.profile.name
+            ? user.account.profile.name
+            : 'Source User'}{' '}
           <DownArrow />
         </Button>
-        <Box sx={{ position: "relative" }}>
+        <Box sx={{ position: 'relative' }}>
           <Box
             sx={{
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               right: 0,
               zIndex: 99999,
               opacity: expanded ? 1 : 0,
-              pointerEvents: expanded ? "all" : "none",
-              backgroundColor: "primary",
-              textAlign: "right",
-              width: "max-content",
+              pointerEvents: expanded ? 'all' : 'none',
+              backgroundColor: 'primary',
+              textAlign: 'right',
+              width: 'max-content',
             }}
           >
             <Button variant="nav" href={`/${user.account.account_id}`}>
@@ -201,7 +201,7 @@ export default function UserNavButton() {
             </Button>
             {user.memberships.map((membership, i) => {
               if (membership.state !== MembershipState.Member) {
-                return <></>;
+                return <></>
               }
               return (
                 <Button
@@ -211,16 +211,16 @@ export default function UserNavButton() {
                 >
                   {`@${membership.membership_account_id}`}
                 </Button>
-              );
+              )
             })}
 
-            {user?.account?.flags.includes(
-              AccountFlags.CREATE_ORGANIZATIONS
-            ) && (
+            {user.account.flags.includes(
+              AccountFlags.CREATE_ORGANIZATIONS,
+            ) &&
               <Button variant="nav" href="/create-organization">
                 Create Organization
               </Button>
-            )}
+            }
             <Button
               variant="nav"
               href={`${process.env.NEXT_PUBLIC_ORY_SDK_URL}/ui/settings`}
@@ -233,6 +233,6 @@ export default function UserNavButton() {
           </Box>
         </Box>
       </Box>
-    );
+    )
   }
 }

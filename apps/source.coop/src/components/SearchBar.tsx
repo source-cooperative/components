@@ -1,47 +1,47 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Box, Grid, Input } from "theme-ui";
-import Button from "./Button";
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { Box, Grid, Input } from 'theme-ui'
+import Button from './Button'
 
 export function SearchBar() {
-  const router = useRouter();
-  const [query, setQuery] = useState(router.query.q || null);
+  const router = useRouter()
+  const [query, setQuery] = useState(router.query.q || null)
 
   const handleSubmit = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+    e.stopPropagation()
+    e.preventDefault()
 
-    const form = e.currentTarget.parentElement.parentElement;
-    let body;
+    const form = e.currentTarget.parentElement.parentElement
+    let body
 
     if (form && form instanceof HTMLFormElement) {
-      const formData = new FormData(form);
+      const formData = new FormData(form)
 
       // map the entire form data to JSON for the request body
-      body = Object.fromEntries(formData);
-      const method = e.currentTarget;
+      body = Object.fromEntries(formData)
+      const method = e.currentTarget
       body = {
         ...body,
         ...{ [method.name]: method.value },
-      };
+      }
 
       if (body.query) {
-        router.push(`/repositories?q=${body.query}`);
+        router.push(`/repositories?q=${body.query}`)
       } else {
-        router.push(`/repositories`);
+        router.push('/repositories')
       }
     }
-  };
+  }
 
   useEffect(() => {
     if (router.query && router.query.q) {
-      setQuery(router.query.q);
+      setQuery(router.query.q)
     }
-  }, [router.query]);
+  }, [router.query])
 
   return (
-    <Box as="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
-      <Grid sx={{ gridGap: 3, gridTemplateColumns: "auto max-content" }}>
+    <Box as="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+      <Grid sx={{ gridGap: 3, gridTemplateColumns: 'auto max-content' }}>
         <Input
           placeholder="Search"
           name="query"
@@ -52,5 +52,5 @@ export function SearchBar() {
         </Button>
       </Grid>
     </Box>
-  );
+  )
 }

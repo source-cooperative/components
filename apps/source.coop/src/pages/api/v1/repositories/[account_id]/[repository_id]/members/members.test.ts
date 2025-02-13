@@ -1,16 +1,16 @@
-import { isAuthorized } from "@/api/authz";
+import { isAuthorized } from '@/api/authz'
 import {
   getAccount,
   getMemberships,
   getRepository,
   putMembership,
-} from "@/api/db";
+} from '@/api/db'
 import {
   BadRequestError,
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
+} from '@/api/errors'
 import {
   Account,
   AccountType,
@@ -22,315 +22,315 @@ import {
   RepositoryDataMode,
   RepositoryFeatured,
   RepositoryState,
-} from "@/api/types";
-import { getSession } from "@/api/utils";
-import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
-import { handler } from "@/pages/api/v1/repositories/[account_id]/[repository_id]/members";
-import { NextApiRequest } from "next";
-import httpMocks from "node-mocks-http";
+} from '@/api/types'
+import { getSession } from '@/api/utils'
+import { MockNextApiResponse, jsonBody } from '@/api/utils/mock'
+import { handler } from '@/pages/api/v1/repositories/[account_id]/[repository_id]/members'
+import { NextApiRequest } from 'next'
+import httpMocks from 'node-mocks-http'
 
-jest.mock("@/api/utils", () => ({
+jest.mock('@/api/utils', () => ({
   getSession: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/authz", () => ({
+jest.mock('@/api/authz', () => ({
   isAuthorized: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/db", () => ({
+jest.mock('@/api/db', () => ({
   getRepository: jest.fn(),
   getAccount: jest.fn(),
   getMemberships: jest.fn(),
   putMembership: jest.fn(),
-}));
+}))
 
-describe("/api/v1/repositories/[account_id]/[repository_id]/members", () => {
-  let req: NextApiRequest;
-  let res: MockNextApiResponse;
+describe('/api/v1/repositories/[account_id]/[repository_id]/members', () => {
+  let req: NextApiRequest
+  let res: MockNextApiResponse
 
   beforeEach(() => {
-    req = httpMocks.createRequest();
-    res = httpMocks.createResponse() as MockNextApiResponse;
-    req.query = { account_id: "test-account", repository_id: "test-repo" };
-  });
+    req = httpMocks.createRequest()
+    res = httpMocks.createResponse() as MockNextApiResponse
+    req.query = { account_id: 'test-account', repository_id: 'test-repo' }
+  })
 
   afterEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
-  describe("POST - inviteMemberHandler", () => {
+  describe('POST - inviteMemberHandler', () => {
     beforeEach(() => {
-      req.method = "POST";
+      req.method = 'POST'
       req.body = {
-        account_id: "invited-account",
+        account_id: 'invited-account',
         role: MembershipRole.Maintainers,
-      };
-    });
+      }
+    })
 
-    it("should throw NotFoundError when repository doesn't exist", async () => {
-      (getSession as jest.Mock).mockResolvedValue({ identity_id: "user-1" });
-      (getRepository as jest.Mock).mockResolvedValue(null);
+    it('should throw NotFoundError when repository doesn\'t exist', async () => {
+      (getSession as jest.Mock).mockResolvedValue({ identity_id: 'user-1' });
+      (getRepository as jest.Mock).mockResolvedValue(null)
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
 
-    it("should throw NotFoundError when invited account doesn't exist", async () => {
+    it('should throw NotFoundError when invited account doesn\'t exist', async () => {
       const mockRepository: Repository = {
-        account_id: "test-account",
-        repository_id: "test-repo",
+        account_id: 'test-account',
+        repository_id: 'test-repo',
         state: RepositoryState.Listed,
         data_mode: RepositoryDataMode.Open,
         featured: RepositoryFeatured.NotFeatured,
-        meta: { title: "Test Repo", description: "Test description", tags: [] },
-        data: { primary_mirror: "test-mirror", mirrors: {} },
+        meta: { title: 'Test Repo', description: 'Test description', tags: [] },
+        data: { primary_mirror: 'test-mirror', mirrors: {} },
         published: new Date().toISOString(),
         disabled: false,
       };
-      (getSession as jest.Mock).mockResolvedValue({ identity_id: "user-1" });
+      (getSession as jest.Mock).mockResolvedValue({ identity_id: 'user-1' });
       (getRepository as jest.Mock).mockResolvedValue(mockRepository);
-      (getAccount as jest.Mock).mockResolvedValue(null);
+      (getAccount as jest.Mock).mockResolvedValue(null)
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
 
-    it("should throw UnauthorizedError when user is not authorized", async () => {
+    it('should throw UnauthorizedError when user is not authorized', async () => {
       const mockRepository: Repository = {
-        account_id: "test-account",
-        repository_id: "test-repo",
+        account_id: 'test-account',
+        repository_id: 'test-repo',
         state: RepositoryState.Listed,
         data_mode: RepositoryDataMode.Open,
         featured: RepositoryFeatured.NotFeatured,
-        meta: { title: "Test Repo", description: "Test description", tags: [] },
-        data: { primary_mirror: "test-mirror", mirrors: {} },
+        meta: { title: 'Test Repo', description: 'Test description', tags: [] },
+        data: { primary_mirror: 'test-mirror', mirrors: {} },
         published: new Date().toISOString(),
         disabled: false,
-      };
+      }
       const mockAccount: Account = {
-        account_id: "invited-account",
+        account_id: 'invited-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
         flags: [],
       };
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "unauthorized-user",
+        identity_id: 'unauthorized-user',
       });
       (getRepository as jest.Mock).mockResolvedValue(mockRepository);
       (getAccount as jest.Mock).mockResolvedValue(mockAccount);
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should throw BadRequestError when member is already invited or exists", async () => {
+    it('should throw BadRequestError when member is already invited or exists', async () => {
       const mockRepository: Repository = {
-        account_id: "test-account",
-        repository_id: "test-repo",
+        account_id: 'test-account',
+        repository_id: 'test-repo',
         state: RepositoryState.Listed,
         data_mode: RepositoryDataMode.Open,
         featured: RepositoryFeatured.NotFeatured,
-        meta: { title: "Test Repo", description: "Test description", tags: [] },
-        data: { primary_mirror: "test-mirror", mirrors: {} },
+        meta: { title: 'Test Repo', description: 'Test description', tags: [] },
+        data: { primary_mirror: 'test-mirror', mirrors: {} },
         published: new Date().toISOString(),
         disabled: false,
-      };
+      }
       const mockAccount: Account = {
-        account_id: "invited-account",
+        account_id: 'invited-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
         flags: [],
-      };
+      }
       const existingMembership: Membership = {
-        membership_id: "existing-membership",
-        account_id: "invited-account",
-        membership_account_id: "test-account",
-        repository_id: "test-repo",
+        membership_id: 'existing-membership',
+        account_id: 'invited-account',
+        membership_account_id: 'test-account',
+        repository_id: 'test-repo',
         role: MembershipRole.Maintainers,
         state: MembershipState.Invited,
         state_changed: new Date().toISOString(),
       };
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
       (getRepository as jest.Mock).mockResolvedValue(mockRepository);
       (getAccount as jest.Mock).mockResolvedValue(mockAccount);
       (isAuthorized as jest.Mock).mockReturnValue(true);
-      (getMemberships as jest.Mock).mockResolvedValue([existingMembership]);
+      (getMemberships as jest.Mock).mockResolvedValue([existingMembership])
 
-      await expect(handler(req, res)).rejects.toThrow(BadRequestError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(BadRequestError)
+    })
 
-    it("should create membership when user is authorized", async () => {
+    it('should create membership when user is authorized', async () => {
       const mockRepository: Repository = {
-        account_id: "test-account",
-        repository_id: "test-repo",
+        account_id: 'test-account',
+        repository_id: 'test-repo',
         state: RepositoryState.Listed,
         data_mode: RepositoryDataMode.Open,
         featured: RepositoryFeatured.NotFeatured,
-        meta: { title: "Test Repo", description: "Test description", tags: [] },
-        data: { primary_mirror: "test-mirror", mirrors: {} },
+        meta: { title: 'Test Repo', description: 'Test description', tags: [] },
+        data: { primary_mirror: 'test-mirror', mirrors: {} },
         published: new Date().toISOString(),
         disabled: false,
-      };
+      }
       const mockAccount: Account = {
-        account_id: "invited-account",
+        account_id: 'invited-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
         flags: [],
-      };
+      }
       const createdMembership: Membership = {
-        membership_id: "mocked-uuid",
-        account_id: "invited-account",
-        membership_account_id: "test-account",
-        repository_id: "test-repo",
+        membership_id: 'mocked-uuid',
+        account_id: 'invited-account',
+        membership_account_id: 'test-account',
+        repository_id: 'test-repo',
         role: MembershipRole.Maintainers,
         state: MembershipState.Invited,
         state_changed: new Date().toISOString(),
       };
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
       (getRepository as jest.Mock).mockResolvedValue(mockRepository);
       (getAccount as jest.Mock).mockResolvedValue(mockAccount);
       (isAuthorized as jest.Mock).mockReturnValue(true);
       (getMemberships as jest.Mock).mockResolvedValue([]);
-      (putMembership as jest.Mock).mockResolvedValue([createdMembership, true]);
+      (putMembership as jest.Mock).mockResolvedValue([createdMembership, true])
 
-      await handler(req, res);
+      await handler(req, res)
 
-      expect(res.statusCode).toBe(200);
-      const responseBody = jsonBody(res);
+      expect(res.statusCode).toBe(200)
+      const responseBody = jsonBody(res)
       expect(responseBody).toMatchObject({
-        account_id: "invited-account",
-        membership_account_id: "test-account",
-        repository_id: "test-repo",
+        account_id: 'invited-account',
+        membership_account_id: 'test-account',
+        repository_id: 'test-repo',
         role: MembershipRole.Maintainers,
         state: MembershipState.Invited,
-      });
-      expect(responseBody.membership_id).toBeTruthy();
-      expect(responseBody.state_changed).toBeTruthy();
+      })
+      expect(responseBody.membership_id).toBeTruthy()
+      expect(responseBody.state_changed).toBeTruthy()
       expect(isAuthorized).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
-          account_id: "invited-account",
-          membership_account_id: "test-account",
-          repository_id: "test-repo",
+          account_id: 'invited-account',
+          membership_account_id: 'test-account',
+          repository_id: 'test-repo',
           role: MembershipRole.Maintainers,
           state: MembershipState.Invited,
         }),
-        Actions.InviteMembership
-      );
+        Actions.InviteMembership,
+      )
       expect(putMembership).toHaveBeenCalledWith(
         expect.objectContaining({
-          account_id: "invited-account",
-          membership_account_id: "test-account",
-          repository_id: "test-repo",
+          account_id: 'invited-account',
+          membership_account_id: 'test-account',
+          repository_id: 'test-repo',
           role: MembershipRole.Maintainers,
           state: MembershipState.Invited,
         }),
-        true
-      );
-    });
-  });
+        true,
+      )
+    })
+  })
 
-  describe("GET - getMembersHandler", () => {
+  describe('GET - getMembersHandler', () => {
     beforeEach(() => {
-      req.method = "GET";
-    });
+      req.method = 'GET'
+    })
 
-    it("should throw NotFoundError when repository doesn't exist", async () => {
-      (getSession as jest.Mock).mockResolvedValue({ identity_id: "user-1" });
-      (getRepository as jest.Mock).mockResolvedValue(null);
+    it('should throw NotFoundError when repository doesn\'t exist', async () => {
+      (getSession as jest.Mock).mockResolvedValue({ identity_id: 'user-1' });
+      (getRepository as jest.Mock).mockResolvedValue(null)
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
 
-    it("should throw UnauthorizedError when user is not authorized", async () => {
+    it('should throw UnauthorizedError when user is not authorized', async () => {
       const mockRepository: Repository = {
-        account_id: "test-account",
-        repository_id: "test-repo",
+        account_id: 'test-account',
+        repository_id: 'test-repo',
         state: RepositoryState.Listed,
         data_mode: RepositoryDataMode.Open,
         featured: RepositoryFeatured.NotFeatured,
-        meta: { title: "Test Repo", description: "Test description", tags: [] },
-        data: { primary_mirror: "test-mirror", mirrors: {} },
+        meta: { title: 'Test Repo', description: 'Test description', tags: [] },
+        data: { primary_mirror: 'test-mirror', mirrors: {} },
         published: new Date().toISOString(),
         disabled: false,
       };
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "unauthorized-user",
+        identity_id: 'unauthorized-user',
       });
       (getRepository as jest.Mock).mockResolvedValue(mockRepository);
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should return memberships when user is authorized", async () => {
+    it('should return memberships when user is authorized', async () => {
       const mockRepository: Repository = {
-        account_id: "test-account",
-        repository_id: "test-repo",
+        account_id: 'test-account',
+        repository_id: 'test-repo',
         state: RepositoryState.Listed,
         data_mode: RepositoryDataMode.Open,
         featured: RepositoryFeatured.NotFeatured,
-        meta: { title: "Test Repo", description: "Test description", tags: [] },
-        data: { primary_mirror: "test-mirror", mirrors: {} },
+        meta: { title: 'Test Repo', description: 'Test description', tags: [] },
+        data: { primary_mirror: 'test-mirror', mirrors: {} },
         published: new Date().toISOString(),
         disabled: false,
-      };
+      }
       const mockMemberships: Membership[] = [
         {
-          membership_id: "membership-1",
-          account_id: "member-1",
-          membership_account_id: "test-account",
-          repository_id: "test-repo",
+          membership_id: 'membership-1',
+          account_id: 'member-1',
+          membership_account_id: 'test-account',
+          repository_id: 'test-repo',
           role: MembershipRole.Maintainers,
           state: MembershipState.Member,
           state_changed: new Date().toISOString(),
         },
         {
-          membership_id: "membership-2",
-          account_id: "member-2",
-          membership_account_id: "test-account",
-          repository_id: "test-repo",
+          membership_id: 'membership-2',
+          account_id: 'member-2',
+          membership_account_id: 'test-account',
+          repository_id: 'test-repo',
           role: MembershipRole.ReadData,
           state: MembershipState.Invited,
           state_changed: new Date().toISOString(),
         },
       ];
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
       (getRepository as jest.Mock).mockResolvedValue(mockRepository);
       (isAuthorized as jest.Mock).mockReturnValue(true);
-      (getMemberships as jest.Mock).mockResolvedValue(mockMemberships);
+      (getMemberships as jest.Mock).mockResolvedValue(mockMemberships)
 
-      await handler(req, res);
+      await handler(req, res)
 
-      expect(res.statusCode).toBe(200);
-      expect(jsonBody(res)).toEqual(mockMemberships);
+      expect(res.statusCode).toBe(200)
+      expect(jsonBody(res)).toEqual(mockMemberships)
       expect(isAuthorized).toHaveBeenCalledWith(
         expect.anything(),
         mockRepository,
-        Actions.ListRepositoryMemberships
-      );
-      expect(isAuthorized).toHaveBeenCalledTimes(3); // Once for ListRepositoryMemberships and twice for GetMembership
-    });
-  });
+        Actions.ListRepositoryMemberships,
+      )
+      expect(isAuthorized).toHaveBeenCalledTimes(3) // Once for ListRepositoryMemberships and twice for GetMembership
+    })
+  })
 
-  describe("Unsupported methods", () => {
-    it("should throw MethodNotImplementedError for unsupported methods", async () => {
-      req.method = "PUT";
+  describe('Unsupported methods', () => {
+    it('should throw MethodNotImplementedError for unsupported methods', async () => {
+      req.method = 'PUT'
       await expect(handler(req, res)).rejects.toThrow(
-        MethodNotImplementedError
-      );
+        MethodNotImplementedError,
+      )
 
-      req.method = "DELETE";
+      req.method = 'DELETE'
       await expect(handler(req, res)).rejects.toThrow(
-        MethodNotImplementedError
-      );
-    });
-  });
-});
+        MethodNotImplementedError,
+      )
+    })
+  })
+})

@@ -6,13 +6,13 @@ import {
   RepositoryState,
   RepositoryUpdateRequest,
   RepositoryUpdateRequestSchema,
-  UserSession
-} from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import useSWR from "swr";
+  UserSession,
+} from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import useSWR from 'swr'
 import {
   Alert,
   Box,
@@ -22,7 +22,7 @@ import {
   Select,
   Text,
   Textarea,
-} from "theme-ui";
+} from 'theme-ui'
 
 export function EditRepositoryForm({
   account_id,
@@ -31,9 +31,9 @@ export function EditRepositoryForm({
   account_id: string;
   repository_id: string;
 }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const {
     data: repository,
@@ -46,33 +46,33 @@ export function EditRepositoryForm({
       : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const { data: user } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   useEffect(() => {
     if (!repository) {
-      return;
+      return
     }
 
-    var cleanedTags = [];
-    for (const tag of repository.meta?.tags) {
+    const cleanedTags = []
+    for (const tag of repository.meta.tags) {
       if (tag.length > 0) {
-        cleanedTags.push(tag);
+        cleanedTags.push(tag)
       }
     }
 
-    setValue("state", repository.state);
-    setValue("meta", repository.meta);
+    setValue('state', repository.state)
+    setValue('meta', repository.meta)
     // @ts-ignore
-    setValue("meta.tags", cleanedTags.join(","));
-  }, [repository]);
+    setValue('meta.tags', cleanedTags.join(','))
+  }, [repository])
 
   const {
     register,
@@ -82,51 +82,51 @@ export function EditRepositoryForm({
   } = useForm<RepositoryUpdateRequest>({
     resolver: zodResolver(RepositoryUpdateRequestSchema),
     defaultValues: repository,
-  });
+  })
 
   const onSubmit: SubmitHandler<RepositoryUpdateRequest> = (data) => {
-    setSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
 
-    var cleanedTags = [];
-    for (const tag of data.meta?.tags) {
+    const cleanedTags = []
+    for (const tag of data.meta.tags) {
       if (tag.length > 0) {
-        cleanedTags.push(tag);
+        cleanedTags.push(tag)
       }
     }
     // @ts-ignore
-    data.meta.tags = cleanedTags.join(",");
+    data.meta.tags = cleanedTags.join(',')
 
     fetch(`/api/v1/repositories/${account_id}/${repository_id}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.ok) {
-        setSubmitting(false);
-        refreshRepository();
-        setSuccessMessage("Saved");
+        setSubmitting(false)
+        refreshRepository()
+        setSuccessMessage('Saved')
       } else {
         res.json().then((data) => {
-          setSubmitting(false);
-          setErrorMessage(data.message);
-        });
+          setSubmitting(false)
+          setErrorMessage(data.message)
+        })
       }
-    });
-  };
+    })
+  }
 
-  let hasEditPermissions = false;
-  if (user && user?.account?.flags?.includes(AccountFlags.ADMIN)) {
-    hasEditPermissions = true;
-  } else if (user && user?.account?.account_id === account_id) {
-    hasEditPermissions = true;
+  let hasEditPermissions = false
+  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+    hasEditPermissions = true
+  } else if (user && user.account.account_id === account_id) {
+    hasEditPermissions = true
   } else {
     if (user) {
-      for (const membership of user?.memberships) {
+      for (const membership of user.memberships) {
         if (
           membership.membership_account_id === account_id &&
           !membership.repository_id &&
@@ -134,8 +134,8 @@ export function EditRepositoryForm({
           (membership.role === MembershipRole.Owners ||
             membership.role === MembershipRole.Maintainers)
         ) {
-          hasEditPermissions = true;
-          break;
+          hasEditPermissions = true
+          break
         } else if (
           membership.membership_account_id === account_id &&
           membership.repository_id === repository_id &&
@@ -143,27 +143,27 @@ export function EditRepositoryForm({
           (membership.role === MembershipRole.Owners ||
             membership.role === MembershipRole.Maintainers)
         ) {
-          hasEditPermissions = true;
-          break;
+          hasEditPermissions = true
+          break
         }
       }
     }
   }
 
   if (!hasEditPermissions) {
-    return <></>;
+    return <></>
   }
 
   if (repositoryError && repositoryError.status === 404) {
-    return <></>;
+    return <></>
   }
 
   if (!repository) {
-    return <></>;
+    return <></>
   }
 
   if (repositoryError) {
-    return <Box variant="cards.componentMessage">Error loading repository</Box>;
+    return <Box variant="cards.componentMessage">Error loading repository</Box>
   }
 
   return (
@@ -176,50 +176,50 @@ export function EditRepositoryForm({
             variant="form"
             sx={{
               gridTemplateColumns: [
-                "1fr",
-                "1fr 2fr",
-                "1fr 2fr 2fr",
-                "1fr 2fr 2fr",
+                '1fr',
+                '1fr 2fr',
+                '1fr 2fr 2fr',
+                '1fr 2fr 2fr',
               ],
             }}
           >
             {errorMessage ||
-              (successMessage && (
+              successMessage &&
                 <Box variant="cards.formMessageBox">
-                  {errorMessage && (
+                  {errorMessage &&
                     <Alert variant="error">{errorMessage}</Alert>
-                  )}
-                  {successMessage && (
+                  }
+                  {successMessage &&
                     <Alert variant="success">{successMessage}</Alert>
-                  )}
+                  }
                 </Box>
-              ))}
-            <Box variant="formField" sx={{ gridColumn: "1" }}>
+            }
+            <Box variant="formField" sx={{ gridColumn: '1' }}>
               <Text variant="formLabel">State</Text>
-              <Select {...register("state")}>
+              <Select {...register('state')}>
                 <option value={RepositoryState.Listed}>Listed</option>
                 <option value={RepositoryState.Unlisted}>Unlisted</option>
               </Select>
-              <Text variant="formError">{errors.state?.message}</Text>
+              <Text variant="formError">{errors.state.message}</Text>
             </Box>
-            <Box variant="formField" sx={{ gridColumn: "1 / span 2" }}>
+            <Box variant="formField" sx={{ gridColumn: '1 / span 2' }}>
               <Text variant="formLabel">Title</Text>
-              <Input {...register("meta.title")} />
-              <Text variant="formError">{errors.meta?.title?.message}</Text>
+              <Input {...register('meta.title')} />
+              <Text variant="formError">{errors.meta.title.message}</Text>
             </Box>
-            <Box variant="formField" sx={{ gridColumn: "1 / -1" }}>
+            <Box variant="formField" sx={{ gridColumn: '1 / -1' }}>
               <Text variant="formLabel">Description</Text>
-              <Textarea rows={8} {...register("meta.description")} />
+              <Textarea rows={8} {...register('meta.description')} />
               <Text variant="formError">
-                {errors.meta?.description?.message}
+                {errors.meta.description.message}
               </Text>
             </Box>
-            <Box variant="formField" sx={{ gridColumn: "1 / -1" }}>
+            <Box variant="formField" sx={{ gridColumn: '1 / -1' }}>
               <Text variant="formLabel">Tags</Text>
-              <Input {...register("meta.tags")} />
-              <Text variant="formError">{errors.meta?.tags?.message}</Text>
+              <Input {...register('meta.tags')} />
+              <Text variant="formError">{errors.meta.tags.message}</Text>
             </Box>
-            <Box sx={{ textAlign: "right", gridColumn: "1 / -1" }}>
+            <Box sx={{ textAlign: 'right', gridColumn: '1 / -1' }}>
               <Button disabled={submitting} variant="formSubmit">
                 Save
               </Button>
@@ -228,5 +228,5 @@ export function EditRepositoryForm({
         </fieldset>
       </Box>
     </>
-  );
+  )
 }

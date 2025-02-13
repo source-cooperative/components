@@ -1,11 +1,11 @@
-import { isAuthorized } from "@/api/authz";
-import { getDataConnections } from "@/api/db";
-import { MethodNotImplementedError } from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { Actions, DataConnection, DataConnectionSchema } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { isAuthorized } from '@/api/authz'
+import { getDataConnections } from '@/api/db'
+import { MethodNotImplementedError } from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { Actions, DataConnection, DataConnectionSchema } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 /**
  * @openapi
  * /data-connections/available:
@@ -31,44 +31,44 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function listAvailableDataConnectionsHandler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection[]>
+  res: NextApiResponse<DataConnection[]>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
 
-  const dataConnections: DataConnection[] = await getDataConnections();
+  const dataConnections: DataConnection[] = await getDataConnections()
 
   const filteredConnections = dataConnections.filter(
     (dataConnection) =>
       isAuthorized(session, dataConnection, Actions.UseDataConnection) &&
-      isAuthorized(session, dataConnection, Actions.GetDataConnection)
-  );
+      isAuthorized(session, dataConnection, Actions.GetDataConnection),
+  )
 
   const sanitizedConnections = filteredConnections.map((connection) => {
     const sanitized = DataConnectionSchema.omit({
       authentication: true,
-    }).parse(connection);
+    }).parse(connection)
 
     if (
       isAuthorized(session, connection, Actions.ViewDataConnectionCredentials)
     ) {
-      return DataConnectionSchema.parse(connection);
+      return DataConnectionSchema.parse(connection)
     }
 
-    return sanitized;
-  });
+    return sanitized
+  })
 
-  res.status(StatusCodes.OK).json(sanitizedConnections);
+  res.status(StatusCodes.OK).json(sanitizedConnections)
 }
 
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection[] | DataConnection>
+  res: NextApiResponse<DataConnection[] | DataConnection>,
 ) {
-  if (req.method === "GET") {
-    return listAvailableDataConnectionsHandler(req, res);
+  if (req.method === 'GET') {
+    return listAvailableDataConnectionsHandler(req, res)
   }
 
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

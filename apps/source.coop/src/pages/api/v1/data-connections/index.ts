@@ -1,15 +1,15 @@
-import { isAuthorized } from "@/api/authz";
-import { getDataConnections, putDataConnection } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getDataConnections, putDataConnection } from '@/api/db'
 import {
   BadRequestError,
   MethodNotImplementedError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { Actions, DataConnection, DataConnectionSchema } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { Actions, DataConnection, DataConnectionSchema } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -32,33 +32,33 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function listDataConnectionsHandler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection[]>
+  res: NextApiResponse<DataConnection[]>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
 
-  const dataConnections: DataConnection[] = await getDataConnections();
+  const dataConnections: DataConnection[] = await getDataConnections()
 
   // Filter connections based on user's permissions
   const filteredConnections = dataConnections.filter((dataConnection) =>
-    isAuthorized(session, dataConnection, Actions.GetDataConnection)
-  );
+    isAuthorized(session, dataConnection, Actions.GetDataConnection),
+  )
 
   // Sanitize connections, removing authentication details if not authorized
   const sanitizedConnections = filteredConnections.map((connection) => {
     const sanitized = DataConnectionSchema.omit({
       authentication: true,
-    }).parse(connection);
+    }).parse(connection)
 
     if (
       isAuthorized(session, connection, Actions.ViewDataConnectionCredentials)
     ) {
-      return DataConnectionSchema.parse(connection);
+      return DataConnectionSchema.parse(connection)
     }
 
-    return sanitized;
-  });
+    return sanitized
+  })
 
-  res.status(StatusCodes.OK).json(sanitizedConnections);
+  res.status(StatusCodes.OK).json(sanitizedConnections)
 }
 
 /**
@@ -90,41 +90,41 @@ async function listDataConnectionsHandler(
  */
 async function createDataConnectionHandler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection>
+  res: NextApiResponse<DataConnection>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
 
-  const dataConnection = DataConnectionSchema.parse(req.body);
+  const dataConnection = DataConnectionSchema.parse(req.body)
 
   if (!isAuthorized(session, dataConnection, Actions.CreateDataConnection)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   const [createdDataConnection, success] = await putDataConnection(
     dataConnection,
-    true
-  );
+    true,
+  )
 
   if (!success) {
     throw new BadRequestError(
-      `Data connection with ID ${dataConnection.data_connection_id} already exists`
-    );
+      `Data connection with ID ${dataConnection.data_connection_id} already exists`,
+    )
   }
 
-  res.status(StatusCodes.OK).json(createdDataConnection);
+  res.status(StatusCodes.OK).json(createdDataConnection)
 }
 
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection[] | DataConnection>
+  res: NextApiResponse<DataConnection[] | DataConnection>,
 ) {
-  if (req.method === "GET") {
-    return listDataConnectionsHandler(req, res);
-  } else if (req.method === "POST") {
-    return createDataConnectionHandler(req, res);
+  if (req.method === 'GET') {
+    return listDataConnectionsHandler(req, res)
+  } else if (req.method === 'POST') {
+    return createDataConnectionHandler(req, res)
   }
 
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

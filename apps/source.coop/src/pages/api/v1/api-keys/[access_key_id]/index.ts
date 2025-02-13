@@ -1,12 +1,12 @@
 // Import necessary modules and types
-import { isAuthorized } from "@/api/authz";
-import { getAPIKey, putAPIKey } from "@/api/db";
-import { MethodNotImplementedError, UnauthorizedError } from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { Actions, RedactedAPIKey, RedactedAPIKeySchema } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { isAuthorized } from '@/api/authz'
+import { getAPIKey, putAPIKey } from '@/api/db'
+import { MethodNotImplementedError, UnauthorizedError } from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { Actions, RedactedAPIKey, RedactedAPIKeySchema } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -40,44 +40,44 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function revokeAPIKeyHandler(
   req: NextApiRequest,
-  res: NextApiResponse<RedactedAPIKey>
+  res: NextApiResponse<RedactedAPIKey>,
 ): Promise<void> {
   // Get the current session
-  const session = await getSession(req);
-  const { access_key_id } = req.query;
+  const session = await getSession(req)
+  const { access_key_id } = req.query
 
   // Fetch the API key
-  const apiKey = await getAPIKey(access_key_id as string);
+  const apiKey = await getAPIKey(access_key_id as string)
 
   if (!apiKey) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   if (!isAuthorized(session, apiKey, Actions.RevokeAPIKey)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  apiKey.disabled = true;
+  apiKey.disabled = true
 
-  const [revokedAPIKey] = await putAPIKey(apiKey);
+  const [revokedAPIKey] = await putAPIKey(apiKey)
 
   // Send the revoked API key as the response
-  res.status(StatusCodes.OK).json(RedactedAPIKeySchema.parse(revokedAPIKey));
+  res.status(StatusCodes.OK).json(RedactedAPIKeySchema.parse(revokedAPIKey))
 }
 
 // Handler function for the API route
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<RedactedAPIKey>
+  res: NextApiResponse<RedactedAPIKey>,
 ) {
   // Check if the request method is DELETE
-  if (req.method === "DELETE") {
-    return revokeAPIKeyHandler(req, res);
+  if (req.method === 'DELETE') {
+    return revokeAPIKeyHandler(req, res)
   }
 
   // If the method is not DELETE, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
 // Export the handler with error handling middleware
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

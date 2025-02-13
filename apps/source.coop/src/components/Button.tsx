@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { forwardRef } from "react";
-import { Box, Button } from "theme-ui";
+import Link from 'next/link'
+import { forwardRef } from 'react'
+import { Box, Button } from 'theme-ui'
 
 const SourceButton = ({ children, suffix, href, ...props }, ref) => {
   if (href) {
@@ -12,14 +12,14 @@ const SourceButton = ({ children, suffix, href, ...props }, ref) => {
           </Button>
         </Link>
       </Box>
-    );
+    )
   } else {
     return (
       <Button ref={ref} {...props}>
         <>{children}</>
       </Button>
-    );
+    )
   }
-};
+}
 
-export default forwardRef(SourceButton);
+export default forwardRef(SourceButton)

@@ -1,15 +1,15 @@
-import { isAuthorized } from "@/api/authz";
-import { getDataConnection, putDataConnection } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getDataConnection, putDataConnection } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { Actions, DataConnection, DataConnectionSchema } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { Actions, DataConnection, DataConnectionSchema } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -40,41 +40,41 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function getDataConnectionHandler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection>
+  res: NextApiResponse<DataConnection>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
 
-  const { data_connection_id } = req.query;
+  const { data_connection_id } = req.query
 
-  var dataConnection = await getDataConnection(data_connection_id as string);
+  let dataConnection = await getDataConnection(data_connection_id as string)
 
   if (!dataConnection) {
     throw new NotFoundError(
-      `Data connection with ID ${data_connection_id} not found`
-    );
+      `Data connection with ID ${data_connection_id} not found`,
+    )
   }
 
-  const { authorization } = req.headers;
+  const { authorization } = req.headers
   if (authorization === process.env.SOURCE_KEY) {
-    res.status(StatusCodes.OK).json(dataConnection);
+    res.status(StatusCodes.OK).json(dataConnection)
   } else {
     if (!isAuthorized(session, dataConnection, Actions.GetDataConnection)) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError()
     }
 
     if (
       !isAuthorized(
         session,
         dataConnection,
-        Actions.ViewDataConnectionCredentials
+        Actions.ViewDataConnectionCredentials,
       )
     ) {
       dataConnection = DataConnectionSchema.omit({
         authentication: true,
-      }).parse(dataConnection);
+      }).parse(dataConnection)
     }
 
-    res.status(StatusCodes.OK).json(dataConnection);
+    res.status(StatusCodes.OK).json(dataConnection)
   }
 }
 
@@ -115,31 +115,31 @@ async function getDataConnectionHandler(
  */
 async function putDataConnectionHandler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection>
+  res: NextApiResponse<DataConnection>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
 
-  const { data_connection_id } = req.query;
+  const { data_connection_id } = req.query
 
-  var dataConnection = await getDataConnection(data_connection_id as string);
+  let dataConnection = await getDataConnection(data_connection_id as string)
 
   if (!dataConnection) {
     throw new NotFoundError(
-      `Data connection with ID ${data_connection_id} not found`
-    );
+      `Data connection with ID ${data_connection_id} not found`,
+    )
   }
 
-  dataConnection = DataConnectionSchema.parse(req.body);
+  dataConnection = DataConnectionSchema.parse(req.body)
 
   if (!isAuthorized(session, dataConnection, Actions.PutDataConnection)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   const [updatedDataConnection, success] = await putDataConnection(
-    dataConnection
-  );
+    dataConnection,
+  )
 
-  res.status(StatusCodes.OK).json(updatedDataConnection);
+  res.status(StatusCodes.OK).json(updatedDataConnection)
 }
 
 /**
@@ -171,58 +171,58 @@ async function putDataConnectionHandler(
  */
 async function disableDataConnectionHandler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection>
+  res: NextApiResponse<DataConnection>,
 ): Promise<void> {
-  const session = await getSession(req);
+  const session = await getSession(req)
 
-  const { data_connection_id } = req.query;
+  const { data_connection_id } = req.query
 
-  var dataConnection = await getDataConnection(data_connection_id as string);
+  const dataConnection = await getDataConnection(data_connection_id as string)
 
   if (!dataConnection) {
     throw new NotFoundError(
-      `Data connection with ID ${data_connection_id} not found`
-    );
+      `Data connection with ID ${data_connection_id} not found`,
+    )
   }
 
   if (!isAuthorized(session, dataConnection, Actions.DisableDataConnection)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  dataConnection.read_only = true;
+  dataConnection.read_only = true
 
-  var [updatedDataConnection, success] = await putDataConnection(
-    dataConnection
-  );
+  let [updatedDataConnection, success] = await putDataConnection(
+    dataConnection,
+  )
 
   if (
     !isAuthorized(
       session,
       updatedDataConnection,
-      Actions.ViewDataConnectionCredentials
+      Actions.ViewDataConnectionCredentials,
     )
   ) {
     updatedDataConnection = DataConnectionSchema.omit({
       authentication: true,
-    }).parse(updatedDataConnection);
+    }).parse(updatedDataConnection)
   }
 
-  res.status(StatusCodes.OK).json(updatedDataConnection);
+  res.status(StatusCodes.OK).json(updatedDataConnection)
 }
 
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<DataConnection>
+  res: NextApiResponse<DataConnection>,
 ) {
-  if (req.method === "GET") {
-    return getDataConnectionHandler(req, res);
-  } else if (req.method === "PUT") {
-    return putDataConnectionHandler(req, res);
-  } else if (req.method === "DELETE") {
-    return disableDataConnectionHandler(req, res);
+  if (req.method === 'GET') {
+    return getDataConnectionHandler(req, res)
+  } else if (req.method === 'PUT') {
+    return putDataConnectionHandler(req, res)
+  } else if (req.method === 'DELETE') {
+    return disableDataConnectionHandler(req, res)
   }
 
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

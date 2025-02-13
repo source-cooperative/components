@@ -3,18 +3,18 @@ import {
   AccountCreationRequestSchema,
   AccountType,
   UserSession,
-} from "@/api/types";
-import SourceButton from "@/components/Button";
-import { Logo } from "@/components/Logo";
-import { ClientError } from "@/lib/client/accounts";
-import { Dimmer } from "@carbonplan/components";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Configuration, FrontendApi } from "@ory/client";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import useSWR from "swr";
+} from '@/api/types'
+import SourceButton from '@/components/Button'
+import { Logo } from '@/components/Logo'
+import { ClientError } from '@/lib/client/accounts'
+import { Dimmer } from '@carbonplan/components'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Configuration, FrontendApi } from '@ory/client'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import useSWR from 'swr'
 import {
   Alert,
   Box,
@@ -25,16 +25,16 @@ import {
   Paragraph,
   Select,
   Text,
-} from "theme-ui";
+} from 'theme-ui'
 
-import { COUNTRIES } from "@/lib/constants";
-import { edgeConfig } from "@ory/integrations/next";
+import { COUNTRIES } from '@/lib/constants'
+import { edgeConfig } from '@ory/integrations/next'
 
 const baseUrl: string = process.env.NEXT_PUBLIC_IS_PROD
   ? process.env.NEXT_PUBLIC_ORY_SDK_URL
-  : "http://localhost:3000/api/.ory";
+  : 'http://localhost:3000/api/.ory'
 
-let ory: FrontendApi;
+let ory: FrontendApi
 if (process.env.NEXT_PUBLIC_IS_PROD) {
   ory = new FrontendApi(
     new Configuration({
@@ -44,33 +44,33 @@ if (process.env.NEXT_PUBLIC_IS_PROD) {
         withCredentials: true, // Important for CORS
         timeout: 30000, // 30 seconds
       },
-    })
-  );
+    }),
+  )
 } else {
-  ory = new FrontendApi(new Configuration(edgeConfig));
+  ory = new FrontendApi(new Configuration(edgeConfig))
 }
 
 export async function createAccount(
-  accountCreationRequest: AccountCreationRequest
+  accountCreationRequest: AccountCreationRequest,
 ): Promise<null> {
-  return null;
+  return null
 }
 
 export default function AccountForm() {
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [logoutUrl, setLogoutUrl] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [logoutUrl, setLogoutUrl] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
+  const router = useRouter()
 
   const { data: user, mutate: refreshUser } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   if (user && user.account) {
-    router.push(`/${user.account.account_id}`);
+    router.push(`/${user.account.account_id}`)
   }
 
   const {
@@ -82,59 +82,59 @@ export default function AccountForm() {
     defaultValues: {
       account_type: AccountType.USER,
     },
-  });
+  })
 
   const onSubmit: SubmitHandler<AccountCreationRequest> = (data) => {
-    setSubmitting(true);
-    fetch(`/api/v1/accounts`, {
-      method: "POST",
-      credentials: "include",
+    setSubmitting(true)
+    fetch('/api/v1/accounts', {
+      method: 'POST',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.ok) {
         refreshUser().then(() => {
-          router.push(`/${data.account_id}`);
-        });
+          router.push(`/${data.account_id}`)
+        })
       } else {
         res.json().then((data) => {
-          setErrorMessage(data.message);
-        });
-        setSubmitting(false);
+          setErrorMessage(data.message)
+        })
+        setSubmitting(false)
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     ory.createBrowserLogoutFlow().then((res) => {
-      setLogoutUrl(res.data.logout_url);
-    });
-  }, []);
+      setLogoutUrl(res.data.logout_url)
+    })
+  }, [])
 
   return (
     <Container
       sx={{
-        width: ["100%", "80%", "50%", "40%"],
-        maxWidth: "500px",
+        width: ['100%', '80%', '50%', '40%'],
+        maxWidth: '500px',
         py: 5,
-        textAlign: "center",
+        textAlign: 'center',
       }}
     >
-      <Box sx={{ alignItems: "center", textAlign: "center" }}>
+      <Box sx={{ alignItems: 'center', textAlign: 'center' }}>
         <Link href="/">
           <Logo
             sx={{
-              width: "100%",
-              fill: "background",
-              backgroundColor: "primary",
+              width: '100%',
+              fill: 'background',
+              backgroundColor: 'primary',
               p: 3,
             }}
           />
         </Link>
       </Box>
-      {errorMessage ? <Alert variant={"error"}>{errorMessage}</Alert> : <></>}
+      {errorMessage ? <Alert variant={'error'}>{errorMessage}</Alert> : <></>}
       <Box as="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid
           sx={{
@@ -153,27 +153,27 @@ export default function AccountForm() {
             Choose a Username
           </Heading>
 
-          <Box sx={{ textAlign: "left" }}>
-            <Text sx={{ fontFamily: "mono", fontSize: 0 }}>Username</Text>
-            <Input {...register("account_id")} />
-            <Text sx={{ fontFamily: "mono", fontSize: 0, color: "red" }}>
-              {errors.account_id?.message}
+          <Box sx={{ textAlign: 'left' }}>
+            <Text sx={{ fontFamily: 'mono', fontSize: 0 }}>Username</Text>
+            <Input {...register('account_id')} />
+            <Text sx={{ fontFamily: 'mono', fontSize: 0, color: 'red' }}>
+              {errors.account_id.message}
             </Text>
           </Box>
-          <Box sx={{ textAlign: "left" }}>
-            <Paragraph sx={{ my: 0, fontFamily: "mono", fontSize: 0 }}>
+          <Box sx={{ textAlign: 'left' }}>
+            <Paragraph sx={{ my: 0, fontFamily: 'mono', fontSize: 0 }}>
               Usernames must meet the following criteria:
             </Paragraph>
-            <Paragraph sx={{ my: 0, fontFamily: "mono", fontSize: 0 }}>
+            <Paragraph sx={{ my: 0, fontFamily: 'mono', fontSize: 0 }}>
               • Between 3 and 40 characters in length
             </Paragraph>
-            <Paragraph sx={{ my: 0, fontFamily: "mono", fontSize: 0 }}>
+            <Paragraph sx={{ my: 0, fontFamily: 'mono', fontSize: 0 }}>
               • Contain only letters, numbers, and hyphens
             </Paragraph>
-            <Paragraph sx={{ my: 0, fontFamily: "mono", fontSize: 0 }}>
+            <Paragraph sx={{ my: 0, fontFamily: 'mono', fontSize: 0 }}>
               • Must not start or end with a hyphen
             </Paragraph>
-            <Paragraph sx={{ my: 0, fontFamily: "mono", fontSize: 0 }}>
+            <Paragraph sx={{ my: 0, fontFamily: 'mono', fontSize: 0 }}>
               • Must not contain consecutive hyphens
             </Paragraph>
           </Box>
@@ -185,53 +185,53 @@ export default function AccountForm() {
             You can fill out your profile information later if you'd like.
           </Paragraph>
 
-          <Box sx={{ textAlign: "left" }}>
-            <Text sx={{ fontFamily: "mono", fontSize: 0 }}>Name</Text>
-            <Input {...register("profile.name")} />
-            <Text sx={{ fontFamily: "mono", fontSize: 0, color: "red" }}>
-              {errors.profile?.name?.message}
+          <Box sx={{ textAlign: 'left' }}>
+            <Text sx={{ fontFamily: 'mono', fontSize: 0 }}>Name</Text>
+            <Input {...register('profile.name')} />
+            <Text sx={{ fontFamily: 'mono', fontSize: 0, color: 'red' }}>
+              {errors.profile.name.message}
             </Text>
           </Box>
 
-          <Box sx={{ textAlign: "left" }}>
-            <Text sx={{ fontFamily: "mono", fontSize: 0 }}>Bio</Text>
-            <Input {...register("profile.bio")} />
-            <Text sx={{ fontFamily: "mono", fontSize: 0, color: "red" }}>
-              {errors.profile?.bio?.message}
+          <Box sx={{ textAlign: 'left' }}>
+            <Text sx={{ fontFamily: 'mono', fontSize: 0 }}>Bio</Text>
+            <Input {...register('profile.bio')} />
+            <Text sx={{ fontFamily: 'mono', fontSize: 0, color: 'red' }}>
+              {errors.profile.bio.message}
             </Text>
           </Box>
 
-          <Box sx={{ textAlign: "left" }}>
-            <Text sx={{ fontFamily: "mono", fontSize: 0 }}>Location</Text>
-            <Select {...register("profile.location")}>
-              {COUNTRIES.map((country, i) => (
-                <option key={`country-${i}`}>{country.value}</option>
-              ))}
+          <Box sx={{ textAlign: 'left' }}>
+            <Text sx={{ fontFamily: 'mono', fontSize: 0 }}>Location</Text>
+            <Select {...register('profile.location')}>
+              {COUNTRIES.map((country, i) =>
+                <option key={`country-${i}`}>{country.value}</option>,
+              )}
             </Select>
-            <Text sx={{ fontFamily: "mono", fontSize: 0, color: "red" }}>
-              {errors.profile?.location?.message}
+            <Text sx={{ fontFamily: 'mono', fontSize: 0, color: 'red' }}>
+              {errors.profile.location.message}
             </Text>
           </Box>
 
-          <Box sx={{ textAlign: "left" }}>
-            <Text sx={{ fontFamily: "mono", fontSize: 0 }}>Website</Text>
-            <Input {...register("profile.url")} />
-            <Text sx={{ fontFamily: "mono", fontSize: 0, color: "red" }}>
-              {errors.profile?.url?.message}
+          <Box sx={{ textAlign: 'left' }}>
+            <Text sx={{ fontFamily: 'mono', fontSize: 0 }}>Website</Text>
+            <Input {...register('profile.url')} />
+            <Text sx={{ fontFamily: 'mono', fontSize: 0, color: 'red' }}>
+              {errors.profile.url.message}
             </Text>
           </Box>
 
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: 'center' }}>
             <SourceButton disabled={submitting}>
-              {submitting ? "Submitting..." : "Complete Registration"}
+              {submitting ? 'Submitting...' : 'Complete Registration'}
             </SourceButton>
           </Box>
         </Grid>
       </Box>
       <Box
         sx={{
-          display: ["none", "none", "initial", "initial"],
-          position: ["fixed"],
+          display: ['none', 'none', 'initial', 'initial'],
+          position: ['fixed'],
           right: [13],
           bottom: [17, 17, 15, 15],
         }}
@@ -239,5 +239,5 @@ export default function AccountForm() {
         <Dimmer />
       </Box>
     </Container>
-  );
+  )
 }

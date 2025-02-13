@@ -1,13 +1,13 @@
 // Import necessary modules and types
-import { isAuthorized } from "@/api/authz";
-import { getAccount, getMemberships, putMembership } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getAccount, getMemberships, putMembership } from '@/api/db'
 import {
   BadRequestError,
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
 import {
   AccountType,
   Actions,
@@ -15,11 +15,11 @@ import {
   MembershipInvitation,
   MembershipInvitationSchema,
   MembershipState,
-} from "@/api/types";
-import { getSession } from "@/api/utils";
-import * as crypto from "crypto";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/types'
+import { getSession } from '@/api/utils'
+import * as crypto from 'crypto'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -64,77 +64,77 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function inviteMemberHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Membership>
+  res: NextApiResponse<Membership>,
 ): Promise<void> {
   // Get the current session
-  const session = await getSession(req);
-  const { account_id } = req.query;
+  const session = await getSession(req)
+  const { account_id } = req.query
 
   // Parse and validate the membership invitation request
   const membershipInvitation: MembershipInvitation =
-    MembershipInvitationSchema.parse(req.body);
+    MembershipInvitationSchema.parse(req.body)
 
   // Fetch the account
-  const account = await getAccount(account_id as string);
+  const account = await getAccount(account_id as string)
 
   if (!account) {
-    throw new NotFoundError(`Account with ID ${account_id} not found`);
+    throw new NotFoundError(`Account with ID ${account_id} not found`)
   }
 
-  const invitedAccount = await getAccount(membershipInvitation.account_id);
+  const invitedAccount = await getAccount(membershipInvitation.account_id)
   if (!invitedAccount) {
     throw new NotFoundError(
-      `Invited account with ID ${membershipInvitation.account_id} not found`
-    );
+      `Invited account with ID ${membershipInvitation.account_id} not found`,
+    )
   }
 
   if (invitedAccount.account_type !== AccountType.USER) {
     throw new BadRequestError(
-      `Invited account with ID ${membershipInvitation.account_id} is not a user account`
-    );
+      `Invited account with ID ${membershipInvitation.account_id} is not a user account`,
+    )
   }
 
   let [createdMembership, success]: [Membership | null, boolean] = [
     null,
     false,
-  ];
+  ]
 
   do {
-    let membership: Membership = {
+    const membership: Membership = {
       ...membershipInvitation,
       membership_id: crypto.randomUUID(),
       membership_account_id: account.account_id,
       state: MembershipState.Invited,
       state_changed: new Date().toISOString(),
-    };
-
-    if (!isAuthorized(session, membership, Actions.InviteMembership)) {
-      throw new UnauthorizedError();
     }
 
-    const existingMembership = await getMemberships(account.account_id);
-    var exists = false;
+    if (!isAuthorized(session, membership, Actions.InviteMembership)) {
+      throw new UnauthorizedError()
+    }
+
+    const existingMembership = await getMemberships(account.account_id)
+    let exists = false
     for (const existing of existingMembership) {
       if (
         existing.account_id === membership.account_id &&
         (existing.state === MembershipState.Member ||
           existing.state === MembershipState.Invited)
       ) {
-        exists = true;
+        exists = true
         throw new BadRequestError(
-          `Account with ID ${membership.account_id} is already a member or has a pending invitation for account with ID ${account.account_id}`
-        );
+          `Account with ID ${membership.account_id} is already a member or has a pending invitation for account with ID ${account.account_id}`,
+        )
       }
     }
     if (!exists) {
-      [createdMembership, success] = await putMembership(membership, true);
+      [createdMembership, success] = await putMembership(membership, true)
 
       // Send the created membership as the response
       if (success) {
-        res.status(StatusCodes.OK).json(createdMembership);
+        res.status(StatusCodes.OK).json(createdMembership)
       }
     }
-  } while (!success);
+  } while (!success)
 }
 
 /**
@@ -174,53 +174,53 @@ async function inviteMemberHandler(
  */
 async function getMembersHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Membership[]>
+  res: NextApiResponse<Membership[]>,
 ): Promise<void> {
   // Get the current session
-  const session = await getSession(req);
-  const { account_id } = req.query;
+  const session = await getSession(req)
+  const { account_id } = req.query
 
   // Fetch the account
-  const account = await getAccount(account_id as string);
+  const account = await getAccount(account_id as string)
 
   if (!account) {
-    throw new NotFoundError(`Account with ID ${account_id} not found`);
+    throw new NotFoundError(`Account with ID ${account_id} not found`)
   }
 
   // Check if the user is authorized to list memberships for this account
   if (!isAuthorized(session, account, Actions.ListAccountMemberships)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   // Retrieve memberships for the account
-  const memberships = await getMemberships(account.account_id);
-  const authorizedMemberships: Membership[] = [];
+  const memberships = await getMemberships(account.account_id)
+  const authorizedMemberships: Membership[] = []
   for (const membership of memberships) {
     // Check if the user is authorized to view the membership
     if (isAuthorized(session, membership, Actions.GetMembership)) {
-      authorizedMemberships.push(membership);
+      authorizedMemberships.push(membership)
     }
   }
 
   // Send the list of authorized memberships as the response
-  res.status(StatusCodes.OK).json(authorizedMemberships);
+  res.status(StatusCodes.OK).json(authorizedMemberships)
 }
 
 // Handler function for the API route
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Membership | Membership[]>
+  res: NextApiResponse<Membership | Membership[]>,
 ) {
   // Check if the request method is POST or GET
-  if (req.method === "POST") {
-    return inviteMemberHandler(req, res);
-  } else if (req.method === "GET") {
-    return getMembersHandler(req, res);
+  if (req.method === 'POST') {
+    return inviteMemberHandler(req, res)
+  } else if (req.method === 'GET') {
+    return getMembersHandler(req, res)
   }
 
   // If the method is neither POST nor GET, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
 // Export the handler with error handling middleware
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

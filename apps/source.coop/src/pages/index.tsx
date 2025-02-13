@@ -1,7 +1,7 @@
-import { RepositoryList } from "@/components/repository/RepositoryList";
-import SourceLink from "@/components/SourceLink";
-import { Box, Card, Paragraph } from "theme-ui";
-import { Layout } from "../components/Layout";
+import { RepositoryList } from '@/components/repository/RepositoryList'
+import SourceLink from '@/components/SourceLink'
+import { Box, Card, Paragraph } from 'theme-ui'
+import { Layout } from '../components/Layout'
 
 export default function Home() {
   return (
@@ -14,10 +14,10 @@ export default function Home() {
             </Paragraph>
           </Card>
           <Box sx={{ mt: 4 }}>
-            <RepositoryList title={"Featured Repositories"} featured={true} />
+            <RepositoryList title={'Featured Repositories'} featured={true} />
           </Box>
         </Layout>
       </main>
     </>
-  );
+  )
 }

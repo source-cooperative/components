@@ -3,12 +3,12 @@ import {
   MembershipRole,
   MembershipState,
   Repository,
-  UserSession
-} from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import React, { useState } from "react";
-import useSWR from "swr";
-import { Alert, Box, Button, Grid, Text } from "theme-ui";
+  UserSession,
+} from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import React, { useState } from 'react'
+import useSWR from 'swr'
+import { Alert, Box, Button, Grid, Text } from 'theme-ui'
 
 export function DangerBox({
   account_id,
@@ -17,9 +17,9 @@ export function DangerBox({
   account_id: string;
   repository_id: string;
 }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const {
     data: repository,
@@ -32,24 +32,24 @@ export function DangerBox({
       : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const { data: user } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
-  let hasEditPermissions = false;
-  if (user && user?.account?.flags?.includes(AccountFlags.ADMIN)) {
-    hasEditPermissions = true;
-  } else if (user && user?.account?.account_id === account_id) {
-    hasEditPermissions = true;
+  let hasEditPermissions = false
+  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+    hasEditPermissions = true
+  } else if (user && user.account.account_id === account_id) {
+    hasEditPermissions = true
   } else {
     if (user) {
-      for (const membership of user?.memberships) {
+      for (const membership of user.memberships) {
         if (
           membership.membership_account_id === account_id &&
           !membership.repository_id &&
@@ -57,8 +57,8 @@ export function DangerBox({
           (membership.role === MembershipRole.Owners ||
             membership.role === MembershipRole.Maintainers)
         ) {
-          hasEditPermissions = true;
-          break;
+          hasEditPermissions = true
+          break
         } else if (
           membership.membership_account_id === account_id &&
           membership.repository_id === repository_id &&
@@ -66,56 +66,56 @@ export function DangerBox({
           (membership.role === MembershipRole.Owners ||
             membership.role === MembershipRole.Maintainers)
         ) {
-          hasEditPermissions = true;
-          break;
+          hasEditPermissions = true
+          break
         }
       }
     }
   }
 
   if (!hasEditPermissions) {
-    return <></>;
+    return <></>
   }
 
   if (repositoryError && repositoryError.status === 404) {
-    return <></>;
+    return <></>
   }
 
   if (!repository) {
-    return <></>;
+    return <></>
   }
 
   if (repositoryError) {
-    return <Box variant="cards.componentMessage">Error loading repository</Box>;
+    return <Box variant="cards.componentMessage">Error loading repository</Box>
   }
 
   function disableRepository() {
     const confirmed = confirm(
-      "Are you sure you want to disable this repository? This action cannot be undone."
-    );
+      'Are you sure you want to disable this repository? This action cannot be undone.',
+    )
 
     if (!confirmed) {
-      return;
+      return
     }
 
-    setSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
     fetch(`/api/v1/repositories/${account_id}/${repository_id}`, {
-      method: "DELETE",
-      credentials: "include",
+      method: 'DELETE',
+      credentials: 'include',
     }).then((res) => {
       if (!res.ok) {
         res.json().then((data) => {
-          setErrorMessage(data.message);
-          setSubmitting(false);
-        });
+          setErrorMessage(data.message)
+          setSubmitting(false)
+        })
       } else {
-        setSubmitting(false);
-        setSuccessMessage("Repository Disabled");
-        refreshRepository();
+        setSubmitting(false)
+        setSuccessMessage('Repository Disabled')
+        refreshRepository()
       }
-    });
+    })
   }
 
   return (
@@ -123,25 +123,25 @@ export function DangerBox({
       <Box
         as="form"
         onSubmit={(e) => {
-          e.preventDefault();
+          e.preventDefault()
         }}
       >
         <fieldset disabled={submitting}>
           <Text variant="formTitle">Danger Box</Text>
           <Grid variant="form">
-            {(errorMessage || successMessage) && (
+            {(errorMessage || successMessage) &&
               <Box variant="cards.formMessageBox">
                 {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
-                {successMessage && (
+                {successMessage &&
                   <Alert variant="success">{successMessage}</Alert>
-                )}
+                }
               </Box>
-            )}
+            }
             <Button
               variant="formDestructive"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                disableRepository();
+                e.preventDefault()
+                disableRepository()
               }}
               disabled={repository.disabled}
             >
@@ -151,5 +151,5 @@ export function DangerBox({
         </fieldset>
       </Box>
     </Box>
-  );
+  )
 }

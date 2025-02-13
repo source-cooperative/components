@@ -1,16 +1,16 @@
 // Import necessary modules and types
-import { isAuthorized } from "@/api/authz";
-import { getAccount, putAccount } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getAccount, putAccount } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
-import { Account, Actions } from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
+import { Account, Actions } from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -45,27 +45,27 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function getAccountHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Account>
+  res: NextApiResponse<Account>,
 ): Promise<void> {
   // Extract account_id from request query
-  const { account_id } = req.query;
+  const { account_id } = req.query
   // Get user session
-  const session = await getSession(req);
+  const session = await getSession(req)
 
   // Fetch account from database
-  const account = await getAccount(account_id as string);
+  const account = await getAccount(account_id as string)
   // If account not found, throw NotFoundError
   if (!account) {
-    throw new NotFoundError(`Account ${account_id} not found`);
+    throw new NotFoundError(`Account ${account_id} not found`)
   }
 
   // Check if user is authorized to get account details
   if (!isAuthorized(session, account, Actions.GetAccount)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   // Send successful response with account details
-  res.status(StatusCodes.OK).json(account);
+  res.status(StatusCodes.OK).json(account)
 }
 
 /**
@@ -100,49 +100,49 @@ async function getAccountHandler(
  */
 async function deleteAccountHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Account>
+  res: NextApiResponse<Account>,
 ): Promise<void> {
   // Extract account_id from request query
-  const { account_id } = req.query;
+  const { account_id } = req.query
   // Get user session
-  const session = await getSession(req);
+  const session = await getSession(req)
 
   // Fetch account to be disabled from database
-  const disableAccount = await getAccount(account_id as string);
+  const disableAccount = await getAccount(account_id as string)
   // If account not found, throw NotFoundError
   if (!disableAccount) {
-    throw new NotFoundError(`Account ${account_id} not found`);
+    throw new NotFoundError(`Account ${account_id} not found`)
   }
 
   // Check if user is authorized to disable the account
   if (!isAuthorized(session, disableAccount, Actions.DisableAccount)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   // Set account as disabled
-  disableAccount.disabled = true;
+  disableAccount.disabled = true
   // Update the account in the database
-  const [account, _success] = await putAccount(disableAccount);
+  const [account, _success] = await putAccount(disableAccount)
 
   // Send successful response with updated account details
-  res.status(StatusCodes.OK).json(account);
+  res.status(StatusCodes.OK).json(account)
 }
 
 // Main handler function for the API endpoint
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Account>
+  res: NextApiResponse<Account>,
 ) {
   // Route request based on HTTP method
-  if (req.method === "GET") {
-    return getAccountHandler(req, res);
-  } else if (req.method === "DELETE") {
-    return deleteAccountHandler(req, res);
+  if (req.method === 'GET') {
+    return getAccountHandler(req, res)
+  } else if (req.method === 'DELETE') {
+    return deleteAccountHandler(req, res)
   }
 
   // Throw error for unsupported methods
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
 // Export the handler with error handling middleware
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

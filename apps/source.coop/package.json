@@ -6,9 +6,10 @@
     "dev": "scripts/db_start.sh && next dev",
     "build": "next build",
     "kill": "scripts/db_stop.sh",
-    "lint": "next lint",
+    "lint": "eslint .",
     "install-cli": "cd cli/ && npm ci && npm run build && npm link --force",
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",

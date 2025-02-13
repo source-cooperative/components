@@ -1,23 +1,23 @@
-import "@fontsource/ibm-plex-sans";
-import "react-loading-skeleton/dist/skeleton.css";
-import "../styles/globals.css";
+import '@fontsource/ibm-plex-sans'
+import 'react-loading-skeleton/dist/skeleton.css'
+import '../styles/globals.css'
 
-import theme from "@/lib/theme";
+import theme from '@/lib/theme'
 
-import Router from "next/router";
-import NProgress from "nprogress"; //nprogress module
-import { SkeletonTheme } from "react-loading-skeleton";
-import "../styles/nprogress.css"; //styles of nprogress
+import Router from 'next/router'
+import NProgress from 'nprogress' //nprogress module
+import { SkeletonTheme } from 'react-loading-skeleton'
+import '../styles/nprogress.css' //styles of nprogress
 
-import provider from "@mdx-js/react";
+import provider from '@mdx-js/react'
 
-import { mdxOptions } from "@/lib/md";
-import { evaluate } from "@mdx-js/mdx";
-import * as runtime from "react/jsx-runtime";
+import { mdxOptions } from '@/lib/md'
+import { evaluate } from '@mdx-js/mdx'
+import * as runtime from 'react/jsx-runtime'
 
-import { Toaster } from "react-hot-toast";
+import { Toaster } from 'react-hot-toast'
 
-import { SWRConfig } from "swr";
+import { SWRConfig } from 'swr'
 
 const fetcher = async ({
   path,
@@ -27,64 +27,64 @@ const fetcher = async ({
   raw,
   markdown,
 }) => {
-  let searchParams: string | null = null;
+  let searchParams: string | null = null
   if (args) {
-    var params = [];
+    const params = []
 
     Object.keys(args).forEach(function (key) {
       if (args[key]) {
-        params.push([key, args[key]]);
+        params.push([key, args[key]])
       }
-    });
+    })
 
-    searchParams = new URLSearchParams(params).toString();
+    searchParams = new URLSearchParams(params).toString()
   }
 
-  var options = {};
+  let options = {}
   if (!exclude_credentials) {
-    options = { credentials: "include" };
+    options = { credentials: 'include' }
   }
 
   const res = await fetch(
     searchParams ? `${path}?${searchParams}` : path,
-    options
-  );
+    options,
+  )
 
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.
   if (!res.ok) {
-    const error = new Error("An error occurred while fetching the data.");
+    const error = new Error('An error occurred while fetching the data.')
     // Attach extra info to the error object.
 
     // @ts-ignore
-    error.info = await res.json();
+    error.info = await res.json()
     // @ts-ignore
-    error.status = res.status;
-    throw error;
+    error.status = res.status
+    throw error
   }
 
   if (markdown) {
-    const text = await res.text();
+    const text = await res.text()
     return evaluate(text, {
       ...provider,
       ...runtime,
       useMDXComponents: SourceComponents,
       ...mdxOptions,
-    } as any);
+    })
   } else {
-    return res.json();
+    return res.json()
   }
-};
+}
 
 //Binding events.
-Router.events.on("routeChangeStart", () => NProgress.start());
-Router.events.on("routeChangeComplete", () => NProgress.done());
-Router.events.on("routeChangeError", () => NProgress.done());
+Router.events.on('routeChangeStart', () => NProgress.start())
+Router.events.on('routeChangeComplete', () => NProgress.done())
+Router.events.on('routeChangeError', () => NProgress.done())
 
-import { components as SourceComponents, SourceProvider } from "@/lib/provider";
+import { components as SourceComponents, SourceProvider } from '@/lib/provider'
 
-import { Analytics } from "@vercel/analytics/react";
-import type { AppProps } from "next/app";
+import { Analytics } from '@vercel/analytics/react'
+import type { AppProps } from 'next/app'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -99,7 +99,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Toaster
             toastOptions={{
               style: {
-                borderRadius: "0px",
+                borderRadius: '0px',
                 zIndex: 99999999,
               },
             }}
@@ -116,5 +116,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </main>
       </SourceProvider>
     </SWRConfig>
-  );
+  )
 }

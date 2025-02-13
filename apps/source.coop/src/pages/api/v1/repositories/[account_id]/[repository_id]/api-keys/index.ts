@@ -1,24 +1,24 @@
 // Import necessary modules and types
-import { isAuthorized } from "@/api/authz";
-import { getAPIKeys, getRepository, putAPIKey } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getAPIKeys, getRepository, putAPIKey } from '@/api/db'
 import {
   BadRequestError,
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
 import {
-  Actions,
   APIKey,
   APIKeyRequest,
   APIKeyRequestSchema,
+  Actions,
   RedactedAPIKey,
   RedactedAPIKeySchema,
-} from "@/api/types";
-import { generateAccessKeyID, generateSecretAccessKey, getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/types'
+import { generateAccessKeyID, generateSecretAccessKey, getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -66,57 +66,57 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function createAPIKeyHandler(
   req: NextApiRequest,
-  res: NextApiResponse<APIKey>
+  res: NextApiResponse<APIKey>,
 ): Promise<void> {
   // Get the current session
-  const session = await getSession(req);
-  const { account_id, repository_id } = req.query;
+  const session = await getSession(req)
+  const { account_id, repository_id } = req.query
 
   // Parse and validate the API key request
-  const apiKeyRequest: APIKeyRequest = APIKeyRequestSchema.parse(req.body);
+  const apiKeyRequest: APIKeyRequest = APIKeyRequestSchema.parse(req.body)
 
   // Check if the expiration date is in the future
   if (Date.parse(apiKeyRequest.expires) <= Date.now()) {
-    throw new BadRequestError("API key expiration date must be in the future");
+    throw new BadRequestError('API key expiration date must be in the future')
   }
 
   // Fetch the repository
   const repository = await getRepository(
     account_id as string,
-    repository_id as string
-  );
+    repository_id as string,
+  )
 
   if (!repository) {
     throw new NotFoundError(
-      `Repository with ID ${account_id}/${repository_id} not found`
-    );
+      `Repository with ID ${account_id}/${repository_id} not found`,
+    )
   }
 
-  let [apiKeyCreated, success]: [APIKey | null, boolean] = [null, false];
+  let [apiKeyCreated, success]: [APIKey | null, boolean] = [null, false]
   do {
     // Create the API key object
-    let apiKey: APIKey = {
+    const apiKey: APIKey = {
       ...apiKeyRequest,
       disabled: false,
       account_id: repository.account_id,
       repository_id: repository.repository_id,
       access_key_id: generateAccessKeyID(),
       secret_access_key: generateSecretAccessKey(),
-    };
+    }
 
     // Check if the user is authorized to create an API key
     if (!isAuthorized(session, apiKey, Actions.CreateAPIKey)) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError()
     }
 
     // Attempt to put the API key in the database
-    [apiKeyCreated, success] = await putAPIKey(apiKey, true);
+    [apiKeyCreated, success] = await putAPIKey(apiKey, true)
 
     if (success) {
       // Send the created API key as the response
-      res.status(StatusCodes.OK).json(apiKeyCreated);
+      res.status(StatusCodes.OK).json(apiKeyCreated)
     }
-  } while (!success);
+  } while (!success)
 }
 
 /**
@@ -159,61 +159,61 @@ async function createAPIKeyHandler(
  */
 async function getAPIKeysHandler(
   req: NextApiRequest,
-  res: NextApiResponse<RedactedAPIKey[]>
+  res: NextApiResponse<RedactedAPIKey[]>,
 ): Promise<void> {
   // Get the current session
-  const session = await getSession(req);
-  const { account_id, repository_id } = req.query;
+  const session = await getSession(req)
+  const { account_id, repository_id } = req.query
 
   // Fetch the repository
   const repository = await getRepository(
     account_id as string,
-    repository_id as string
-  );
+    repository_id as string,
+  )
 
   if (!repository) {
     throw new NotFoundError(
-      `Repository with ID ${account_id}/${repository_id} not found`
-    );
+      `Repository with ID ${account_id}/${repository_id} not found`,
+    )
   }
 
   // Check if the user is authorized to list API keys for this repository
   if (!isAuthorized(session, repository, Actions.ListRepositoryAPIKeys)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   // Retrieve API keys for the repository
   const apiKeys = await getAPIKeys(
     repository.account_id,
-    repository.repository_id
-  );
-  const redactedAPIKeys: RedactedAPIKey[] = [];
+    repository.repository_id,
+  )
+  const redactedAPIKeys: RedactedAPIKey[] = []
   for (const apiKey of apiKeys) {
     // Check if the user is authorized to view the API Key
     if (isAuthorized(session, apiKey, Actions.GetAPIKey)) {
-      redactedAPIKeys.push(RedactedAPIKeySchema.parse(apiKey));
+      redactedAPIKeys.push(RedactedAPIKeySchema.parse(apiKey))
     }
   }
 
   // Send the list of redacted API keys as the response
-  res.status(StatusCodes.OK).json(redactedAPIKeys);
+  res.status(StatusCodes.OK).json(redactedAPIKeys)
 }
 
 // Handler function for the API route
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<APIKey | RedactedAPIKey[]>
+  res: NextApiResponse<APIKey | RedactedAPIKey[]>,
 ) {
   // Check if the request method is POST
-  if (req.method === "POST") {
-    return createAPIKeyHandler(req, res);
-  } else if (req.method === "GET") {
-    return getAPIKeysHandler(req, res);
+  if (req.method === 'POST') {
+    return createAPIKeyHandler(req, res)
+  } else if (req.method === 'GET') {
+    return getAPIKeysHandler(req, res)
   }
 
   // If the method is not POST, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
 // Export the handler with error handling middleware
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

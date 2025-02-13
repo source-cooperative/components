@@ -1,51 +1,51 @@
-import { Membership, MembershipState, UserSession } from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import { useState } from "react";
-import useSWR from "swr";
-import { Alert, Box, Button, Grid, Text } from "theme-ui";
-import SourceLink from "../SourceLink";
+import { Membership, MembershipState, UserSession } from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import { useState } from 'react'
+import useSWR from 'swr'
+import { Alert, Box, Button, Grid, Text } from 'theme-ui'
+import SourceLink from '../SourceLink'
 
 export function Invitations({ account_id }: { account_id: string }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const { data: user, mutate: refreshUser } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
-  if (!user || user?.account?.account_id !== account_id) {
-    return <></>;
+  if (!user || user.account.account_id !== account_id) {
+    return <></>
   }
 
   const invitations = user
-    ? user?.memberships
-        ?.filter((membership) => membership.state === MembershipState.Invited)
-        .sort(
-          (a, b) =>
-            new Date(a.state_changed).getTime() -
-            new Date(b.state_changed).getTime()
-        )
-    : [];
+    ? user.memberships
+      .filter((membership) => membership.state === MembershipState.Invited)
+      .sort(
+        (a, b) =>
+          new Date(a.state_changed).getTime() -
+            new Date(b.state_changed).getTime(),
+      )
+    : []
 
   if (invitations.length === 0 && (errorMessage || successMessage)) {
     return (
       <>
-        <Box variant="cards.formMessageBox" sx={{ gridColumn: "1 / -1" }}>
+        <Box variant="cards.formMessageBox" sx={{ gridColumn: '1 / -1' }}>
           {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
           {successMessage && <Alert variant="success">{successMessage}</Alert>}
         </Box>
       </>
-    );
+    )
   } else if (invitations.length === 0) {
-    return <></>;
+    return <></>
   }
   enum Action {
-    ACCEPT = "accept",
-    DECLINE = "revoke",
+    ACCEPT = 'accept',
+    DECLINE = 'revoke',
   }
 
   function performInvitationAction({
@@ -56,45 +56,45 @@ export function Invitations({ account_id }: { account_id: string }) {
     action: Action;
   }) {
     fetch(`/api/v1/memberships/${invitation.membership_id}/${action}`, {
-      method: "POST",
-      credentials: "include",
+      method: 'POST',
+      credentials: 'include',
     }).then((res) => {
       if (res.ok) {
-        setSuccessMessage("Invitation Accepted");
-        setSubmitting(false);
-        refreshUser();
+        setSuccessMessage('Invitation Accepted')
+        setSubmitting(false)
+        refreshUser()
       } else {
         res.json().then((data) => {
-          setSubmitting(false);
-          setErrorMessage(data.error);
-        });
+          setSubmitting(false)
+          setErrorMessage(data.error)
+        })
       }
-    });
+    })
   }
 
   return (
     <>
-      <Box sx={{ gridColumn: "1 / -1" }}>
+      <Box sx={{ gridColumn: '1 / -1' }}>
         <Text variant="formTitle">Pending Invitations</Text>
         <fieldset disabled={submitting}>
           <Grid
             variant="form"
             sx={{
               gridTemplateColumns: [
-                "1fr 1fr",
-                "1fr auto auto",
-                "1fr auto auto",
-                "1fr auto auto",
+                '1fr 1fr',
+                '1fr auto auto',
+                '1fr auto auto',
+                '1fr auto auto',
               ],
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             {invitations.map((invitation) => {
               return (
                 <>
-                  <Box sx={{ gridColumn: ["span 2", "1", "1", "1"] }}>
-                    <Text sx={{ fontWeight: "body", fontSize: 1 }}>
-                      Invited to{" "}
+                  <Box sx={{ gridColumn: ['span 2', '1', '1', '1'] }}>
+                    <Text sx={{ fontWeight: 'body', fontSize: 1 }}>
+                      Invited to{' '}
                       <SourceLink
                         href={
                           invitation.repository_id
@@ -105,22 +105,22 @@ export function Invitations({ account_id }: { account_id: string }) {
                         @{invitation.membership_account_id}
                         {invitation.repository_id &&
                           `/${invitation.repository_id}`}
-                      </SourceLink>{" "}
-                      on{" "}
+                      </SourceLink>{' '}
+                      on{' '}
                       {new Date(invitation.state_changed).toLocaleDateString(
-                        "en-US",
-                        { month: "short", day: "numeric", year: "numeric" }
+                        'en-US',
+                        { month: 'short', day: 'numeric', year: 'numeric' },
                       )}
                     </Text>
                   </Box>
                   <Button
                     variant="formSuccess"
                     onClick={(e) => {
-                      e.preventDefault();
+                      e.preventDefault()
                       performInvitationAction({
                         invitation,
                         action: Action.ACCEPT,
-                      });
+                      })
                     }}
                   >
                     Accept
@@ -128,29 +128,29 @@ export function Invitations({ account_id }: { account_id: string }) {
                   <Button
                     variant="formDestructive"
                     onClick={(e) => {
-                      e.preventDefault();
+                      e.preventDefault()
                       performInvitationAction({
                         invitation,
                         action: Action.DECLINE,
-                      });
+                      })
                     }}
                   >
                     Decline
                   </Button>
                 </>
-              );
+              )
             })}
           </Grid>
-          {(errorMessage || successMessage) && (
+          {(errorMessage || successMessage) &&
             <Box variant="cards.formMessageBox">
               {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
-              {successMessage && (
+              {successMessage &&
                 <Alert variant="success">{successMessage}</Alert>
-              )}
+              }
             </Box>
-          )}
+          }
         </fieldset>
       </Box>
     </>
-  );
+  )
 }

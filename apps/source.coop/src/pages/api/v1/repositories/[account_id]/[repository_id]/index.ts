@@ -1,19 +1,19 @@
-import { isAuthorized } from "@/api/authz";
-import { getRepository, putRepository } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getRepository, putRepository } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
 import {
   Actions,
   Repository,
   RepositoryUpdateRequestSchema,
-} from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -58,31 +58,31 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function disableRepositoryHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository>
+  res: NextApiResponse<Repository>,
 ): Promise<void> {
-  const session = await getSession(req);
-  const { account_id, repository_id } = req.query;
+  const session = await getSession(req)
+  const { account_id, repository_id } = req.query
 
   const repository = await getRepository(
     account_id as string,
-    repository_id as string
-  );
+    repository_id as string,
+  )
 
   if (!repository) {
     throw new NotFoundError(
-      `Repository with ID ${account_id}/${repository_id} not found`
-    );
+      `Repository with ID ${account_id}/${repository_id} not found`,
+    )
   }
 
   if (!isAuthorized(session, repository, Actions.DisableRepository)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  repository.disabled = true;
+  repository.disabled = true
 
-  await putRepository(repository);
+  await putRepository(repository)
 
-  res.status(StatusCodes.OK).json(repository);
+  res.status(StatusCodes.OK).json(repository)
 }
 
 /**
@@ -128,27 +128,27 @@ async function disableRepositoryHandler(
  */
 async function getRepositoryHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository>
+  res: NextApiResponse<Repository>,
 ): Promise<void> {
-  const session = await getSession(req);
-  const { account_id, repository_id } = req.query;
+  const session = await getSession(req)
+  const { account_id, repository_id } = req.query
 
   const repository = await getRepository(
     account_id as string,
-    repository_id as string
-  );
+    repository_id as string,
+  )
 
   if (!repository) {
     throw new NotFoundError(
-      `Repository with ID ${account_id}/${repository_id} not found`
-    );
+      `Repository with ID ${account_id}/${repository_id} not found`,
+    )
   }
 
   if (!isAuthorized(session, repository, Actions.GetRepository)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  res.status(StatusCodes.OK).json(repository);
+  res.status(StatusCodes.OK).json(repository)
 }
 
 /**
@@ -202,49 +202,49 @@ async function getRepositoryHandler(
  */
 async function putRepositoryHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository>
+  res: NextApiResponse<Repository>,
 ): Promise<void> {
-  const session = await getSession(req);
-  const { account_id, repository_id } = req.query;
+  const session = await getSession(req)
+  const { account_id, repository_id } = req.query
 
   const repository = await getRepository(
     account_id as string,
-    repository_id as string
-  );
+    repository_id as string,
+  )
 
   if (!repository) {
     throw new NotFoundError(
-      `Repository with ID ${account_id}/${repository_id} not found`
-    );
+      `Repository with ID ${account_id}/${repository_id} not found`,
+    )
   }
 
-  const repositoryUpdate = RepositoryUpdateRequestSchema.parse(req.body);
+  const repositoryUpdate = RepositoryUpdateRequestSchema.parse(req.body)
 
   if (!isAuthorized(session, repository, Actions.PutRepository)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
-  repository.meta = repositoryUpdate.meta;
-  repository.state = repositoryUpdate.state;
-  await putRepository(repository);
+  repository.meta = repositoryUpdate.meta
+  repository.state = repositoryUpdate.state
+  await putRepository(repository)
 
-  res.status(StatusCodes.OK).json(repository);
+  res.status(StatusCodes.OK).json(repository)
 }
 
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository>
+  res: NextApiResponse<Repository>,
 ) {
-  if (req.method === "PUT") {
-    return putRepositoryHandler(req, res);
-  } else if (req.method === "GET") {
-    return getRepositoryHandler(req, res);
-  } else if (req.method === "DELETE") {
-    return disableRepositoryHandler(req, res);
+  if (req.method === 'PUT') {
+    return putRepositoryHandler(req, res)
+  } else if (req.method === 'GET') {
+    return getRepositoryHandler(req, res)
+  } else if (req.method === 'DELETE') {
+    return disableRepositoryHandler(req, res)
   }
 
   // If the method is neither POST nor GET, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

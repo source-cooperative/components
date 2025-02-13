@@ -1,24 +1,24 @@
 // Import necessary modules and types
-import { isAuthorized } from "@/api/authz";
-import { putAccount } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { putAccount } from '@/api/db'
 import {
   BadRequestError,
   MethodNotImplementedError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
 import {
   Account,
   AccountCreationRequestSchema,
   AccountFlags,
   AccountType,
   Actions,
-} from "@/api/types";
-import { getSession } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+} from '@/api/types'
+import { getSession } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-const isProd = process.env.NEXT_PUBLIC_IS_PROD === "1";
+const isProd = process.env.NEXT_PUBLIC_IS_PROD === '1'
 
 /**
  * @openapi
@@ -52,21 +52,21 @@ const isProd = process.env.NEXT_PUBLIC_IS_PROD === "1";
  */
 async function createAccountHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Account>
+  res: NextApiResponse<Account>,
 ): Promise<void> {
   // Get the current session
-  const session = await getSession(req);
+  const session = await getSession(req)
 
   // Parse and validate the account creation request
-  const accountRequest = AccountCreationRequestSchema.parse(req.body);
+  const accountRequest = AccountCreationRequestSchema.parse(req.body)
 
   const flags: AccountFlags[] = isProd
     ? [AccountFlags.CREATE_ORGANIZATIONS]
     : [
-        AccountFlags.CREATE_ORGANIZATIONS,
-        AccountFlags.CREATE_REPOSITORIES,
-        AccountFlags.ADMIN,
-      ];
+      AccountFlags.CREATE_ORGANIZATIONS,
+      AccountFlags.CREATE_REPOSITORIES,
+      AccountFlags.ADMIN,
+    ]
 
   // Create a new account object
   const newAccount: Account = {
@@ -75,42 +75,42 @@ async function createAccountHandler(
     flags,
     identity_id:
       accountRequest.account_type === AccountType.USER
-        ? session?.identity_id
-        : "N/A",
-  };
+        ? session.identity_id
+        : 'N/A',
+  }
 
   // Check if the user is authorized to create an account
   if (!isAuthorized(session, newAccount, Actions.CreateAccount)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   // Attempt to create the account in the database
-  const [account, success] = await putAccount(newAccount, true);
+  const [account, success] = await putAccount(newAccount, true)
 
   // If the account creation was not successful, throw an error
   if (!success) {
     throw new BadRequestError(
-      `Account with ID ${account.account_id} already exists`
-    );
+      `Account with ID ${account.account_id} already exists`,
+    )
   }
 
   // Send the created account as the response
-  res.status(StatusCodes.OK).json(account);
+  res.status(StatusCodes.OK).json(account)
 }
 
 // Handler function for the API route
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Account>
+  res: NextApiResponse<Account>,
 ) {
   // Check if the request method is POST
-  if (req.method === "POST") {
-    return createAccountHandler(req, res);
+  if (req.method === 'POST') {
+    return createAccountHandler(req, res)
   }
 
   // If the method is not POST, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
 // Export the handler with error handling middleware
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

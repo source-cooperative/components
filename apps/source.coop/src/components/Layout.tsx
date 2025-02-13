@@ -1,37 +1,37 @@
-import { MembershipState, UserSession } from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import Link from "next/link";
-import useSWR from "swr";
-import { Alert, Box, Container, Flex, Grid, Spinner } from "theme-ui";
-import Error from "./Error";
-import { Footer } from "./Footer";
-import { Logo } from "./Logo";
-import { Meta } from "./Meta";
-import NotFound from "./NotFound";
-import { SearchBar } from "./SearchBar";
-import SideNav from "./SideNav";
-import SourceLink from "./SourceLink";
-import UserNavButton from "./UserNavButton";
+import { MembershipState, UserSession } from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import Link from 'next/link'
+import useSWR from 'swr'
+import { Alert, Box, Container, Flex, Grid, Spinner } from 'theme-ui'
+import Error from './Error'
+import { Footer } from './Footer'
+import { Logo } from './Logo'
+import { Meta } from './Meta'
+import NotFound from './NotFound'
+import { SearchBar } from './SearchBar'
+import SideNav from './SideNav'
+import SourceLink from './SourceLink'
+import UserNavButton from './UserNavButton'
 
 const alerts = [
   {
-    type: "warning",
+    type: 'warning',
     message:
-      "NOTE: This service is under active development. Certain features may not work or become unavailable at any time.",
+      'NOTE: This service is under active development. Certain features may not work or become unavailable at any time.',
   },
-];
+]
 
 export function Loading() {
   return (
     <Container
       sx={{
-        height: "100%",
-        textAlign: "center",
+        height: '100%',
+        textAlign: 'center',
       }}
     >
       <Spinner />
     </Container>
-  );
+  )
 }
 
 export function Layout({
@@ -42,73 +42,73 @@ export function Layout({
   notFound = false,
   messages = [],
 }) {
-  let content = children;
+  let content = children
 
   const {
     data: user,
     isLoading: _userIsLoading,
     error: _userError,
   } = useSWR<UserSession, ClientError>(
-    { path: `/api/v1/whoami` },
+    { path: '/api/v1/whoami' },
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const pendingInvitations = user
-    ? user?.memberships
-        ?.filter((membership) => membership.state === MembershipState.Invited)
-        .sort(
-          (a, b) =>
-            new Date(a.state_changed).getTime() -
-            new Date(b.state_changed).getTime()
-        )
-    : [];
+    ? user.memberships
+      .filter((membership) => membership.state === MembershipState.Invited)
+      .sort(
+        (a, b) =>
+          new Date(a.state_changed).getTime() -
+            new Date(b.state_changed).getTime(),
+      )
+    : []
 
   if (error) {
-    content = <Error />;
+    content = <Error />
   } else if (notFound) {
-    content = <NotFound />;
+    content = <NotFound />
   }
   //<Button variant="nav" href="/repositories" sx={{textAlign: "right", display: "inline-block"}}>Browse Repositories</Button>
 
   return (
     <>
-      {!title ? (
+      {!title ?
         <Meta
           description="Source Cooperative is a data publishing utility that allows trusted organizations and individuals to share data using standard HTTP methods."
           title="Source Cooperative"
         />
-      ) : null}
+        : null}
       <Flex
         sx={{
-          minHeight: "100vh;",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          minHeight: '100vh;',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
         }}
       >
         <Box>
           <Box sx={{ zIndex: 9999999 }}>
             {alerts.map((alert, i) => {
               return (
-                <Alert key={"alert-" + i} variant={alert.type}>
+                <Alert key={'alert-' + i} variant={alert.type}>
                   {alert.message}
                 </Alert>
-              );
+              )
             })}
-            {pendingInvitations?.length > 0 ? (
+            {pendingInvitations.length > 0 ?
               <Alert variant="info">
-                <SourceLink href={`/${user?.account?.account_id}/manage`}>
+                <SourceLink href={`/${user.account.account_id}/manage`}>
                   {`You have ${pendingInvitations.length} pending invitation(s).`}
                 </SourceLink>
               </Alert>
-            ) : null}
+              : null}
           </Box>
 
           <Container
             sx={{
-              position: "sticky",
-              backgroundColor: "background",
+              position: 'sticky',
+              backgroundColor: 'background',
               zIndex: 9999,
               top: 0,
               py: 2,
@@ -116,50 +116,50 @@ export function Layout({
           >
             <Box
               sx={{
-                width: ["100%", "100%", "100%", "70%"],
-                margin: "0 auto",
+                width: ['100%', '100%', '100%', '70%'],
+                margin: '0 auto',
               }}
             >
               <Grid
                 sx={{
                   gridTemplateColumns: [
-                    "auto 1fr",
-                    "auto 3fr auto",
-                    "auto 1fr 1fr",
-                    "auto 1fr 1fr",
+                    'auto 1fr',
+                    'auto 3fr auto',
+                    'auto 1fr 1fr',
+                    'auto 1fr 1fr',
                   ],
                 }}
               >
                 <Flex
                   sx={{
-                    justifyContent: "left",
-                    maxWidth: ["100%", "400px", "400px", "400px"],
-                    alignContent: "center",
+                    justifyContent: 'left',
+                    maxWidth: ['100%', '400px', '400px', '400px'],
+                    alignContent: 'center',
                     gridRowStart: [2, 1, 1, 1],
                     gridColumnStart: [1, 2, 2, 2],
-                    gridColumnEnd: ["end", 3, 3, 3],
+                    gridColumnEnd: ['end', 3, 3, 3],
                   }}
                 >
-                  <Box sx={{ alignSelf: "center", width: "100%" }}>
+                  <Box sx={{ alignSelf: 'center', width: '100%' }}>
                     <SearchBar />
                   </Box>
                 </Flex>
                 <Flex
                   sx={{
-                    alignContent: "center",
-                    justifySelf: ["left", "left", "left", "left"],
+                    alignContent: 'center',
+                    justifySelf: ['left', 'left', 'left', 'left'],
                     gridColumnStart: [1, 1, 1, 1],
                   }}
                 >
                   <Link href="/">
                     <Logo
                       sx={{
-                        height: ["45px", "45px", "55px", "55px"],
-                        fill: "text",
-                        backgroundColor: "background",
+                        height: ['45px', '45px', '55px', '55px'],
+                        fill: 'text',
+                        backgroundColor: 'background',
                         p: 0,
-                        "&:hover": {
-                          fill: "highlight",
+                        '&:hover': {
+                          fill: 'highlight',
                         },
                       }}
                     />
@@ -167,12 +167,12 @@ export function Layout({
                 </Flex>
                 <Flex
                   sx={{
-                    justifySelf: "right",
-                    alignContent: "center",
-                    gridColumnEnd: "end",
+                    justifySelf: 'right',
+                    alignContent: 'center',
+                    gridColumnEnd: 'end',
                   }}
                 >
-                  <Box sx={{ alignSelf: "center" }}>
+                  <Box sx={{ alignSelf: 'center' }}>
                     <UserNavButton />
                   </Box>
                 </Flex>
@@ -183,27 +183,27 @@ export function Layout({
           <Container>
             <Grid
               sx={{
-                gridTemplateColumns: ["100%", "100%", "15% 85%", "15% 70% 15%"],
+                gridTemplateColumns: ['100%', '100%', '15% 85%', '15% 70% 15%'],
                 gridGap: 0,
               }}
             >
               <Flex
                 sx={{
-                  alignContent: "center",
-                  backgroundColor: "background",
+                  alignContent: 'center',
+                  backgroundColor: 'background',
                   zIndex: 999,
-                  justifyContent: "right",
+                  justifyContent: 'right',
                   mr: [0, 0, 3, 3],
                   pb: [1, 1, 0, 0],
-                  top: ["65.5px", "65.5px", null, null],
-                  position: ["sticky", "sticky", null, null],
+                  top: ['65.5px', '65.5px', null, null],
+                  position: ['sticky', 'sticky', null, null],
                 }}
               >
-                {!notFound && !error && sideNavLinks ? (
+                {!notFound && !error && sideNavLinks ?
                   <SideNav links={sideNavLinks} />
-                ) : (
+                  :
                   <></>
-                )}
+                }
               </Flex>
               <Box
                 sx={{
@@ -215,10 +215,10 @@ export function Layout({
                 <Box sx={{ mb: [messages.length > 0 ? 2 : 0] }}>
                   {messages.map((message, i) => {
                     return (
-                      <Alert key={"message-" + i} variant={message.type}>
+                      <Alert key={'message-' + i} variant={message.type}>
                         {message.message}
                       </Alert>
-                    );
+                    )
                   })}
                 </Box>
                 {content}
@@ -227,11 +227,11 @@ export function Layout({
           </Container>
         </Box>
 
-        <Box as="footer" sx={{ width: "100%", margin: "3 auto", py: 3, }}>
+        <Box as="footer" sx={{ width: '100%', margin: '3 auto', py: 3 }}>
           <Footer />
         </Box>
 
       </Flex>
     </>
-  );
+  )
 }

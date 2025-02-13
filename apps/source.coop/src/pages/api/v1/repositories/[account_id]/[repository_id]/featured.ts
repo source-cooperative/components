@@ -1,17 +1,17 @@
-import { getRepository, putRepository } from "@/api/db";
+import { getRepository, putRepository } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
-import { withErrorHandling } from "@/api/middleware";
+} from '@/api/errors'
+import { withErrorHandling } from '@/api/middleware'
 import {
   Repository,
-  RepositoryFeaturedUpdateRequestSchema
-} from "@/api/types";
-import { getSession, isAdmin } from "@/api/utils";
-import { StatusCodes } from "http-status-codes";
-import type { NextApiRequest, NextApiResponse } from "next";
+  RepositoryFeaturedUpdateRequestSchema,
+} from '@/api/types'
+import { getSession, isAdmin } from '@/api/utils'
+import { StatusCodes } from 'http-status-codes'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 /**
  * @openapi
@@ -56,47 +56,47 @@ import type { NextApiRequest, NextApiResponse } from "next";
  */
 async function putRepositoryFeaturedHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository>
+  res: NextApiResponse<Repository>,
 ): Promise<void> {
-  const session = await getSession(req);
-  const { account_id, repository_id } = req.query;
+  const session = await getSession(req)
+  const { account_id, repository_id } = req.query
 
   const repository = await getRepository(
     account_id as string,
-    repository_id as string
-  );
+    repository_id as string,
+  )
 
   if (!repository) {
     throw new NotFoundError(
-      `Repository with ID ${account_id}/${repository_id} not found`
-    );
+      `Repository with ID ${account_id}/${repository_id} not found`,
+    )
   }
 
   if (!isAdmin(session)) {
-    throw new UnauthorizedError();
+    throw new UnauthorizedError()
   }
 
   const repositoryUpdate = RepositoryFeaturedUpdateRequestSchema.parse(
-    req.body
-  );
+    req.body,
+  )
 
-  repository.featured = repositoryUpdate.featured;
+  repository.featured = repositoryUpdate.featured
 
-  await putRepository(repository);
+  await putRepository(repository)
 
-  res.status(StatusCodes.OK).json(repository);
+  res.status(StatusCodes.OK).json(repository)
 }
 
 export async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Repository>
+  res: NextApiResponse<Repository>,
 ) {
-  if (req.method === "PUT") {
-    return putRepositoryFeaturedHandler(req, res);
+  if (req.method === 'PUT') {
+    return putRepositoryFeaturedHandler(req, res)
   }
 
   // If the method is neither POST nor GET, throw an error
-  throw new MethodNotImplementedError();
+  throw new MethodNotImplementedError()
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(handler)

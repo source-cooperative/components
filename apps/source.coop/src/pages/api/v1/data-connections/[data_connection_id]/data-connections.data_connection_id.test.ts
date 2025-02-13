@@ -1,10 +1,10 @@
-import { isAuthorized } from "@/api/authz";
-import { getDataConnection, putDataConnection } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getDataConnection, putDataConnection } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
+} from '@/api/errors'
 import {
   AccountFlags,
   AccountType,
@@ -14,128 +14,128 @@ import {
   RepositoryDataMode,
   S3Regions,
   UserSession,
-} from "@/api/types";
-import { getSession } from "@/api/utils";
-import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
-import { handler } from "@/pages/api/v1/data-connections/[data_connection_id]";
-import { NextApiRequest } from "next";
-import httpMocks from "node-mocks-http";
+} from '@/api/types'
+import { getSession } from '@/api/utils'
+import { MockNextApiResponse, jsonBody } from '@/api/utils/mock'
+import { handler } from '@/pages/api/v1/data-connections/[data_connection_id]'
+import { NextApiRequest } from 'next'
+import httpMocks from 'node-mocks-http'
 
-jest.mock("@/api/utils", () => ({
+jest.mock('@/api/utils', () => ({
   getSession: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/authz", () => ({
+jest.mock('@/api/authz', () => ({
   isAuthorized: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/db", () => ({
+jest.mock('@/api/db', () => ({
   getDataConnection: jest.fn(),
   putDataConnection: jest.fn(),
-}));
+}))
 
-describe("/api/v1/data-connections/[data_connection_id]", () => {
-  let req: NextApiRequest;
-  let res: MockNextApiResponse;
+describe('/api/v1/data-connections/[data_connection_id]', () => {
+  let req: NextApiRequest
+  let res: MockNextApiResponse
 
   beforeEach(() => {
-    req = httpMocks.createRequest();
-    res = httpMocks.createResponse() as MockNextApiResponse;
-    req.query = { data_connection_id: "test-connection" };
-  });
+    req = httpMocks.createRequest()
+    res = httpMocks.createResponse() as MockNextApiResponse
+    req.query = { data_connection_id: 'test-connection' }
+  })
 
   afterEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
-  describe("GET - getDataConnectionHandler", () => {
+  describe('GET - getDataConnectionHandler', () => {
     beforeEach(() => {
-      req.method = "GET";
-    });
+      req.method = 'GET'
+    })
 
-    it("should return data connection when user is authorized", async () => {
+    it('should return data connection when user is authorized', async () => {
       const mockSession: UserSession = {
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
         account: {
-          account_id: "user-account",
+          account_id: 'user-account',
           account_type: AccountType.USER,
           disabled: false,
           profile: {},
           flags: [AccountFlags.ADMIN],
         },
-      };
+      }
       const mockDataConnection: DataConnection = {
-        data_connection_id: "test-connection",
-        name: "Test Connection",
+        data_connection_id: 'test-connection',
+        name: 'Test Connection',
         read_only: false,
         allowed_data_modes: [RepositoryDataMode.Open],
         details: {
           provider: DataProvider.S3,
-          bucket: "test-bucket",
-          base_prefix: "test-prefix",
+          bucket: 'test-bucket',
+          base_prefix: 'test-prefix',
           region: S3Regions.US_EAST_1,
         },
         authentication: {
           type: DataConnectionAuthenticationType.S3AccessKey,
-          access_key_id: "AKIAIOSFODNN7EXAMPLE",
-          secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          access_key_id: 'AKIAIOSFODNN7EXAMPLE',
+          secret_access_key: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
         },
       };
 
       (getSession as jest.Mock).mockResolvedValue(mockSession);
       (getDataConnection as jest.Mock).mockResolvedValue(mockDataConnection);
-      (isAuthorized as jest.Mock).mockReturnValue(true);
+      (isAuthorized as jest.Mock).mockReturnValue(true)
 
-      await handler(req, res);
+      await handler(req, res)
 
-      expect(res.statusCode).toBe(200);
-      expect(jsonBody(res)).toEqual(mockDataConnection);
-    });
+      expect(res.statusCode).toBe(200)
+      expect(jsonBody(res)).toEqual(mockDataConnection)
+    })
 
-    it("should throw UnauthorizedError when user is not authorized", async () => {
+    it('should throw UnauthorizedError when user is not authorized', async () => {
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "unauthorized-user",
+        identity_id: 'unauthorized-user',
       });
       (getDataConnection as jest.Mock).mockResolvedValue({
-        data_connection_id: "test-connection",
+        data_connection_id: 'test-connection',
       });
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should throw NotFoundError when data connection doesn't exist", async () => {
+    it('should throw NotFoundError when data connection doesn\'t exist', async () => {
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
-      (getDataConnection as jest.Mock).mockResolvedValue(null);
+      (getDataConnection as jest.Mock).mockResolvedValue(null)
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
-  });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
+  })
 
-  describe("PUT - putDataConnectionHandler", () => {
+  describe('PUT - putDataConnectionHandler', () => {
     beforeEach(() => {
-      req.method = "PUT";
+      req.method = 'PUT'
       req.body = {
-        data_connection_id: "test-connection",
-        name: "Updated Test Connection",
+        data_connection_id: 'test-connection',
+        name: 'Updated Test Connection',
         read_only: true,
         allowed_data_modes: [RepositoryDataMode.Open],
         details: {
           provider: DataProvider.S3,
-          bucket: "updated-bucket",
-          base_prefix: "updated-prefix",
+          bucket: 'updated-bucket',
+          base_prefix: 'updated-prefix',
           region: S3Regions.EU_WEST_1,
         },
-      };
-    });
+      }
+    })
 
-    it("should update data connection when user is authorized", async () => {
+    it('should update data connection when user is authorized', async () => {
       const mockSession: UserSession = {
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
         account: {
-          account_id: "admin-account",
+          account_id: 'admin-account',
           account_type: AccountType.USER,
           disabled: false,
           profile: {},
@@ -144,67 +144,67 @@ describe("/api/v1/data-connections/[data_connection_id]", () => {
       };
       (getSession as jest.Mock).mockResolvedValue(mockSession);
       (getDataConnection as jest.Mock).mockResolvedValue({
-        data_connection_id: "test-connection",
+        data_connection_id: 'test-connection',
       });
       (isAuthorized as jest.Mock).mockReturnValue(true);
-      (putDataConnection as jest.Mock).mockResolvedValue([req.body, true]);
+      (putDataConnection as jest.Mock).mockResolvedValue([req.body, true])
 
-      await handler(req, res);
+      await handler(req, res)
 
-      expect(res.statusCode).toBe(200);
-      expect(jsonBody(res)).toEqual(req.body);
-    });
+      expect(res.statusCode).toBe(200)
+      expect(jsonBody(res)).toEqual(req.body)
+    })
 
-    it("should throw UnauthorizedError when user is not authorized", async () => {
+    it('should throw UnauthorizedError when user is not authorized', async () => {
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "unauthorized-user",
+        identity_id: 'unauthorized-user',
       });
       (getDataConnection as jest.Mock).mockResolvedValue({
-        data_connection_id: "test-connection",
+        data_connection_id: 'test-connection',
       });
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should throw NotFoundError when data connection doesn't exist", async () => {
+    it('should throw NotFoundError when data connection doesn\'t exist', async () => {
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
-      (getDataConnection as jest.Mock).mockResolvedValue(null);
+      (getDataConnection as jest.Mock).mockResolvedValue(null)
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
-  });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
+  })
 
-  describe("DELETE - disableDataConnectionHandler", () => {
+  describe('DELETE - disableDataConnectionHandler', () => {
     beforeEach(() => {
-      req.method = "DELETE";
-    });
+      req.method = 'DELETE'
+    })
 
-    it("should disable data connection when user is authorized", async () => {
+    it('should disable data connection when user is authorized', async () => {
       const mockSession: UserSession = {
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
         account: {
-          account_id: "admin-account",
+          account_id: 'admin-account',
           account_type: AccountType.USER,
           disabled: false,
           profile: {},
           flags: [AccountFlags.ADMIN],
         },
-      };
+      }
       const mockDataConnection: DataConnection = {
-        data_connection_id: "test-connection",
-        name: "Test Connection",
+        data_connection_id: 'test-connection',
+        name: 'Test Connection',
         read_only: false,
         allowed_data_modes: [RepositoryDataMode.Open],
         details: {
           provider: DataProvider.S3,
-          bucket: "test-bucket",
-          base_prefix: "test-prefix",
+          bucket: 'test-bucket',
+          base_prefix: 'test-prefix',
           region: S3Regions.US_EAST_1,
         },
-      };
+      }
       const disabledDataConnection = { ...mockDataConnection, read_only: true };
 
       (getSession as jest.Mock).mockResolvedValue(mockSession);
@@ -213,39 +213,39 @@ describe("/api/v1/data-connections/[data_connection_id]", () => {
       (putDataConnection as jest.Mock).mockResolvedValue([
         disabledDataConnection,
         true,
-      ]);
+      ])
 
-      await handler(req, res);
+      await handler(req, res)
 
-      expect(res.statusCode).toBe(200);
-      expect(jsonBody(res)).toEqual(disabledDataConnection);
-    });
+      expect(res.statusCode).toBe(200)
+      expect(jsonBody(res)).toEqual(disabledDataConnection)
+    })
 
-    it("should throw UnauthorizedError when user is not authorized", async () => {
+    it('should throw UnauthorizedError when user is not authorized', async () => {
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "unauthorized-user",
+        identity_id: 'unauthorized-user',
       });
       (getDataConnection as jest.Mock).mockResolvedValue({
-        data_connection_id: "test-connection",
+        data_connection_id: 'test-connection',
       });
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should throw NotFoundError when data connection doesn't exist", async () => {
+    it('should throw NotFoundError when data connection doesn\'t exist', async () => {
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
-      (getDataConnection as jest.Mock).mockResolvedValue(null);
+      (getDataConnection as jest.Mock).mockResolvedValue(null)
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
-  });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
+  })
 
-  it("should throw MethodNotImplementedError for unsupported HTTP methods", async () => {
-    req.method = "PATCH";
+  it('should throw MethodNotImplementedError for unsupported HTTP methods', async () => {
+    req.method = 'PATCH'
 
-    await expect(handler(req, res)).rejects.toThrow(MethodNotImplementedError);
-  });
-});
+    await expect(handler(req, res)).rejects.toThrow(MethodNotImplementedError)
+  })
+})

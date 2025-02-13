@@ -1,4 +1,4 @@
-import { Meta } from './Meta';
+import { Meta } from './Meta'
 
 interface RepositoryMetaProps {
   repository: {
@@ -12,8 +12,8 @@ interface RepositoryMetaProps {
 export function RepositoryMeta({ repository }: RepositoryMetaProps) {
   return (
     <Meta
-      title={repository.meta?.title}
-      description={repository.meta?.description}
+      title={repository.meta.title}
+      description={repository.meta.description}
     />
-  );
-} 
+  )
+}

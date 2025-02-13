@@ -1,5 +1,5 @@
-import Head from "next/head";
-import { useThemeUI } from "theme-ui";
+import Head from 'next/head'
+import { useThemeUI } from 'theme-ui'
 
 interface MetaProps {
   title?: string;
@@ -9,27 +9,27 @@ interface MetaProps {
   image?: string;
 }
 
-export function Meta({ 
-  title, 
+export function Meta({
+  title,
   description,
   siteName = 'Source Cooperative',
   baseUrl = 'https://source.coop',
-  image = '' // default image URL could go here
+  image = '', // default image URL could go here
 }: MetaProps) {
-  const { theme, colorMode } = useThemeUI();
+  const { theme, colorMode } = useThemeUI()
   if (!description) {
     console.warn(
-      "a custom description should be used for search engine optimization"
-    );
+      'a custom description should be used for search engine optimization',
+    )
   }
   if (!title) {
     console.warn(
-      "a custom title should be used for search engine optimization"
-    );
+      'a custom title should be used for search engine optimization',
+    )
   }
-  const fullTitle = title ? `${title} - ${siteName}` : siteName;
-  const descriptionProp = description || null;
-  const cardProp = image || null;
+  const fullTitle = title ? `${title} - ${siteName}` : siteName
+  const descriptionProp = description || null
+  const cardProp = image || null
 
   return (
     <Head>
@@ -44,7 +44,7 @@ export function Meta({
       <meta name="msapplication-TileImage" content="/img/ms-icon-144x144.png" />
       <meta
         name="color-scheme"
-        content={colorMode === "light" ? "light" : "dark"}
+        content={colorMode === 'light' ? 'light' : 'dark'}
       />
       <meta key="og:title" property="og:title" content={fullTitle} />
       <meta key="og:description" property="og:description" content={description} />
@@ -57,5 +57,5 @@ export function Meta({
       {image && <meta key="twitter:image" name="twitter:image" content={image} />}
       <meta name="format-detection" content="telephone=no" />
     </Head>
-  );
+  )
 }

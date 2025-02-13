@@ -1,81 +1,81 @@
-import { isAuthorized } from "@/api/authz";
-import { getAccount, putAccount } from "@/api/db";
+import { isAuthorized } from '@/api/authz'
+import { getAccount, putAccount } from '@/api/db'
 import {
   MethodNotImplementedError,
   NotFoundError,
   UnauthorizedError,
-} from "@/api/errors";
+} from '@/api/errors'
 import {
   Account,
   AccountProfile,
   AccountType,
   Actions,
   UserSession,
-} from "@/api/types";
-import { getSession } from "@/api/utils";
-import { MockNextApiResponse, jsonBody } from "@/api/utils/mock";
-import { handler } from "@/pages/api/v1/accounts/[account_id]/profile";
-import { NextApiRequest } from "next";
-import httpMocks from "node-mocks-http";
+} from '@/api/types'
+import { getSession } from '@/api/utils'
+import { MockNextApiResponse, jsonBody } from '@/api/utils/mock'
+import { handler } from '@/pages/api/v1/accounts/[account_id]/profile'
+import { NextApiRequest } from 'next'
+import httpMocks from 'node-mocks-http'
 
-jest.mock("@/api/utils", () => ({
+jest.mock('@/api/utils', () => ({
   getSession: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/authz", () => ({
+jest.mock('@/api/authz', () => ({
   isAuthorized: jest.fn(),
-}));
+}))
 
-jest.mock("@/api/db", () => ({
+jest.mock('@/api/db', () => ({
   getAccount: jest.fn(),
   putAccount: jest.fn(),
-}));
+}))
 
-describe("/api/v1/accounts/[account_id]/profile", () => {
-  let req: NextApiRequest;
-  let res: MockNextApiResponse;
+describe('/api/v1/accounts/[account_id]/profile', () => {
+  let req: NextApiRequest
+  let res: MockNextApiResponse
 
   beforeEach(() => {
-    req = httpMocks.createRequest();
-    res = httpMocks.createResponse() as MockNextApiResponse;
-    req.query = { account_id: "test-account" };
-  });
+    req = httpMocks.createRequest()
+    res = httpMocks.createResponse() as MockNextApiResponse
+    req.query = { account_id: 'test-account' }
+  })
 
   afterEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
-  describe("GET - getAccountProfileHandler", () => {
+  describe('GET - getAccountProfileHandler', () => {
     beforeEach(() => {
-      req.method = "GET";
-    });
+      req.method = 'GET'
+    })
 
-    it("should throw UnauthorizedError when user is not authenticated", async () => {
+    it('should throw UnauthorizedError when user is not authenticated', async () => {
       (getSession as jest.Mock).mockResolvedValue(null);
       (getAccount as jest.Mock).mockResolvedValue({
-        account_id: "test-account",
+        account_id: 'test-account',
         account_type: AccountType.USER,
         disabled: false,
-        profile: { name: "Test User" },
+        profile: { name: 'Test User' },
         flags: [],
       });
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should throw NotFoundError when account doesn't exist", async () => {
-      (getSession as jest.Mock).mockResolvedValue({ identity_id: "user-1" });
-      (getAccount as jest.Mock).mockResolvedValue(null);
+    it('should throw NotFoundError when account doesn\'t exist', async () => {
+      (getSession as jest.Mock).mockResolvedValue({ identity_id: 'user-1' });
+      (getAccount as jest.Mock).mockResolvedValue(null)
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
 
-    it("should throw UnauthorizedError when user is not authorized", async () => {
+    it('should throw UnauthorizedError when user is not authorized', async () => {
       const mockSession: UserSession = {
-        identity_id: "unauthorized-user",
+        identity_id: 'unauthorized-user',
         account: {
-          account_id: "unauthorized-account",
+          account_id: 'unauthorized-account',
           account_type: AccountType.USER,
           disabled: false,
           profile: {},
@@ -84,81 +84,81 @@ describe("/api/v1/accounts/[account_id]/profile", () => {
       };
       (getSession as jest.Mock).mockResolvedValue(mockSession);
       (getAccount as jest.Mock).mockResolvedValue({
-        account_id: "test-account",
+        account_id: 'test-account',
         account_type: AccountType.USER,
         disabled: false,
-        profile: { name: "Test User" },
+        profile: { name: 'Test User' },
         flags: [],
       });
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should return account profile when user is authorized", async () => {
+    it('should return account profile when user is authorized', async () => {
       const mockProfile: AccountProfile = {
-        name: "Test User",
-        bio: "Test bio",
-        location: "Test Location",
-        url: "https://test.com",
-      };
+        name: 'Test User',
+        bio: 'Test bio',
+        location: 'Test Location',
+        url: 'https://test.com',
+      }
       const mockAccount: Account = {
-        account_id: "test-account",
+        account_id: 'test-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: mockProfile,
         flags: [],
       };
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
       (getAccount as jest.Mock).mockResolvedValue(mockAccount);
-      (isAuthorized as jest.Mock).mockReturnValue(true);
+      (isAuthorized as jest.Mock).mockReturnValue(true)
 
-      await handler(req, res);
+      await handler(req, res)
 
-      expect(res.statusCode).toBe(200);
-      expect(jsonBody(res)).toEqual(mockProfile);
+      expect(res.statusCode).toBe(200)
+      expect(jsonBody(res)).toEqual(mockProfile)
       expect(isAuthorized).toHaveBeenCalledWith(
         expect.anything(),
         mockAccount,
-        Actions.GetAccountProfile
-      );
-    });
-  });
+        Actions.GetAccountProfile,
+      )
+    })
+  })
 
-  describe("PUT - putAccountProfileHandler", () => {
+  describe('PUT - putAccountProfileHandler', () => {
     beforeEach(() => {
-      req.method = "PUT";
-    });
+      req.method = 'PUT'
+    })
 
-    it("should throw UnauthorizedError when user is not authenticated", async () => {
+    it('should throw UnauthorizedError when user is not authenticated', async () => {
       (getSession as jest.Mock).mockResolvedValue(null);
       (getAccount as jest.Mock).mockResolvedValue({
-        account_id: "test-account",
+        account_id: 'test-account',
         account_type: AccountType.USER,
         disabled: false,
-        profile: { name: "Test User" },
+        profile: { name: 'Test User' },
         flags: [],
       });
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should throw NotFoundError when account doesn't exist", async () => {
-      (getSession as jest.Mock).mockResolvedValue({ identity_id: "user-1" });
-      (getAccount as jest.Mock).mockResolvedValue(null);
-      req.body = { name: "Updated Name" };
+    it('should throw NotFoundError when account doesn\'t exist', async () => {
+      (getSession as jest.Mock).mockResolvedValue({ identity_id: 'user-1' });
+      (getAccount as jest.Mock).mockResolvedValue(null)
+      req.body = { name: 'Updated Name' }
 
-      await expect(handler(req, res)).rejects.toThrow(NotFoundError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(NotFoundError)
+    })
 
-    it("should throw UnauthorizedError when user is not authorized", async () => {
+    it('should throw UnauthorizedError when user is not authorized', async () => {
       const mockSession: UserSession = {
-        identity_id: "unauthorized-user",
+        identity_id: 'unauthorized-user',
         account: {
-          account_id: "unauthorized-account",
+          account_id: 'unauthorized-account',
           account_type: AccountType.USER,
           disabled: false,
           profile: {},
@@ -167,83 +167,83 @@ describe("/api/v1/accounts/[account_id]/profile", () => {
       };
       (getSession as jest.Mock).mockResolvedValue(mockSession);
       (getAccount as jest.Mock).mockResolvedValue({
-        account_id: "test-account",
+        account_id: 'test-account',
         account_type: AccountType.USER,
         disabled: false,
-        profile: { name: "Test User" },
+        profile: { name: 'Test User' },
         flags: [],
       });
-      (isAuthorized as jest.Mock).mockReturnValue(false);
+      (isAuthorized as jest.Mock).mockReturnValue(false)
 
-      req.body = { name: "Updated Name" };
+      req.body = { name: 'Updated Name' }
 
-      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError);
-    });
+      await expect(handler(req, res)).rejects.toThrow(UnauthorizedError)
+    })
 
-    it("should update account profile when user is authorized", async () => {
+    it('should update account profile when user is authorized', async () => {
       const initialProfile: AccountProfile = {
-        name: "Test User",
-        bio: "Initial bio",
-      };
+        name: 'Test User',
+        bio: 'Initial bio',
+      }
       const updatedProfile: AccountProfile = {
-        name: "Updated User",
-        bio: "Updated bio",
-        location: "New Location",
-      };
+        name: 'Updated User',
+        bio: 'Updated bio',
+        location: 'New Location',
+      }
       const mockAccount: Account = {
-        account_id: "test-account",
+        account_id: 'test-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: initialProfile,
         flags: [],
-      };
+      }
       const updatedAccount: Account = {
         ...mockAccount,
         profile: updatedProfile,
       };
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
       (getAccount as jest.Mock).mockResolvedValue(mockAccount);
       (isAuthorized as jest.Mock).mockReturnValue(true);
-      (putAccount as jest.Mock).mockResolvedValue([updatedAccount, true]);
+      (putAccount as jest.Mock).mockResolvedValue([updatedAccount, true])
 
-      req.body = updatedProfile;
+      req.body = updatedProfile
 
-      await handler(req, res);
+      await handler(req, res)
 
-      expect(res.statusCode).toBe(200);
-      expect(jsonBody(res)).toEqual(updatedProfile);
+      expect(res.statusCode).toBe(200)
+      expect(jsonBody(res)).toEqual(updatedProfile)
       expect(isAuthorized).toHaveBeenCalledWith(
         expect.anything(),
         mockAccount,
-        Actions.PutAccountProfile
-      );
-      expect(putAccount).toHaveBeenCalledWith(updatedAccount);
-    });
+        Actions.PutAccountProfile,
+      )
+      expect(putAccount).toHaveBeenCalledWith(updatedAccount)
+    })
 
-    it("should throw an error for invalid profile data", async () => {
+    it('should throw an error for invalid profile data', async () => {
       (getSession as jest.Mock).mockResolvedValue({
-        identity_id: "authorized-user",
+        identity_id: 'authorized-user',
       });
       (getAccount as jest.Mock).mockResolvedValue({
-        account_id: "test-account",
+        account_id: 'test-account',
         account_type: AccountType.USER,
         disabled: false,
         profile: {},
         flags: [],
       });
-      (isAuthorized as jest.Mock).mockReturnValue(true);
+      (isAuthorized as jest.Mock).mockReturnValue(true)
 
-      req.body = { name: 123 }; // Invalid type for name
+      req.body = { name: 123 } // Invalid type for name
 
-      await expect(handler(req, res)).rejects.toThrow();
-    });
-  });
+      await expect(handler(req, res)).rejects.toThrow()
+    })
+  })
 
-  it("should throw MethodNotImplementedError for unsupported HTTP methods", async () => {
-    req.method = "POST";
+  it('should throw MethodNotImplementedError for unsupported HTTP methods', async () => {
+    req.method = 'POST'
 
-    await expect(handler(req, res)).rejects.toThrow(MethodNotImplementedError);
-  });
-});
+    await expect(handler(req, res)).rejects.toThrow(MethodNotImplementedError)
+  })
+})

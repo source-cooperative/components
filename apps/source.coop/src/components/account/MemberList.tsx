@@ -4,12 +4,12 @@ import {
   MembershipRole,
   MembershipState,
   UserSession,
-} from "@/api/types";
-import { ClientError } from "@/lib/client/accounts";
-import { useState } from "react";
-import useSWR from "swr";
-import { Alert, Box, Button, Grid, Paragraph, Select, Text } from "theme-ui";
-import SourceLink from "../SourceLink";
+} from '@/api/types'
+import { ClientError } from '@/lib/client/accounts'
+import { useState } from 'react'
+import useSWR from 'swr'
+import { Alert, Box, Button, Grid, Paragraph, Select, Text } from 'theme-ui'
+import SourceLink from '../SourceLink'
 
 export function MemberList({
   account_id,
@@ -18,9 +18,9 @@ export function MemberList({
   account_id: string;
   repository_id?: string;
 }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const {
     data: memberships,
@@ -30,72 +30,72 @@ export function MemberList({
     account_id && !repository_id
       ? { path: `/api/v1/accounts/${account_id}/members` }
       : account_id && repository_id
-      ? { path: `/api/v1/repositories/${account_id}/${repository_id}/members` }
-      : null,
+        ? { path: `/api/v1/repositories/${account_id}/${repository_id}/members` }
+        : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const { data: user } = useSWR<UserSession, ClientError>(
-    account_id ? { path: `/api/v1/whoami` } : null,
+    account_id ? { path: '/api/v1/whoami' } : null,
     {
       refreshInterval: 0,
-    }
-  );
+    },
+  )
 
   const activeMembers = memberships
-    ?.filter((membership) => membership.state === MembershipState.Member)
+    .filter((membership) => membership.state === MembershipState.Member)
     .sort(
       (a, b) =>
         new Date(a.state_changed).getTime() -
-        new Date(b.state_changed).getTime()
-    );
+        new Date(b.state_changed).getTime(),
+    )
 
   const invitedMembers = memberships
-    ?.filter((membership) => membership.state === MembershipState.Invited)
+    .filter((membership) => membership.state === MembershipState.Invited)
     .sort(
       (a, b) =>
         new Date(a.state_changed).getTime() -
-        new Date(b.state_changed).getTime()
-    );
+        new Date(b.state_changed).getTime(),
+    )
 
   const previousMembers = memberships
-    ?.filter((membership) => membership.state === MembershipState.Revoked)
+    .filter((membership) => membership.state === MembershipState.Revoked)
     .sort(
       (a, b) =>
         new Date(b.state_changed).getTime() -
-        new Date(a.state_changed).getTime()
-    );
+        new Date(a.state_changed).getTime(),
+    )
 
   function revokeMembership({ member }: { member: Membership }) {
     const confirmed = confirm(
-      "Are you sure you want to revoke this account's membership?"
-    );
+      'Are you sure you want to revoke this account\'s membership?',
+    )
 
     if (!confirmed) {
-      return null;
+      return null
     }
 
-    setSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
 
     fetch(`/api/v1/memberships/${member.membership_id}/revoke`, {
-      method: "POST",
-      credentials: "include",
+      method: 'POST',
+      credentials: 'include',
     }).then((res) => {
       if (res.ok) {
-        setSubmitting(false);
-        setSuccessMessage("Saved");
-        reloadMemberships();
+        setSubmitting(false)
+        setSuccessMessage('Saved')
+        reloadMemberships()
       } else {
         res.json().then((data) => {
-          setSubmitting(false);
-          setErrorMessage(data.message);
-        });
+          setSubmitting(false)
+          setErrorMessage(data.message)
+        })
       }
-    });
+    })
   }
 
   function updateMembership({
@@ -105,39 +105,39 @@ export function MemberList({
     member: Membership;
     new_role: MembershipRole;
   }) {
-    setSubmitting(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
 
     fetch(`/api/v1/memberships/${member.membership_id}/update-role`, {
-      method: "POST",
-      credentials: "include",
+      method: 'POST',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(new_role),
     }).then((res) => {
       if (res.ok) {
-        setSubmitting(false);
-        setSuccessMessage("Saved");
-        reloadMemberships();
+        setSubmitting(false)
+        setSuccessMessage('Saved')
+        reloadMemberships()
       } else {
         res.json().then((data) => {
-          setSubmitting(false);
-          setErrorMessage(data.message);
-        });
+          setSubmitting(false)
+          setErrorMessage(data.message)
+        })
       }
-    });
+    })
   }
 
-  let hasEditPermissions = false;
-  if (user && user?.account?.flags?.includes(AccountFlags.ADMIN)) {
-    hasEditPermissions = true;
-  } else if (user && user?.account?.account_id === account_id) {
-    hasEditPermissions = true;
+  let hasEditPermissions = false
+  if (user && user.account.flags.includes(AccountFlags.ADMIN)) {
+    hasEditPermissions = true
+  } else if (user && user.account.account_id === account_id) {
+    hasEditPermissions = true
   } else {
     if (user) {
-      for (const membership of user?.memberships) {
+      for (const membership of user.memberships) {
         if (
           membership.membership_account_id === account_id &&
           !membership.repository_id &&
@@ -145,13 +145,13 @@ export function MemberList({
           (membership.role === MembershipRole.Owners ||
             membership.role === MembershipRole.Maintainers)
         ) {
-          hasEditPermissions = true;
-          break;
+          hasEditPermissions = true
+          break
         }
       }
 
       if (repository_id) {
-        for (const membership of user?.memberships) {
+        for (const membership of user.memberships) {
           if (
             membership.membership_account_id === account_id &&
             membership.repository_id === repository_id &&
@@ -159,8 +159,8 @@ export function MemberList({
             (membership.role === MembershipRole.Owners ||
               membership.role === MembershipRole.Maintainers)
           ) {
-            hasEditPermissions = true;
-            break;
+            hasEditPermissions = true
+            break
           }
         }
       }
@@ -172,53 +172,53 @@ export function MemberList({
       <Box variant="cards.componentMessage">
         You do not have permission to view this account's members.
       </Box>
-    );
+    )
   }
 
   if (!hasEditPermissions) {
-    if (activeMembers?.length > 0) {
+    if (activeMembers.length > 0) {
       return (
         <Box>
           <Text variant="formTitle">Members</Text>
           <Grid
             variant="form"
             sx={{
-              gridTemplateColumns: ["1fr", "1fr", "1fr", "1fr"],
-              alignItems: "center",
+              gridTemplateColumns: ['1fr', '1fr', '1fr', '1fr'],
+              alignItems: 'center',
               mb: 3,
             }}
           >
-            {activeMembers.map((membership) => (
+            {activeMembers.map((membership) =>
               <>
                 <Box sx={{ mt: [2, 0, 0, 0] }}>
-                  <Text sx={{ fontSize: 1, fontWeight: "bold" }}>
+                  <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
                     <SourceLink href={`/${membership.account_id}`}>
                       @{membership.account_id}
                     </SourceLink>
                   </Text>
                   <Paragraph
-                    sx={{ fontSize: 0, fontFamily: "mono", py: 0, my: 0 }}
+                    sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}
                   >
-                    Member Since{" "}
+                    Member Since{' '}
                     {new Date(membership.state_changed).toLocaleDateString()}
                   </Paragraph>
                 </Box>
-              </>
-            ))}
+              </>,
+            )}
           </Grid>
         </Box>
-      );
+      )
     }
 
     return (
       <>
-        <Box sx={{ gridColumn: "1 / -1" }}>
+        <Box sx={{ gridColumn: '1 / -1' }}>
           <Text variant="formTitle">Members</Text>
           <Grid
             variant="form"
             sx={{
-              gridTemplateColumns: "1fr",
-              alignItems: "center",
+              gridTemplateColumns: '1fr',
+              alignItems: 'center',
               mb: 3,
             }}
           >
@@ -228,46 +228,46 @@ export function MemberList({
           </Grid>
         </Box>
       </>
-    );
+    )
   }
 
   return (
     <Box>
-      {(errorMessage || successMessage) && (
+      {(errorMessage || successMessage) &&
         <Box variant="cards.formMessageBox">
           {errorMessage && <Alert variant="error">{errorMessage}</Alert>}
           {successMessage && <Alert variant="success">{successMessage}</Alert>}
         </Box>
-      )}
+      }
       <fieldset disabled={submitting}>
-        {activeMembers?.length > 0 && (
+        {activeMembers.length > 0 &&
           <>
             <Text variant="formTitle">Members</Text>
             <Grid
               variant="form"
               sx={{
                 gridTemplateColumns: [
-                  "1fr",
-                  "1fr auto auto",
-                  "1fr auto auto",
-                  "1fr auto auto",
+                  '1fr',
+                  '1fr auto auto',
+                  '1fr auto auto',
+                  '1fr auto auto',
                 ],
-                alignItems: "center",
+                alignItems: 'center',
                 mb: 3,
               }}
             >
-              {activeMembers.map((membership) => (
+              {activeMembers.map((membership) =>
                 <>
                   <Box sx={{ mt: [2, 0, 0, 0] }}>
-                    <Text sx={{ fontSize: 1, fontWeight: "bold" }}>
+                    <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
                       <SourceLink href={`/${membership.account_id}`}>
                         @{membership.account_id}
                       </SourceLink>
                     </Text>
                     <Paragraph
-                      sx={{ fontSize: 0, fontFamily: "mono", py: 0, my: 0 }}
+                      sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}
                     >
-                      Member Since{" "}
+                      Member Since{' '}
                       {new Date(membership.state_changed).toLocaleDateString()}
                     </Paragraph>
                   </Box>
@@ -275,10 +275,10 @@ export function MemberList({
                     variant="minimalSelect"
                     defaultValue={membership.role}
                     onChange={(e) =>
-                      updateMembership({
-                        member: membership,
-                        new_role: e.target.value as MembershipRole,
-                      })
+                    { updateMembership({
+                      member: membership,
+                      new_role: e.target.value as MembershipRole,
+                    }) }
                     }
                   >
                     <option value={MembershipRole.Owners}>Owner</option>
@@ -294,40 +294,40 @@ export function MemberList({
                   >
                     Revoke Membership
                   </Button>
-                </>
-              ))}
+                </>,
+              )}
             </Grid>
           </>
-        )}
+        }
 
-        {invitedMembers?.length > 0 && (
+        {invitedMembers.length > 0 &&
           <>
             <Text variant="formTitle">Invited Members</Text>
             <Grid
               variant="form"
               sx={{
                 gridTemplateColumns: [
-                  "1fr",
-                  "1fr auto",
-                  "1fr auto",
-                  "1fr auto",
+                  '1fr',
+                  '1fr auto',
+                  '1fr auto',
+                  '1fr auto',
                 ],
-                alignItems: "center",
+                alignItems: 'center',
                 mb: 3,
               }}
             >
-              {invitedMembers.map((membership) => (
+              {invitedMembers.map((membership) =>
                 <>
                   <Box>
-                    <Text sx={{ fontSize: 1, fontWeight: "bold" }}>
+                    <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
                       <SourceLink href={`/${membership.account_id}`}>
                         @{membership.account_id}
                       </SourceLink>
                     </Text>
                     <Paragraph
-                      sx={{ fontSize: 0, fontFamily: "mono", py: 0, my: 0 }}
+                      sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}
                     >
-                      Invited on{" "}
+                      Invited on{' '}
                       {new Date(membership.state_changed).toLocaleDateString()}
                     </Paragraph>
                   </Box>
@@ -337,42 +337,42 @@ export function MemberList({
                   >
                     Rescind Invitation
                   </Button>
-                </>
-              ))}
+                </>,
+              )}
             </Grid>
           </>
-        )}
+        }
 
-        {previousMembers?.length > 0 && (
+        {previousMembers.length > 0 &&
           <>
             <Text variant="formTitle">Previous Memberships</Text>
             <Grid
               variant="form"
               sx={{
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
-              {previousMembers.map((membership) => (
+              {previousMembers.map((membership) =>
                 <>
                   <Box>
-                    <Text sx={{ fontSize: 1, fontWeight: "bold" }}>
+                    <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
                       <SourceLink href={`/${membership.account_id}`}>
                         @{membership.account_id}
                       </SourceLink>
                     </Text>
                     <Paragraph
-                      sx={{ fontSize: 0, fontFamily: "mono", py: 0, my: 0 }}
+                      sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}
                     >
-                      Departed on{" "}
+                      Departed on{' '}
                       {new Date(membership.state_changed).toLocaleDateString()}
                     </Paragraph>
                   </Box>
-                </>
-              ))}
+                </>,
+              )}
             </Grid>
           </>
-        )}
+        }
       </fieldset>
     </Box>
-  );
+  )
 }

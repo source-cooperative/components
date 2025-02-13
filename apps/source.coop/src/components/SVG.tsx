@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Box } from "theme-ui";
+import { Box } from 'theme-ui'
 
 export default function SVG({ ...props }) {
   return (
@@ -7,5 +7,5 @@ export default function SVG({ ...props }) {
       {props.title ? <title>{props.title}</title> : <></>}
       {props.children}
     </Box>
-  );
+  )
 }

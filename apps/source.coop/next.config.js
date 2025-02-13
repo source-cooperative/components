@@ -5,21 +5,21 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/auth/:path*",
-        destination: "https://*",
+        source: '/auth/:path*',
+        destination: 'https://*',
       },
-    ];
+    ]
   },
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "*",
-        port: "",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: '*',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

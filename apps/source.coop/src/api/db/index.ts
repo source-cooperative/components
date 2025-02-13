@@ -33,40 +33,40 @@
  */
 
 import {
-  Account,
   APIKey,
+  Account,
   DataConnection,
   Membership,
   Repository,
   RepositoryFeatured,
-} from "@/api/types";
-import logger from "@/utils/logger";
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+} from '@/api/types'
+import logger from '@/utils/logger'
+import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb'
 import {
   DynamoDBDocumentClient,
   QueryCommand,
   ScanCommand,
-} from "@aws-sdk/lib-dynamodb";
-import { marshall } from "@aws-sdk/util-dynamodb";
-import { awsCredentialsProvider } from "@vercel/functions/oidc";
+} from '@aws-sdk/lib-dynamodb'
+import { marshall } from '@aws-sdk/util-dynamodb'
+import { awsCredentialsProvider } from '@vercel/functions/oidc'
 
-const isProd = process.env.NEXT_PUBLIC_IS_PROD === "1";
-const AWS_ROLE_ARN = process.env.AWS_ROLE_ARN!;
-let client: DynamoDBClient;
+const isProd = process.env.NEXT_PUBLIC_IS_PROD === '1'
+const { AWS_ROLE_ARN } = process.env
+let client: DynamoDBClient
 if (isProd) {
   client = new DynamoDBClient({
     credentials: awsCredentialsProvider({
       roleArn: AWS_ROLE_ARN,
     }),
     region: process.env.AWS_DEFAULT_REGION,
-  });
+  })
 } else {
   client = new DynamoDBClient({
-    endpoint: "http://localhost:8000",
-  });
+    endpoint: 'http://localhost:8000',
+  })
 }
 
-const docClient = DynamoDBDocumentClient.from(client);
+const docClient = DynamoDBDocumentClient.from(client)
 
 /**
  * Retrieves a user account from DynamoDB based on the given identity ID.
@@ -75,23 +75,23 @@ const docClient = DynamoDBDocumentClient.from(client);
  * @throws Will throw an error if there's an issue querying DynamoDB.
  */
 export async function getAccountByIdentityId(
-  identityId: string
+  identityId: string,
 ): Promise<Account | null> {
   const command = new QueryCommand({
-    TableName: "sc-accounts",
-    IndexName: "identity_id",
-    KeyConditionExpression: "identity_id = :identity_id",
+    TableName: 'sc-accounts',
+    IndexName: 'identity_id',
+    KeyConditionExpression: 'identity_id = :identity_id',
     ExpressionAttributeValues: {
-      ":identity_id": identityId,
+      ':identity_id': identityId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return (response.Items?.[0] as Account) ?? null;
+    const response = await client.send(command)
+    return (response.Items[0] as Account) ?? null
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -102,36 +102,36 @@ export async function getAccountByIdentityId(
  */
 export async function getRepositories(): Promise<Repository[]> {
   const command = new ScanCommand({
-    TableName: "sc-repositories",
+    TableName: 'sc-repositories',
     ConsistentRead: true,
-  });
+  })
 
   try {
-    const response = await docClient.send(command);
-    return response.Items?.map((item) => item as Repository) ?? [];
+    const response = await docClient.send(command)
+    return response.Items.map((item) => item as Repository) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
 export async function getRepositoriesByAccount(
-  accountId: string
+  accountId: string,
 ): Promise<Repository[]> {
   const command = new QueryCommand({
-    TableName: "sc-repositories",
-    KeyConditionExpression: "account_id = :account_id",
+    TableName: 'sc-repositories',
+    KeyConditionExpression: 'account_id = :account_id',
     ExpressionAttributeValues: {
-      ":account_id": accountId,
+      ':account_id': accountId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return response.Items?.map((item) => item as Repository) ?? [];
+    const response = await client.send(command)
+    return response.Items.map((item) => item as Repository) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -144,24 +144,24 @@ export async function getRepositoriesByAccount(
  */
 export async function getRepository(
   accountId: string,
-  repositoryId: string
+  repositoryId: string,
 ): Promise<Repository | null> {
   const command = new QueryCommand({
-    TableName: "sc-repositories",
+    TableName: 'sc-repositories',
     KeyConditionExpression:
-      "account_id = :account_id AND repository_id = :repository_id",
+      'account_id = :account_id AND repository_id = :repository_id',
     ExpressionAttributeValues: {
-      ":account_id": accountId,
-      ":repository_id": repositoryId,
+      ':account_id': accountId,
+      ':repository_id': repositoryId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return (response.Items?.[0] as Repository) ?? null;
+    const response = await client.send(command)
+    return (response.Items[0] as Repository) ?? null
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -172,20 +172,20 @@ export async function getRepository(
  */
 export async function getFeaturedRepositories(): Promise<Repository[]> {
   const command = new QueryCommand({
-    TableName: "sc-repositories",
-    IndexName: "featured",
-    KeyConditionExpression: "featured = :featured",
+    TableName: 'sc-repositories',
+    IndexName: 'featured',
+    KeyConditionExpression: 'featured = :featured',
     ExpressionAttributeValues: {
-      ":featured": RepositoryFeatured.Featured,
+      ':featured': RepositoryFeatured.Featured,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return response.Items?.map((item) => item as Repository) ?? [];
+    const response = await client.send(command)
+    return response.Items.map((item) => item as Repository) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -196,16 +196,16 @@ export async function getFeaturedRepositories(): Promise<Repository[]> {
  */
 export async function getAccounts(): Promise<Account[]> {
   const command = new ScanCommand({
-    TableName: "sc-accounts",
+    TableName: 'sc-accounts',
     ConsistentRead: true,
-  });
+  })
 
   try {
-    const response = await docClient.send(command);
-    return response.Items?.map((item) => item as Account) ?? [];
+    const response = await docClient.send(command)
+    return response.Items.map((item) => item as Account) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -217,25 +217,25 @@ export async function getAccounts(): Promise<Account[]> {
  */
 export async function putAccount(
   account: Account,
-  checkIfExists: boolean = false
+  checkIfExists = false,
 ): Promise<[Account, boolean]> {
   const command = new PutItemCommand({
-    TableName: "sc-accounts",
+    TableName: 'sc-accounts',
     Item: marshall(account),
     ConditionExpression: checkIfExists
-      ? "attribute_not_exists(account_id)"
+      ? 'attribute_not_exists(account_id)'
       : undefined,
-  });
+  })
 
   try {
-    await docClient.send(command);
-    return [account, true];
+    await docClient.send(command)
+    return [account, true]
   } catch (e) {
-    if (e instanceof Error && e.name === "ConditionalCheckFailedException") {
-      return [account, false];
+    if (e instanceof Error && e.name === 'ConditionalCheckFailedException') {
+      return [account, false]
     }
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -247,25 +247,25 @@ export async function putAccount(
  */
 export async function putRepository(
   repository: Repository,
-  checkIfExists: boolean = false
+  checkIfExists = false,
 ): Promise<[Repository, boolean]> {
   const command = new PutItemCommand({
-    TableName: "sc-repositories",
+    TableName: 'sc-repositories',
     Item: marshall(repository),
     ConditionExpression: checkIfExists
-      ? "attribute_not_exists(account_id) AND attribute_not_exists(repository_id)"
+      ? 'attribute_not_exists(account_id) AND attribute_not_exists(repository_id)'
       : undefined,
-  });
+  })
 
   try {
-    await docClient.send(command);
-    return [repository, true];
+    await docClient.send(command)
+    return [repository, true]
   } catch (e) {
-    if (e instanceof Error && e.name === "ConditionalCheckFailedException") {
-      return [repository, false];
+    if (e instanceof Error && e.name === 'ConditionalCheckFailedException') {
+      return [repository, false]
     }
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -277,25 +277,25 @@ export async function putRepository(
  */
 export async function putAPIKey(
   apiKey: APIKey,
-  checkIfExists: boolean = false
+  checkIfExists = false,
 ): Promise<[APIKey, boolean]> {
   const command = new PutItemCommand({
-    TableName: "sc-api-keys",
+    TableName: 'sc-api-keys',
     Item: marshall(apiKey),
     ConditionExpression: checkIfExists
-      ? "attribute_not_exists(access_key_id)"
+      ? 'attribute_not_exists(access_key_id)'
       : undefined,
-  });
+  })
 
   try {
-    await docClient.send(command);
-    return [apiKey, true];
+    await docClient.send(command)
+    return [apiKey, true]
   } catch (e) {
-    if (e instanceof Error && e.name === "ConditionalCheckFailedException") {
-      return [apiKey, false];
+    if (e instanceof Error && e.name === 'ConditionalCheckFailedException') {
+      return [apiKey, false]
     }
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -307,19 +307,19 @@ export async function putAPIKey(
  */
 export async function getAPIKey(accessKeyId: string): Promise<APIKey | null> {
   const command = new QueryCommand({
-    TableName: "sc-api-keys",
-    KeyConditionExpression: "access_key_id = :access_key_id",
+    TableName: 'sc-api-keys',
+    KeyConditionExpression: 'access_key_id = :access_key_id',
     ExpressionAttributeValues: {
-      ":access_key_id": accessKeyId,
+      ':access_key_id': accessKeyId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return (response.Items?.[0] as APIKey) ?? null;
+    const response = await client.send(command)
+    return (response.Items[0] as APIKey) ?? null
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -331,19 +331,19 @@ export async function getAPIKey(accessKeyId: string): Promise<APIKey | null> {
  */
 export async function getAccount(accountId: string): Promise<Account | null> {
   const command = new QueryCommand({
-    TableName: "sc-accounts",
-    KeyConditionExpression: "account_id = :account_id",
+    TableName: 'sc-accounts',
+    KeyConditionExpression: 'account_id = :account_id',
     ExpressionAttributeValues: {
-      ":account_id": accountId,
+      ':account_id': accountId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return (response.Items?.[0] as Account) ?? null;
+    const response = await client.send(command)
+    return (response.Items[0] as Account) ?? null
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -354,23 +354,23 @@ export async function getAccount(accountId: string): Promise<Account | null> {
  * @throws Will throw an error if there's an issue querying DynamoDB.
  */
 export async function getMembershipsForUser(
-  accountId: string
+  accountId: string,
 ): Promise<Membership[]> {
   const command = new QueryCommand({
-    TableName: "sc-memberships",
-    IndexName: "account_id",
-    KeyConditionExpression: "account_id = :account_id",
+    TableName: 'sc-memberships',
+    IndexName: 'account_id',
+    KeyConditionExpression: 'account_id = :account_id',
     ExpressionAttributeValues: {
-      ":account_id": accountId,
+      ':account_id': accountId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return response.Items?.map((item) => item as Membership) ?? [];
+    const response = await client.send(command)
+    return response.Items.map((item) => item as Membership) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -382,35 +382,35 @@ export async function getMembershipsForUser(
  */
 export async function getMemberships(
   membershipAccountId: string,
-  repositoryId: string | null = null
+  repositoryId: string | null = null,
 ): Promise<Membership[]> {
   let command = new QueryCommand({
-    TableName: "sc-memberships",
-    IndexName: "membership_account_id",
-    KeyConditionExpression: "membership_account_id = :membership_account_id",
+    TableName: 'sc-memberships',
+    IndexName: 'membership_account_id',
+    KeyConditionExpression: 'membership_account_id = :membership_account_id',
     ExpressionAttributeValues: {
-      ":membership_account_id": membershipAccountId,
+      ':membership_account_id': membershipAccountId,
     },
-  });
+  })
   if (repositoryId) {
     command = new QueryCommand({
-      TableName: "sc-memberships",
-      IndexName: "membership_account_id_repository_id",
+      TableName: 'sc-memberships',
+      IndexName: 'membership_account_id_repository_id',
       KeyConditionExpression:
-        "membership_account_id = :membership_account_id AND repository_id = :repository_id",
+        'membership_account_id = :membership_account_id AND repository_id = :repository_id',
       ExpressionAttributeValues: {
-        ":membership_account_id": membershipAccountId,
-        ":repository_id": repositoryId,
+        ':membership_account_id': membershipAccountId,
+        ':repository_id': repositoryId,
       },
-    });
+    })
   }
 
   try {
-    const response = await client.send(command);
-    return response.Items?.map((item) => item as Membership) ?? [];
+    const response = await client.send(command)
+    return response.Items.map((item) => item as Membership) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -421,22 +421,22 @@ export async function getMemberships(
  * @throws Will throw an error if there's an issue querying DynamoDB.
  */
 export async function getMembership(
-  membershipId: string
+  membershipId: string,
 ): Promise<Membership | null> {
   const command = new QueryCommand({
-    TableName: "sc-memberships",
-    KeyConditionExpression: "membership_id = :membership_id",
+    TableName: 'sc-memberships',
+    KeyConditionExpression: 'membership_id = :membership_id',
     ExpressionAttributeValues: {
-      ":membership_id": membershipId,
+      ':membership_id': membershipId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return (response.Items?.[0] as Membership) ?? null;
+    const response = await client.send(command)
+    return (response.Items[0] as Membership) ?? null
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -448,27 +448,27 @@ export async function getMembership(
  */
 export async function getAPIKeys(
   accountId: string,
-  repositoryId: string | null = null
+  repositoryId: string | null = null,
 ): Promise<APIKey[]> {
   const command = new QueryCommand({
-    TableName: "sc-api-keys",
-    IndexName: "account_id",
-    KeyConditionExpression: "account_id = :account_id",
+    TableName: 'sc-api-keys',
+    IndexName: 'account_id',
+    KeyConditionExpression: 'account_id = :account_id',
     FilterExpression: repositoryId
-      ? "repository_id = :repository_id"
-      : "attribute_not_exists(repository_id)",
+      ? 'repository_id = :repository_id'
+      : 'attribute_not_exists(repository_id)',
     ExpressionAttributeValues: {
-      ":account_id": accountId,
-      ...(repositoryId && { ":repository_id": repositoryId }),
+      ':account_id': accountId,
+      ...repositoryId && { ':repository_id': repositoryId },
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return response.Items?.map((item) => item as APIKey) ?? [];
+    const response = await client.send(command)
+    return response.Items.map((item) => item as APIKey) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
@@ -480,83 +480,83 @@ export async function getAPIKeys(
  */
 export async function putMembership(
   membership: Membership,
-  checkIfExists: boolean = false
+  checkIfExists = false,
 ): Promise<[Membership, boolean]> {
   const command = new PutItemCommand({
-    TableName: "sc-memberships",
+    TableName: 'sc-memberships',
     Item: marshall(membership),
     ConditionExpression: checkIfExists
-      ? "attribute_not_exists(membership_id)"
+      ? 'attribute_not_exists(membership_id)'
       : undefined,
-  });
+  })
 
   try {
-    await docClient.send(command);
-    return [membership, true];
+    await docClient.send(command)
+    return [membership, true]
   } catch (e) {
-    if (e instanceof Error && e.name === "ConditionalCheckFailedException") {
-      return [membership, false];
+    if (e instanceof Error && e.name === 'ConditionalCheckFailedException') {
+      return [membership, false]
     }
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
 export async function getDataConnections(): Promise<DataConnection[]> {
   const command = new ScanCommand({
-    TableName: "sc-data-connections",
+    TableName: 'sc-data-connections',
     ConsistentRead: true,
-  });
+  })
 
   try {
-    const response = await docClient.send(command);
-    return response.Items?.sort((a,b) => b.data_connection_id.localeCompare(a.data_connection_id)).map((item) => item as DataConnection) ?? [];
+    const response = await docClient.send(command)
+    return response.Items.sort((a, b) => b.data_connection_id.localeCompare(a.data_connection_id)).map((item) => item as DataConnection) ?? []
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
 export async function putDataConnection(
   dataConnection: DataConnection,
-  checkIfExists: boolean = false
+  checkIfExists = false,
 ): Promise<[DataConnection, boolean]> {
   const command = new PutItemCommand({
-    TableName: "sc-data-connections",
+    TableName: 'sc-data-connections',
     Item: marshall(dataConnection),
     ConditionExpression: checkIfExists
-      ? "attribute_not_exists(data_connection_id)"
+      ? 'attribute_not_exists(data_connection_id)'
       : undefined,
-  });
+  })
 
   try {
-    await docClient.send(command);
-    return [dataConnection, true];
+    await docClient.send(command)
+    return [dataConnection, true]
   } catch (e) {
-    if (e instanceof Error && e.name === "ConditionalCheckFailedException") {
-      return [dataConnection, false];
+    if (e instanceof Error && e.name === 'ConditionalCheckFailedException') {
+      return [dataConnection, false]
     }
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
 
 export async function getDataConnection(
-  dataConnectionId: string
+  dataConnectionId: string,
 ): Promise<DataConnection | null> {
   const command = new QueryCommand({
-    TableName: "sc-data-connections",
-    KeyConditionExpression: "data_connection_id = :data_connection_id",
+    TableName: 'sc-data-connections',
+    KeyConditionExpression: 'data_connection_id = :data_connection_id',
     ExpressionAttributeValues: {
-      ":data_connection_id": dataConnectionId,
+      ':data_connection_id': dataConnectionId,
     },
-  });
+  })
 
   try {
-    const response = await client.send(command);
-    return (response.Items?.[0] as DataConnection) ?? null;
+    const response = await client.send(command)
+    return (response.Items[0] as DataConnection) ?? null
   } catch (e) {
-    logger.error(e);
-    throw e;
+    logger.error(e)
+    throw e
   }
 }
