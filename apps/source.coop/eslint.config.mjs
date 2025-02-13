@@ -13,7 +13,7 @@ export default tseslint.config(
     files: ['**/*.{ts,tsx,js}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: globals.node,
       parserOptions: {
         project: './tsconfig.eslint.json',
         tsconfigRootDir: import.meta.dirname,
