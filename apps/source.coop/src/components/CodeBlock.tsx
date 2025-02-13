@@ -1,7 +1,7 @@
+import { SVG } from '@source-cooperative/components'
 import { useRef, useState } from 'react'
 import { Box, Card } from 'theme-ui'
 import { useCopyToClipboard } from 'usehooks-ts'
-import SVG from './SVG'
 
 export function ClipboardIcon() {
   return (

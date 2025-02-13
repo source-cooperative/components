@@ -1,4 +1,4 @@
-import SVG from './SVG'
+import { SVG } from '@source-cooperative/components'
 
 export function Logo({ ...props }) {
   return (
