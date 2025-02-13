@@ -5,11 +5,11 @@ import {
   UserSession,
 } from '@/api/types'
 import SourceButton from '@/components/Button'
-import { Logo } from '@/components/Logo'
 import { ClientError } from '@/lib/client/accounts'
 import { Dimmer } from '@carbonplan/components'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Configuration, FrontendApi } from '@ory/client'
+import { Logo } from '@source-cooperative/components'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
