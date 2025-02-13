@@ -9,7 +9,8 @@
     "build": "echo 'Nothing to build, the cli is a Node.js script'",
     "lint": "eslint .",
     "start": "node src/index.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3.651.1",

@@ -65,6 +65,7 @@
     "prebuild": "rimraf dist",
     "lint": "eslint .",
     "prepare": "npm run build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"Error: no test specified\" && exit 0"
   }
 }
