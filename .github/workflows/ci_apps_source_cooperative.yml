@@ -1,0 +1,16 @@
+name: apps/source.coop
+on:
+  push:
+    paths:
+      - "packages/components/**"
+      - "packages/cli/**"
+      - "apps/source.coop/**"
+      - ".github/workflows/_common_jobs.yml"
+      - ".github/workflows/ci_apps_source_cooperative.yml"
+      - "eslint.config.js"
+      - "package.json"
+jobs:
+  ci:
+    uses: ./.github/workflows/_common_jobs.yml
+    with:
+      workspace: "source-cooperative"
