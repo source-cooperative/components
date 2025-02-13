@@ -1,6 +1,6 @@
 {
   "name": "@source-cooperative/cli",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
   "description": "CLI Tool for interacting with Source Cooperative. See 'sc' command in root package.json -> 'npx sc --help'",
   "type": "module",
