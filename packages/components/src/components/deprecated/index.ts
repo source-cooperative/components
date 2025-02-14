@@ -1,5 +1,7 @@
 export { default as BaseLayout } from './BaseLayout'
 export { default as Browser } from './Browser'
+export { FieldState, FieldType, FormResultState } from './enums'
+export type { FieldStateValue, FieldTypeValue, FormResultStateValue } from './enums'
 export { default as Footer } from './Footer'
 export { default as Form } from './Form'
 export type { FormFieldState, FormResult } from './Form'

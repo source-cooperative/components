@@ -12,9 +12,9 @@ import {
   Text,
   Textarea,
 } from 'theme-ui'
-import type { FieldStateValue, FieldTypeValue, FormResultStateValue } from '../../lib/enums'
-import { FieldState, FieldType, FormResultState } from '../../lib/enums'
 import Button from '../Button'
+import type { FieldStateValue, FieldTypeValue, FormResultStateValue } from './enums'
+import { FieldState, FieldType, FormResultState } from './enums'
 
 export interface FormFieldState {
   state: FieldStateValue;
