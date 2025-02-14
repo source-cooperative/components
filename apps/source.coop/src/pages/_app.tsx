@@ -2,12 +2,12 @@ import '@fontsource/ibm-plex-sans'
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/globals.css'
 
-import theme from '@/lib/theme'
+import { theme } from '@source-cooperative/components'
 
 import Router from 'next/router'
-import NProgress from 'nprogress'; //nprogress module
+import NProgress from 'nprogress' //nprogress module
 import { SkeletonTheme } from 'react-loading-skeleton'
-import '../styles/nprogress.css'; //styles of nprogress
+import '../styles/nprogress.css' //styles of nprogress
 
 import provider from '@mdx-js/react'
 
@@ -94,7 +94,7 @@ export default function App({ Component, pageProps }: AppProps) {
         fetcher: fetcher,
       }}
     >
-      <SourceProvider theme={theme} components={SourceComponents}>
+      <SourceProvider theme={theme}>
         <main>
           <Toaster
             toastOptions={{
