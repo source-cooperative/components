@@ -5,7 +5,7 @@ import {
   ListObjectsV2Command,
   S3Client,
 } from '@aws-sdk/client-s3'
-import { Button, Link as SourceLink, SVG } from '@source-cooperative/components'
+import { Button, SVG, Link as SourceLink } from '@source-cooperative/components'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
