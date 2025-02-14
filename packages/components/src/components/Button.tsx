@@ -36,7 +36,7 @@ const LinkButton = forwardRef(function LinkButton(props: LinkButtonProps, ref: R
 
 type SourceButtonProps = ButtonProps | LinkButtonProps
 export default forwardRef(function SourceButton(props: SourceButtonProps, ref: Ref<HTMLButtonElement>) {
-  return 'href' in props ?
+  return 'href' in props && props.href ?
     <LinkButton {...props} ref={ref} /> :
     <Button {...props} ref={ref} />
 })
