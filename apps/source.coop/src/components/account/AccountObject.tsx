@@ -1,9 +1,9 @@
 import { Account, AccountProfileResponse } from '@/api/types'
 import { ClientError } from '@/lib/client/accounts'
+import { Link } from '@source-cooperative/components'
 import { GoInfo, GoLink, GoLocation } from 'react-icons/go'
 import useSWR from 'swr'
 import { Box, Grid, Heading, Image, Text } from 'theme-ui'
-import SourceLink from '../SourceLink'
 
 export function AccountObject({ account_id }: { account_id: string }) {
   const { data: profile, isLoading: _profileIsLoading } = useSWR<
@@ -93,7 +93,7 @@ export function AccountObject({ account_id }: { account_id: string }) {
                   fontSize: 1,
                 }}
               >
-                <SourceLink href={profile.url}>{profile.url}</SourceLink>
+                <Link href={profile.url}>{profile.url}</Link>
               </Text>
             </>
           }
@@ -115,9 +115,9 @@ export function AccountObject({ account_id }: { account_id: string }) {
             {profile.bio
               ? profile.bio.split(/\s+/).map((word, index) =>
                 word.startsWith('@') ?
-                  <SourceLink key={index} href={`/${word.slice(1)}`}>
+                  <Link key={index} href={`/${word.slice(1)}`}>
                     {word}
-                  </SourceLink>
+                  </Link>
                   :
                   word + ' ',
 

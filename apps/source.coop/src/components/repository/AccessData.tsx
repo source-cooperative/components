@@ -6,8 +6,8 @@ import {
   RepositoryDataMode,
   UserSession,
 } from '@/api/types'
-import SourceLink from '@/components/SourceLink'
 import { ClientError } from '@/lib/client/accounts'
+import { Link } from '@source-cooperative/components'
 import useSWR from 'swr'
 import {
   Box,
@@ -172,11 +172,11 @@ export function AccessData({
           </Box>
           <Text>
             NOTE:These examples refer to the{' '}
-            <SourceLink href="https://aws.amazon.com/cli/">AWS CLI</SourceLink>,
+            <Link href="https://aws.amazon.com/cli/">AWS CLI</Link>,
             but you can use any S3-compatible client (such as{' '}
-            <SourceLink href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html">
+            <Link href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html">
               boto3
-            </SourceLink>
+            </Link>
             ).
           </Text>
         </Grid>
@@ -217,13 +217,13 @@ export function AccessData({
             </Box>
             <Text>
               NOTE:These examples refer to the{' '}
-              <SourceLink href="https://aws.amazon.com/cli/">
+              <Link href="https://aws.amazon.com/cli/">
                 AWS CLI
-              </SourceLink>
+              </Link>
               , but you can use any S3-compatible client (such as{' '}
-              <SourceLink href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html">
+              <Link href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html">
                 boto3
-              </SourceLink>
+              </Link>
               ).
             </Text>
           </Grid>

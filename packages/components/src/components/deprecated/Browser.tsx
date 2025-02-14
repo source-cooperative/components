@@ -2,8 +2,8 @@ import { useRouter } from 'next/router'
 import Skeleton from 'react-loading-skeleton'
 import { Box, Card, Flex, Grid, Paragraph, Text } from 'theme-ui'
 import Button from '../Button'
+import Link from '../Link'
 import SVG from '../SVG'
-import Link from './Link'
 
 interface Breadcrumb {
 	href: string;

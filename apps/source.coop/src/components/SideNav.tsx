@@ -1,8 +1,8 @@
 import { SideNavLink } from '@/lib/types'
+import { Link } from '@source-cooperative/components'
 import { NextRouter, useRouter } from 'next/router'
 import Skeleton from 'react-loading-skeleton'
 import { Box, Grid, Select } from 'theme-ui'
-import SourceLink from './SourceLink'
 
 function onSelectChange(
   e: React.ChangeEvent<HTMLSelectElement>,
@@ -70,13 +70,13 @@ export default function SideNav({ links }: { links: SideNavLink[] }) {
             }
 
             return (
-              <SourceLink
+              <Link
                 key={'side-nav-' + i}
                 variant={link.active ? 'navLinkActive' : 'navLink'}
                 href={link.href}
               >
                 {link.title}
-              </SourceLink>
+              </Link>
             )
           })}
         </Grid>

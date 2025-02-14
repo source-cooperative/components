@@ -1,5 +1,5 @@
 import { Box, Grid, Text, useColorMode } from 'theme-ui'
-import Link from './Link'
+import Link from '../Link'
 
 interface FooterLink {
 	href: string;

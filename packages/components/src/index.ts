@@ -1,6 +1,7 @@
 export { default as Button } from './components/Button'
 export { default as CodeBlock, InlineCode } from './components/CodeBlock'
 export * from './components/deprecated/index'
+export { default as Link } from './components/Link'
 export { default as Logo } from './components/Logo'
 export { default as Meta } from './components/Meta'
 export { default as SVG } from './components/SVG'

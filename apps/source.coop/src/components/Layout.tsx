@@ -1,6 +1,6 @@
 import { MembershipState, UserSession } from '@/api/types'
 import { ClientError } from '@/lib/client/accounts'
-import { Logo, Meta } from '@source-cooperative/components'
+import { Logo, Meta, Link as SourceLink } from '@source-cooperative/components'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { Alert, Box, Container, Flex, Grid, Spinner } from 'theme-ui'
@@ -9,7 +9,6 @@ import { Footer } from './Footer'
 import NotFound from './NotFound'
 import { SearchBar } from './SearchBar'
 import SideNav from './SideNav'
-import SourceLink from './SourceLink'
 import UserNavButton from './UserNavButton'
 
 const alerts = [

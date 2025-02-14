@@ -1,12 +1,11 @@
 import { AzureDataConnectionSchema, DataConnection, Repository, S3DataConnectionSchema } from '@/api/types'
-import SourceLink from '@/components/SourceLink'
 import { ClientError } from '@/lib/client/accounts'
 import {
   HeadObjectCommand,
   ListObjectsV2Command,
   S3Client,
 } from '@aws-sdk/client-s3'
-import { Button, SVG } from '@source-cooperative/components'
+import { Button, Link as SourceLink, SVG } from '@source-cooperative/components'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'

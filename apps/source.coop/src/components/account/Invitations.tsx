@@ -1,9 +1,9 @@
 import { Membership, MembershipState, UserSession } from '@/api/types'
 import { ClientError } from '@/lib/client/accounts'
+import { Link } from '@source-cooperative/components'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { Alert, Box, Button, Grid, Text } from 'theme-ui'
-import SourceLink from '../SourceLink'
 
 export function Invitations({ account_id }: { account_id: string }) {
   const [submitting, setSubmitting] = useState(false)
@@ -95,7 +95,7 @@ export function Invitations({ account_id }: { account_id: string }) {
                   <Box sx={{ gridColumn: ['span 2', '1', '1', '1'] }}>
                     <Text sx={{ fontWeight: 'body', fontSize: 1 }}>
                       Invited to{' '}
-                      <SourceLink
+                      <Link
                         href={
                           invitation.repository_id
                             ? `/repositories/${invitation.membership_account_id}/${invitation.repository_id}/description`
@@ -105,7 +105,7 @@ export function Invitations({ account_id }: { account_id: string }) {
                         @{invitation.membership_account_id}
                         {invitation.repository_id &&
                           `/${invitation.repository_id}`}
-                      </SourceLink>{' '}
+                      </Link>{' '}
                       on{' '}
                       {new Date(invitation.state_changed).toLocaleDateString(
                         'en-US',

@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 
-import SourceLink from '@/components/SourceLink'
+import { Link } from '@source-cooperative/components'
 import { Box, Container, Grid, Text } from 'theme-ui'
 
 const footerLinks = [
@@ -39,13 +39,13 @@ export function Footer({}) {
         >
           {footerLinks.map(({ url, display }, i) =>
             url ?
-              <SourceLink
+              <Link
                 key={'footer-link-' + i}
                 href={url}
                 variant="footer"
               >
                 <Text>{display}</Text>
-              </SourceLink>
+              </Link>
               :
               <Text key={'footer-text-' + i} variant="footer" sx={{ textAlign: 'left' }}>
                 {display}
@@ -64,9 +64,9 @@ export function Footer({}) {
               }}
             />
               Source Cooperative is a{' '}
-            <SourceLink href="https://radiant.earth" variant="footer">
+            <Link href="https://radiant.earth" variant="footer">
                 Radiant Earth
-            </SourceLink>
+            </Link>
             {' '}initiative.
           </Text>
         </Grid>

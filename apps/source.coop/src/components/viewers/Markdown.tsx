@@ -1,14 +1,12 @@
 /** @jsxImportSource theme-ui */
 
-import { SourceComponents } from '@/lib/provider'
-import { useEffect, useState } from 'react'
-
 import { mdxOptions } from '@/lib/md'
+import { SourceComponents } from '@/lib/provider'
 import { evaluate } from '@mdx-js/mdx'
+import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import * as runtime from 'react/jsx-runtime'
 import { Box, Grid, Text } from 'theme-ui'
-import SourceLink from '../SourceLink'
 
 export function Markdown({ url }) {
   const [mdxModule, setMdxModule] = useState(null)
@@ -45,13 +43,13 @@ export function Markdown({ url }) {
             <Text>
               This Repository Does Not Contain a README. If you are the owner of
               this repository, follow the instructions{' '}
-              <SourceLink
+              <Link
                 href={
                   'https://github.com/radiantearth/source-cooperative/wiki/Repositories#readme-markdown-files'
                 }
               >
                 here
-              </SourceLink>{' '}
+              </Link>{' '}
               to create a README.md
             </Text>
           </Box>

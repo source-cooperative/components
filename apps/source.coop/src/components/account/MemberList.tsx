@@ -6,10 +6,10 @@ import {
   UserSession,
 } from '@/api/types'
 import { ClientError } from '@/lib/client/accounts'
+import { Link } from '@source-cooperative/components'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { Alert, Box, Button, Grid, Paragraph, Select, Text } from 'theme-ui'
-import SourceLink from '../SourceLink'
 
 export function MemberList({
   account_id,
@@ -192,9 +192,9 @@ export function MemberList({
               <>
                 <Box sx={{ mt: [2, 0, 0, 0] }}>
                   <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
-                    <SourceLink href={`/${membership.account_id}`}>
+                    <Link href={`/${membership.account_id}`}>
                       @{membership.account_id}
-                    </SourceLink>
+                    </Link>
                   </Text>
                   <Paragraph
                     sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}
@@ -260,9 +260,9 @@ export function MemberList({
                 <>
                   <Box sx={{ mt: [2, 0, 0, 0] }}>
                     <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
-                      <SourceLink href={`/${membership.account_id}`}>
+                      <Link href={`/${membership.account_id}`}>
                         @{membership.account_id}
-                      </SourceLink>
+                      </Link>
                     </Text>
                     <Paragraph
                       sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}
@@ -320,9 +320,9 @@ export function MemberList({
                 <>
                   <Box>
                     <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
-                      <SourceLink href={`/${membership.account_id}`}>
+                      <Link href={`/${membership.account_id}`}>
                         @{membership.account_id}
-                      </SourceLink>
+                      </Link>
                     </Text>
                     <Paragraph
                       sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}
@@ -356,9 +356,9 @@ export function MemberList({
                 <>
                   <Box>
                     <Text sx={{ fontSize: 1, fontWeight: 'bold' }}>
-                      <SourceLink href={`/${membership.account_id}`}>
+                      <Link href={`/${membership.account_id}`}>
                         @{membership.account_id}
-                      </SourceLink>
+                      </Link>
                     </Text>
                     <Paragraph
                       sx={{ fontSize: 0, fontFamily: 'mono', py: 0, my: 0 }}

@@ -1,6 +1,6 @@
 import { Repository, RepositoryDataMode, RepositoryState } from '@/api/types'
-import SourceLink from '@/components/SourceLink'
 import RepositoryTag from '@/components/repository/RepositoryTag'
+import { Link } from '@source-cooperative/components'
 import moment from 'moment'
 import { useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -28,7 +28,7 @@ export function RepositoryListing({
     const showExpandOption =
       truncate && repository.meta.description.length > 300
     title =
-      <SourceLink
+      <Link
         sx={{ display: 'inline' }}
         href={
           '/repositories/' +
@@ -39,14 +39,14 @@ export function RepositoryListing({
         }
       >
         {repository.meta.title}
-      </SourceLink>
+      </Link>
 
     details =
       <>
         Provided By{' '}
-        <SourceLink href={'/' + repository.account_id}>
+        <Link href={'/' + repository.account_id}>
           {'@' + repository.account_id}
-        </SourceLink>{' '}
+        </Link>{' '}
         • Published on {moment(repository.published).format('MMMM DD, YYYY')}
       </>
 
@@ -69,26 +69,26 @@ export function RepositoryListing({
         description =
           <>
             {repository.meta.description}{' '}
-            <SourceLink
+            <Link
               variant="link"
               onClick={(e) => { setExpanded(false) }}
               sx={{ ml: 1, fontSize: 0 }}
             >
               [View Less]
-            </SourceLink>
+            </Link>
           </>
 
       } else {
         description =
           <>
             {repository.meta.description.substring(0, 300)}...{' '}
-            <SourceLink
+            <Link
               variant="link"
               onClick={(e) => { setExpanded(true) }}
               sx={{ ml: 1, fontSize: 0 }}
             >
               [View More]
-            </SourceLink>
+            </Link>
           </>
 
       }

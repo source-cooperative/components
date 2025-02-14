@@ -1,4 +1,4 @@
-import SourceLink from '@/components/SourceLink'
+import { Link } from '@source-cooperative/components'
 import { transparentize } from '@theme-ui/color'
 import { Card, Text } from 'theme-ui'
 
@@ -41,7 +41,7 @@ export default function RepositoryTag({ tag }: { tag: any }) {
 
   if (link) {
     return (
-      <SourceLink variant="tag" href={'/repositories?tags=' + tag}>
+      <Link variant="tag" href={'/repositories?tags=' + tag}>
         <Card variant="tag" sx={{
           color: color,
           backgroundColor: transparentize(color, 0.7),
@@ -50,7 +50,7 @@ export default function RepositoryTag({ tag }: { tag: any }) {
           } }}>
           <Text variant="tag">{tag}</Text>
         </Card>
-      </SourceLink>
+      </Link>
     )
   } else {
     return (

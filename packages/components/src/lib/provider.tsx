@@ -5,7 +5,7 @@ import type { MDXComponents } from 'mdx/types.js'
 import type { ComponentPropsWithoutRef, JSX, ReactNode } from 'react'
 import { Card, Heading, Paragraph, ThemeUIProvider } from 'theme-ui'
 import CodeBlock, { InlineCode } from '../components/CodeBlock'
-import Link from '../components/deprecated/Link'
+import Link from '../components/Link'
 
 function createLink(props: JSX.IntrinsicElements['a']) {
   const { href } = props
