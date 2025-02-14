@@ -7,7 +7,6 @@
     "build": "next build",
     "kill": "scripts/db_stop.sh",
     "lint": "eslint .",
-    "install-cli": "cd cli/ && npm ci && npm run build && npm link --force",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },
