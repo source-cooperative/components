@@ -32,13 +32,14 @@ export function ClipboardCopiedIcon() {
   )
 }
 
-export function InlineCode({ children }: {children: React.ReactNode}) {
+export function InlineCode({ children, ...props }: {children: React.ReactNode} & ComponentPropsWithoutRef<typeof Card>) {
   return (
     <Card
       variant="inlineCode"
       onClick={(e) => {
         window.getSelection()?.selectAllChildren(e.currentTarget)
       }}
+      {...props}
     >
       {children}
     </Card>

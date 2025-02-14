@@ -1,8 +1,8 @@
 /** @jsxImportSource theme-ui */
 
 import { mdxOptions } from '@/lib/md'
-import { SourceComponents } from '@/lib/provider'
 import { evaluate } from '@mdx-js/mdx'
+import { SourceComponents } from '@source-cooperative/components'
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import * as runtime from 'react/jsx-runtime'

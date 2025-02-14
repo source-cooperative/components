@@ -5,9 +5,9 @@ import '../styles/globals.css'
 import theme from '@/lib/theme'
 
 import Router from 'next/router'
-import NProgress from 'nprogress' //nprogress module
+import NProgress from 'nprogress'; //nprogress module
 import { SkeletonTheme } from 'react-loading-skeleton'
-import '../styles/nprogress.css' //styles of nprogress
+import '../styles/nprogress.css'; //styles of nprogress
 
 import provider from '@mdx-js/react'
 
@@ -81,7 +81,7 @@ Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
-import { components as SourceComponents, SourceProvider } from '@/lib/provider'
+import { SourceComponents, SourceProvider } from '@source-cooperative/components'
 
 import { Analytics } from '@vercel/analytics/react'
 import type { AppProps } from 'next/app'
