@@ -4,12 +4,11 @@ import {
   AccountType,
   UserSession,
 } from '@/api/types'
-import SourceButton from '@/components/Button'
 import { ClientError } from '@/lib/client/accounts'
 import { Dimmer } from '@carbonplan/components'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Configuration, FrontendApi } from '@ory/client'
-import { Logo } from '@source-cooperative/components'
+import { Button, Logo } from '@source-cooperative/components'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -222,9 +221,9 @@ export default function AccountForm() {
           </Box>
 
           <Box sx={{ textAlign: 'center' }}>
-            <SourceButton disabled={submitting}>
+            <Button disabled={submitting}>
               {submitting ? 'Submitting...' : 'Complete Registration'}
-            </SourceButton>
+            </Button>
           </Box>
         </Grid>
       </Box>

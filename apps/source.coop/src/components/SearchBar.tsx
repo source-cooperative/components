@@ -1,7 +1,7 @@
+import { Button } from '@source-cooperative/components'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Box, Grid, Input } from 'theme-ui'
-import Button from './Button'
 
 export function SearchBar() {
   const router = useRouter()

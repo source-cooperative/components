@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Grid, Heading, Text } from 'theme-ui'
-import { default as Button } from './Button'
-import { ViewerId, viewers } from './viewers'
-import { FileProps, ViewerMetadata } from './viewers/types'
+import { default as Button } from '../Button'
+import { ViewerId, viewers } from '../viewers'
+import { FileProps, ViewerMetadata } from '../viewers/types'
 
 interface ViewerLoaderProps {
   url: string;

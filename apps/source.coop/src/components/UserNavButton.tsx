@@ -7,12 +7,11 @@ import {
 } from '@/api/types'
 import { ClientError } from '@/lib/client/accounts'
 import { edgeConfig } from '@ory/integrations/next'
-import { SVG } from '@source-cooperative/components'
+import { Button, SVG } from '@source-cooperative/components'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { Box, useColorMode } from 'theme-ui'
-import Button from './Button'
 
 import { Configuration, FrontendApi } from '@ory/client'
 
