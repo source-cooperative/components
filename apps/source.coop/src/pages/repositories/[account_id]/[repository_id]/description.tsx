@@ -58,6 +58,7 @@ export default function RepositoryDetail() {
         {repository ?
           <Markdown
             url={`${process.env.NEXT_PUBLIC_S3_ENDPOINT}/${accountId}/${repositoryId}/README.md`}
+            filename="README.md"
           />
           :
           <></>
