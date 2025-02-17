@@ -5,8 +5,10 @@
   "source": "src/index.ts",
   "type": "module",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/components.esm.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/components.esm.js"
+    }
   },
   "repository": {
     "type": "git",
