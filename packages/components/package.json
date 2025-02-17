@@ -1,12 +1,15 @@
 {
   "name": "@source-cooperative/components",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Source Cooperative React Components",
   "source": "src/index.ts",
   "type": "module",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/components.esm.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/components.esm.js",
+      "require": "./dist/components.esm.js"
+    }
   },
   "repository": {
     "type": "git",
