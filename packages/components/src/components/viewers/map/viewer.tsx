@@ -10,12 +10,13 @@ import type VectorSource from 'ol/source/Vector'
 import { Fill, Stroke, Style } from 'ol/style'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Flex, Text, useThemeUI } from 'theme-ui'
+import { SxProp, cn } from '../../../lib/sx'
 import { FileProps } from '../types'
 import { getLayer } from './formats'
 import { getFeatureColor, parseColor } from './utils'
 
-export function MapViewer(props: FileProps) {
-  const { url, filename } = props
+export function MapViewer(props: FileProps & SxProp) {
+  const { url, filename, sx, css, className } = props
   const { theme: { rawColors } } = useThemeUI()
 
   const mapElement = useRef()
@@ -154,9 +155,11 @@ export function MapViewer(props: FileProps) {
           position: 'relative',
           p: 1,
           backgroundColor: 'primary',
+          ...sx,
         }}
+        css={css}
         ref={mapElement}
-        className="map-container"
+        className={cn('map-container', className)}
       >
         <Box sx={{ position: 'absolute', zIndex: 998, top: 2, left: 2 }}>
           <Box

@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Grid, Heading, Text } from 'theme-ui'
+import { SxProp } from '../lib/sx'
 import { default as Button } from './Button'
 import { ViewerId, viewers } from './viewers'
 import { FileProps, ViewerMetadata } from './viewers/types'
 
-interface ViewerLoaderProps {
+type ViewerLoaderProps ={
   url: string;
   viewerId?: ViewerId;
   onViewerSelected?: (viewerId: ViewerId | undefined) => void;
-}
+} & SxProp
 
 interface CompatibleViewer {
   id: ViewerId;
@@ -21,7 +22,7 @@ interface State {
 }
 
 export default function ViewerLoader(props: ViewerLoaderProps) {
-  const { url, viewerId, onViewerSelected } = props
+  const { url, viewerId, onViewerSelected, sx, css, className } = props
   const [state, setState] = useState<State | undefined>(undefined)
 
   const onClick = useCallback((id?: ViewerId) => {
@@ -56,8 +57,10 @@ export default function ViewerLoader(props: ViewerLoaderProps) {
         sx={{
           py: 2,
           justifyContent: 'center',
-          display: 'flex',
+          display: 'flex', ...sx,
         }}
+        css={css}
+        className={className}
       >
         <Text
           sx={{
@@ -74,7 +77,7 @@ export default function ViewerLoader(props: ViewerLoaderProps) {
   if (viewerId) {
     const viewerMetadata = viewers[viewerId]
     return (
-      <Box sx={{ py: 2 }}>
+      <Box sx={{ py: 2, ...sx }} css={css} className={className}>
         {
           <viewerMetadata.viewer
             url={fileProps.url}
@@ -89,7 +92,7 @@ export default function ViewerLoader(props: ViewerLoaderProps) {
   }
 
   return (
-    <Box sx={{ py: 2 }}>
+    <Box sx={{ py: 2, ...sx }} css={css} className={className}>
       <Heading as="h2">Select a Viewer</Heading>
       <Grid sx={{ gridTemplateColumns: '1fr' }}>
         {compatibleViewers.length === 0 ?

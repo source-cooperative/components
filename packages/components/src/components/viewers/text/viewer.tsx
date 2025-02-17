@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { Box, Paragraph } from 'theme-ui'
+import { SxProp } from '../../../lib/sx'
 import { default as CodeBlock } from '../../CodeBlock'
 import { FileProps } from '../types'
 
-export function TextViewer(props: FileProps) {
-  const { url } = props
+export function TextViewer(props: FileProps & SxProp) {
+  const { url, sx, css, className } = props
 
   const [content, setContent] = useState<string | undefined>(undefined)
 
@@ -26,14 +27,14 @@ export function TextViewer(props: FileProps) {
 
   if (!content) {
     return (
-      <CodeBlock copyButton={false}>
+      <CodeBlock copyButton={false} sx={sx} css={css} className={className}>
         <Skeleton count={10} />
       </CodeBlock>
     )
   }
 
   return (
-    <Box>
+    <Box sx={sx} css={css} className={className}>
       <CodeBlock copyButton={true}>
         {content.split('\n').map((line, i) => {
           return (

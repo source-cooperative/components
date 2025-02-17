@@ -2,6 +2,7 @@ import React, { ComponentPropsWithoutRef, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { Box, Card } from 'theme-ui'
 import { useCopyToClipboard } from 'usehooks-ts'
+import { SxProp } from '../lib/sx'
 import SVG from './SVG'
 
 export function ClipboardIcon() {
@@ -32,7 +33,7 @@ export function ClipboardCopiedIcon() {
   )
 }
 
-export function InlineCode({ children, ...props }: {children: React.ReactNode} & ComponentPropsWithoutRef<typeof Card>) {
+export function InlineCode({ children, ...props }: {children: React.ReactNode} & ComponentPropsWithoutRef<typeof Card> & SxProp) {
   return (
     <Card
       variant="inlineCode"
@@ -54,7 +55,7 @@ function copyToClipboard(container: HTMLElement) {
 type CodeBlockProps = {
   children: React.ReactNode;
   copyButton?: boolean;
-} & ComponentPropsWithoutRef<typeof Card>
+} & ComponentPropsWithoutRef<typeof Card> & SxProp
 
 export default function CodeBlock({ children, copyButton, ...props }: CodeBlockProps) {
   const copy = useCopyToClipboard()[1]

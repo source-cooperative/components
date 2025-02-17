@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import { MouseEventHandler, ReactNode } from 'react'
 import { Link as ThemeLink } from 'theme-ui'
+import { SxProp } from '../lib/sx'
 
-export interface LinkProps {
+type LinkProps = {
   children?: ReactNode
   variant?: string
   href?: string
   onClick?: MouseEventHandler<HTMLAnchorElement>
-}
+} & SxProp
 
 function HrefLink(props: LinkProps & { href: string }) {
   return <Link passHref legacyBehavior href={props.href}>
