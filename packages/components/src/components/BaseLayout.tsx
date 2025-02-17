@@ -1,12 +1,10 @@
-import { Toaster } from 'react-hot-toast'
-import { Alert, Box, Container, Grid, Select } from 'theme-ui'
-import Link from './Link'
-import Meta from './Meta'
-
 import { useRouter } from 'next/router'
 import React from 'react'
-import { Flex } from 'theme-ui'
+import { Toaster } from 'react-hot-toast'
+import { Alert, Box, Container, Flex, Grid, Select } from 'theme-ui'
+import Link from './Link'
 import Logo from './Logo'
+import Meta, { MetaProps } from './Meta'
 
 export interface SideNavLink {
 	title: string;
@@ -18,8 +16,8 @@ interface AlertData {
 	variant: string;
 }
 
-interface LayoutProps {
-	title?: string;
+type LayoutProps = {
+  title?: string;
 	description?: string;
 	children: React.ReactNode;
 	logo?: React.ReactNode;
@@ -29,12 +27,15 @@ interface LayoutProps {
 	sideNavLinks?: SideNavLink[];
 	alerts?: AlertData[];
 	messages?: AlertData[];
-}
+} & MetaProps
 
 export default function BaseLayout(props: LayoutProps) {
   const {
     title = 'Source Cooperative',
     description = 'Source Cooperative is a neutral, non-profit data-sharing utility that allows trusted organizations to share data without purchasing a data portal SaaS subscription or managing infrastructure. Source allows organizations to share data using standard HTTP methods rather than requiring proprietary APIs or SaaS interfaces. It is currently in private beta.',
+    siteName,
+    baseUrl,
+    image,
     children,
     logo,
     topMenu,
@@ -69,7 +70,7 @@ export default function BaseLayout(props: LayoutProps) {
         <Toaster position="bottom-right" toastOptions={toastOptions} />
       </Box>
 
-      <Meta description={description} title={title} card="" />
+      <Meta description={description} title={title} siteName={siteName} baseUrl={baseUrl} image={image} />
 
       <Flex
         sx={{
