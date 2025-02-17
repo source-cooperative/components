@@ -2,15 +2,10 @@ import type { ThemeProviderProps } from '@theme-ui/core'
 import { useThemedStylesWithMdx } from '@theme-ui/mdx'
 import Prism from '@theme-ui/prism'
 import type { MDXComponents } from 'mdx/types.js'
-import type { ComponentPropsWithoutRef, JSX, ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { Card, Heading, Paragraph, ThemeUIProvider } from 'theme-ui'
 import CodeBlock, { InlineCode } from '../components/CodeBlock'
 import Link from '../components/Link'
-
-function createLink(props: JSX.IntrinsicElements['a']) {
-  const { href } = props
-  return href ? <Link href={href}>{props.children}</Link> : props.children
-}
 
 function createHeadingWithLink(level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') {
   return function headingWithLink(props: ComponentPropsWithoutRef<typeof Heading>) {
@@ -26,7 +21,7 @@ const components: Readonly<MDXComponents> = {
   h4: createHeadingWithLink('h5'),
   h5: createHeadingWithLink('h6'),
   h6: createHeadingWithLink('h6'),
-  a: createLink,
+  a: Link,
   p: ({ children }: { children?: ReactNode }) => <Paragraph>{children}</Paragraph>,
   blockquote: ({ children }: { children?: ReactNode }) => <Card variant="blockquote">{children}</Card>,
   code: ({ children, className = '' }: { children?: ReactNode, className?: string }) => {
@@ -39,7 +34,7 @@ const components: Readonly<MDXComponents> = {
         <Prism className={className}>{children}</Prism>
       </CodeBlock>
       :
-      <InlineCode>{children}</InlineCode>
+      <InlineCode className={className}>{children}</InlineCode>
   },
 } as const
 
@@ -48,9 +43,7 @@ export function SourceComponents() {
 }
 
 export function SourceProvider({ children, theme }: {children?: ReactNode, theme: ThemeProviderProps['theme'] }) {
-  return (
-    <ThemeUIProvider theme={theme}>
-      {children}
-    </ThemeUIProvider>
-  )
+  return <ThemeUIProvider theme={theme}>
+    {children}
+  </ThemeUIProvider>
 }

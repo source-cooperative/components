@@ -1,33 +1,22 @@
-import NextLink from 'next/link'
-import { ReactNode } from 'react'
+import Link from 'next/link'
+import { MouseEventHandler, ReactNode } from 'react'
 import { Link as ThemeLink } from 'theme-ui'
 
-type LinkProps = {
-  children: ReactNode;
-  variant?: string;
-} & ({
-  href: string;
-} | {
-  onClick: () => void;
-})
-export default function Link(props: LinkProps) {
-  if ('onClick' in props) {
-    return (
-      <ThemeLink
-        onClick={props.onClick}
-        sx={{ variant: `links.${props.variant ?? 'default'}` }}
-      >
-        {props.children}
-      </ThemeLink>
-    )
-  }
+export interface LinkProps {
+  children?: ReactNode
+  variant?: string
+  href?: string
+  onClick?: MouseEventHandler<HTMLAnchorElement>
+}
 
-  return (
-    <NextLink
-      href={props.href}
-      sx={{ variant: props.variant ? `links.${props.variant}` : 'links' }}
-    >
-      {props.children}
-    </NextLink>
-  )
+function HrefLink(props: LinkProps & { href: string }) {
+  return <Link passHref legacyBehavior href={props.href}>
+    <ThemeLink variant={props.variant ?? 'link'} {...props} />
+  </Link>
+}
+
+export default function SourceLink(props: LinkProps) {
+  return 'href' in props && props.href ?
+    <HrefLink {...props} href={props.href} /> :
+    <ThemeLink {...props} />
 }
