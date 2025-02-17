@@ -1,12 +1,12 @@
 import { Toaster } from 'react-hot-toast'
 import { Alert, Box, Container, Grid, Select } from 'theme-ui'
-import Link from '../Link'
-import Meta, { MetaProps } from '../Meta'
+import Link from './Link'
+import Meta, { MetaProps } from './Meta'
 
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Flex } from 'theme-ui'
-import Logo from '../Logo'
+import Logo from './Logo'
 
 export interface SideNavLink {
 	title: string;

@@ -1,6 +1,6 @@
 import { FormEvent, MouseEvent } from 'react'
 import { Box, Grid, Input } from 'theme-ui'
-import Button from '../Button'
+import Button from './Button'
 
 interface SearchBarProps {
 	placeholder?: string;
