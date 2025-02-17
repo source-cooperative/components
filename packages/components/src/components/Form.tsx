@@ -14,6 +14,7 @@ import {
 } from 'theme-ui'
 import type { FieldStateValue, FieldTypeValue, FormResultStateValue } from '../lib/enums'
 import { FieldState, FieldType, FormResultState } from '../lib/enums'
+import { SxProp } from '../lib/sx'
 import Button from './Button'
 
 export interface FormFieldState {
@@ -44,13 +45,13 @@ export interface FormResult {
 	onSuccess?: () => void;
 }
 
-interface FormProps {
+type FormProps={
 	fields: FormFieldData[];
 	gridColumns?: ResponsiveStyleValue<string | number>;
 	active?: boolean;
 	submitText?: string;
 	onSubmit: (values: Record<string, string>) => Promise<FormResult>;
-}
+} & SxProp
 
 function getFieldMessage(field: FormFieldData): ReactNode {
   if (!field.state.message) {
@@ -246,7 +247,7 @@ function FormField(field: FormFieldData) {
   )
 }
 
-export default function Form({ fields, gridColumns, active = true, submitText = 'Submit', onSubmit } : FormProps) {
+export default function Form({ fields, gridColumns, active = true, submitText = 'Submit', onSubmit, sx, css, className } : FormProps) {
   const [submitting, setSubmitting] = useState(false)
   const [submittable, setSubmittable] = useState(false)
 
@@ -293,7 +294,7 @@ export default function Form({ fields, gridColumns, active = true, submitText = 
   }
 
   return (
-    <Box as="form" onSubmit={(e) => { submitHandler(e as unknown as FormEvent<HTMLFormElement>) }}>
+    <Box as="form" onSubmit={(e) => { submitHandler(e as unknown as FormEvent<HTMLFormElement>) }} sx={sx} css={css} className={className}>
       <Grid columns={gridColumns ?? ['auto']} gap={3} mb={3}>
         {fields.map((field, i) => {
           return <FormField key={`form-field-${i}`} {...field} />

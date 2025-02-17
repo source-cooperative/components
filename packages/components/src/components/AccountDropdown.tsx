@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Box } from 'theme-ui'
+import { SxProp } from '../lib/sx'
 import Button from './Button'
 import SVG from './SVG'
 
@@ -32,15 +33,15 @@ interface Link {
 	text: string;
 }
 
-interface AccountDropdownProps {
+type AccountDropdownProps = {
 	name?: string;
 	signedIn: boolean;
 	verified: boolean;
 	usernameClaimed: boolean;
 	links?: Link[];
-}
+} & SxProp
 
-export default function AccountDropdown( { name, signedIn = false, verified = false, usernameClaimed = false, links }: AccountDropdownProps) {
+export default function AccountDropdown( { name, signedIn = false, verified = false, usernameClaimed = false, links, sx, css, className }: AccountDropdownProps) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   if (!signedIn) {
@@ -56,7 +57,7 @@ export default function AccountDropdown( { name, signedIn = false, verified = fa
   }
 
   return (
-    <>
+    <Box sx={sx} css={css} className={className}>
       <Box
         onMouseOut={() => { setMenuOpen(false) }}
         onMouseOver={() => { setMenuOpen(true) }}
@@ -156,6 +157,6 @@ export default function AccountDropdown( { name, signedIn = false, verified = fa
           }
         </Box>
       </Box>
-    </>
+    </Box>
   )
 }

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import Skeleton from 'react-loading-skeleton'
 import { Box, Card, Flex, Grid, Paragraph, Text } from 'theme-ui'
+import { SxProp } from '../lib/sx'
 import Button from './Button'
 import Link from './Link'
 import SVG from './SVG'
@@ -16,12 +17,12 @@ interface Listing {
 	href: string;
 }
 
-interface BrowserResult {
+type BrowserResult = {
 	prev: boolean;
 	next?: string;
 	breadcrumbs?: Breadcrumb[];
 	items?: Listing[];
-}
+} & SxProp
 
 function humanFileSize(bytes: number, si = false, dp = 1) {
   const thresh = si ? 1000 : 1024
@@ -115,11 +116,11 @@ function Item(props: Listing) {
   }
 }
 
-export default function Browser({ prev = false, next, breadcrumbs, items } : BrowserResult) {
+export default function Browser({ prev = false, next, breadcrumbs, items, sx, css, className } : BrowserResult) {
   const router = useRouter()
 
   return (
-    <Box sx={{ py: 2 }}>
+    <Box sx={{ py: 2, sx }} css={css} className={className}>
       <Paragraph
         sx={{
           fontFamily: 'mono',

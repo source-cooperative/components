@@ -1,4 +1,5 @@
 import { Box, Grid, Text, useColorMode } from 'theme-ui'
+import { SxProp } from '../lib/sx'
 import Link from './Link'
 
 interface FooterLink {
@@ -6,12 +7,12 @@ interface FooterLink {
 	text: string;
 }
 
-interface FooterProps {
+type FooterProps = {
 	links?: FooterLink[];
 	text?: string[];
-}
+} & SxProp
 
-export default function Footer({ links, text }: FooterProps) {
+export default function Footer({ links, text, sx, css, className }: FooterProps) {
   const setColorMode = useColorMode()[1]
 
   return (
@@ -21,7 +22,10 @@ export default function Footer({ links, text }: FooterProps) {
         gridTemplateColumns: '1fr 1fr 1fr 1fr',
         gridTemplateRows: '1fr 1fr',
         gap: 1,
+        ...sx,
       }}
+      css={css}
+      className={className}
     >
       {links?.map((link, index) => {
         return (

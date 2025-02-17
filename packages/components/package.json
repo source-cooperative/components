@@ -1,6 +1,6 @@
 {
   "name": "@source-cooperative/components",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Source Cooperative React Components",
   "source": "src/index.ts",
   "type": "module",

@@ -3,8 +3,10 @@ import { ReactNode, useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { Box } from 'theme-ui'
 import { SourceComponents } from '../../../lib/provider'
+import { SxProp } from '../../../lib/sx'
 import { FileProps } from '../types'
 import { generateContent } from './mdx'
+
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url)
   if (!response.ok) {
@@ -13,8 +15,8 @@ async function fetchText(url: string): Promise<string> {
   return response.text()
 }
 
-export function MarkdownViewer(props: FileProps & { errorChildren?: ReactNode }) {
-  const { url, errorChildren } = props
+export function MarkdownViewer(props: FileProps & { errorChildren?: ReactNode } & SxProp) {
+  const { url, errorChildren, sx, css, className } = props
 
   const [error, setError] = useState<string | undefined>(undefined)
   const [content, setContent] = useState<MDXModule | undefined>(undefined)
@@ -43,9 +45,10 @@ export function MarkdownViewer(props: FileProps & { errorChildren?: ReactNode })
       maxWidth: '100%',
       height: 'auto',
       display: 'block',
+      ...sx,
     },
-  }}>
+  }} className={className} css={css}>
     <content.default />
   </Box> :
-    <Box><Skeleton count={10} /></Box>
+    <Box sx={sx} className={className} css={css}><Skeleton count={10} /></Box>
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { AspectRatio, Box, Text } from 'theme-ui'
+import { SxProp } from '../../../lib/sx'
 import { FileProps } from '../types'
 import { fetchRows } from './formats'
 import { TruncatedData, printNumRows, truncate } from './utils'
@@ -8,8 +9,8 @@ import { TruncatedData, printNumRows, truncate } from './utils'
 const maxNumRows = 100
 const maxCellLength = 100
 
-export function TableViewer(props: FileProps) {
-  const { url, filename } = props
+export function TableViewer(props: FileProps & SxProp) {
+  const { url, filename, sx, css, className } = props
 
   const [error, setError] = useState<string | undefined>(undefined)
   const [data, setData] = useState<TruncatedData | undefined>(undefined)
@@ -42,7 +43,10 @@ export function TableViewer(props: FileProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          ...sx,
         }}
+        css={css}
+        className={className}
       >
         {!error && <Skeleton count={10} />}
         {error && <Text>{error}</Text>}
@@ -51,7 +55,7 @@ export function TableViewer(props: FileProps) {
   }
 
   return (
-    <figure sx={{ margin: 0 }}>
+    <figure sx={{ margin: 0, ...sx }} css={css} className={className}>
       <Box
         sx={{
           overflow: 'auto',

@@ -1,6 +1,6 @@
-import SVG from './SVG'
+import SVG, { OptionalSVGProps } from './SVG'
 
-export default function Logo({ ...props }) {
+export default function Logo({ ...props }: OptionalSVGProps) {
   return (
     <SVG viewBox="0 0 181 55" {...props}>
       <g>

@@ -1,15 +1,16 @@
 import { FormEvent, MouseEvent } from 'react'
 import { Box, Grid, Input } from 'theme-ui'
+import { SxProp } from '../lib/sx'
 import Button from './Button'
 
-interface SearchBarProps {
+type SearchBarProps = {
 	placeholder?: string;
 	defaultValue?: string;
 	buttonText?: string;
 	handleSubmit?: (val: string) => void;
-}
+} & SxProp
 
-export default function SearchBar( { placeholder = 'Search', defaultValue, buttonText = 'Browse', handleSubmit }: SearchBarProps) {
+export default function SearchBar( { placeholder = 'Search', defaultValue, buttonText = 'Browse', handleSubmit, sx, css, className }: SearchBarProps) {
 
   function submitForm(form: HTMLFormElement) {
     const formData = new FormData(form)
@@ -38,7 +39,7 @@ export default function SearchBar( { placeholder = 'Search', defaultValue, butto
   }
 
   return (
-    <Box as="form" onSubmit={onFormSubmit} sx={{ width: '100%' }}>
+    <Box as="form" onSubmit={onFormSubmit} sx={{ width: '100%', ...sx }} css={css} className={className}>
       <Grid sx={{ gridGap: 3, gridTemplateColumns: 'auto max-content' }}>
         <Input
           placeholder={placeholder}

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 import { Alert, Box, Container, Flex, Grid, Select } from 'theme-ui'
+import { SxProp } from '../lib/sx'
 import Link from './Link'
 import Logo from './Logo'
 import Meta, { MetaProps } from './Meta'
@@ -27,7 +28,7 @@ type LayoutProps = {
 	sideNavLinks?: SideNavLink[];
 	alerts?: AlertData[];
 	messages?: AlertData[];
-} & MetaProps
+} & MetaProps & SxProp
 
 export default function BaseLayout(props: LayoutProps) {
   const {
@@ -44,6 +45,7 @@ export default function BaseLayout(props: LayoutProps) {
     sideNavLinks,
     alerts,
     messages,
+    sx, css, className,
   } = props
   const router = useRouter()
 
@@ -65,7 +67,7 @@ export default function BaseLayout(props: LayoutProps) {
   }
 
   return (
-    <main>
+    <main sx={sx} css={css} className={className}>
       <Box sx={{ zIndex: 999999 }}>
         <Toaster position="bottom-right" toastOptions={toastOptions} />
       </Box>
