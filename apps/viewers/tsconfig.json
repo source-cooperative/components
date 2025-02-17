@@ -18,7 +18,8 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "jsxImportSource": "theme-ui"
+    "jsxImportSource": "theme-ui",
+    "target": "ES2022"
   },
   "include": [
     "next-env.d.ts",

@@ -1,10 +1,10 @@
 import { MDXModule } from 'mdx/types.js'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
+import { Box } from 'theme-ui'
 import { SourceComponents } from '../../../lib/provider'
 import { FileProps } from '../types'
 import { generateContent } from './mdx'
-
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url)
   if (!response.ok) {
@@ -13,8 +13,8 @@ async function fetchText(url: string): Promise<string> {
   return response.text()
 }
 
-export function MarkdownViewer(props: FileProps) {
-  const { url } = props
+export function MarkdownViewer(props: FileProps & { errorChildren?: ReactNode }) {
+  const { url, errorChildren } = props
 
   const [error, setError] = useState<string | undefined>(undefined)
   const [content, setContent] = useState<MDXModule | undefined>(undefined)
@@ -35,7 +35,17 @@ export function MarkdownViewer(props: FileProps) {
   }, [url, components])
 
   if (error) {
-    return <p>{error}</p>
+    return errorChildren ? <>{errorChildren}</> : <p>{error}</p>
   }
-  return content ? <content.default /> : <Skeleton count={10} />
+  return content ? <Box sx={{
+    width: '100%',
+    '& img': { // Target all images within the markdown
+      maxWidth: '100%',
+      height: 'auto',
+      display: 'block',
+    },
+  }}>
+    <content.default />
+  </Box> :
+    <Box><Skeleton count={10} /></Box>
 }

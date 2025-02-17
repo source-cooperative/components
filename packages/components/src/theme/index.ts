@@ -1,4 +1,3 @@
-/// See https://github.com/source-cooperative/theme
 import { Theme } from 'theme-ui'
 
 export const theme: Theme = {
@@ -64,36 +63,6 @@ export const theme: Theme = {
   },
   text: {
     // fontSize: 1,
-    sideNav: {
-      color: 'accent',
-      fontSize: 3,
-      fontFamily: 'mono',
-      textTransform: 'uppercase',
-      textDecoration: 'none',
-      '&:hover': {
-        color: 'text',
-        textDecoration: 'underline',
-      },
-    },
-    sideNavActive: {
-      color: 'text',
-      fontSize: 3,
-      fontFamily: 'mono',
-      textTransform: 'uppercase',
-      textDecoration: 'underline',
-      '&:hover': {
-        color: 'text',
-        textDecoration: 'underline',
-      },
-    },
-    link: {
-      color: 'text',
-      textDecoration: 'underline',
-      '&:hover': {
-        color: 'secondary',
-        textDecoration: 'none',
-      },
-    },
     detail: {
       fontSize: 0,
       fontWeight: 'body',
@@ -105,6 +74,22 @@ export const theme: Theme = {
       mb: 1,
       fontSize: 1,
       lineHeight: '1.5em',
+    },
+    formTitle: {
+      fontSize: 3,
+      fontFamily: 'mono',
+      fontWeight: 'bold',
+    },
+    formLabel: {
+      fontSize: 0,
+      fontFamily: 'mono',
+      fontWeight: 'body',
+    },
+    formError: {
+      fontSize: 0,
+      color: 'red',
+      fontFamily: 'mono',
+      fontWeight: 'body',
     },
     description: {
       fontSize: 1,
@@ -144,7 +129,7 @@ export const theme: Theme = {
         borderColor: 'primary',
         outline: 'none',
       },
-      backgroundColor: 'muted',
+      backgroundColor: 'hinted',
       fontFamily: 'mono',
       fontSize: 1,
       borderRadius: 0,
@@ -153,8 +138,23 @@ export const theme: Theme = {
         color: 'accent',
       },
     },
+    readonly: {
+      borderColor: 'accent',
+      '&:focus': {
+        borderColor: 'primary',
+        outline: 'none',
+      },
+      backgroundColor: 'hinted',
+      fontFamily: 'mono',
+      fontSize: 1,
+      borderRadius: 0,
+      '&:disabled': {
+        backgroundColor: 'hinted',
+        color: 'primary',
+      },
+    },
     textarea: {
-      backgroundColor: 'muted',
+      backgroundColor: 'hinted',
       borderRadius: 0,
       borderColor: 'accent',
       fontFamily: 'mono',
@@ -184,7 +184,20 @@ export const theme: Theme = {
       fontFamily: 'mono',
       borderRadius: 0,
       borderColor: 'accent',
-      backgroundColor: 'muted',
+      backgroundColor: 'hinted',
+      '&:disabled': {
+        backgroundColor: 'hinted',
+        color: 'accent',
+      },
+    },
+    minimalSelect: {
+      fontSize: 0,
+      pr: 4,
+      mr: 1,
+      fontFamily: 'mono',
+      borderRadius: 0,
+      borderColor: 'accent',
+      backgroundColor: 'hinted',
       '&:disabled': {
         backgroundColor: 'hinted',
         color: 'accent',
@@ -203,6 +216,66 @@ export const theme: Theme = {
       cursor: 'pointer',
       fontFamily: 'mono',
       fontSize: 2,
+      fontWeight: 'body',
+      '&:hover': {
+        color: 'highlight',
+      },
+      '&:disabled': {
+        color: 'background',
+        backgroundColor: 'highlight',
+        cursor: 'not-allowed',
+      },
+    },
+    formSubmit: {
+      textTransform: 'uppercase',
+      p: 2,
+      m: 0,
+      color: 'background',
+      borderRadius: 0,
+      backgroundColor: 'primary',
+      cursor: 'pointer',
+      fontFamily: 'mono',
+      fontSize: 1,
+      fontWeight: 'body',
+      '&:hover': {
+        color: 'highlight',
+      },
+      '&:disabled': {
+        color: 'background',
+        backgroundColor: 'highlight',
+        cursor: 'not-allowed',
+      },
+    },
+    formDestructive: {
+      textTransform: 'uppercase',
+      p: 2,
+      m: 0,
+      color: 'background',
+      borderRadius: 0,
+      backgroundColor: 'red',
+      cursor: 'pointer',
+      fontFamily: 'mono',
+      fontSize: 1,
+      fontWeight: 'body',
+      '&:hover': {
+        color: 'highlight',
+      },
+      '&:disabled': {
+        color: 'background',
+        backgroundColor: 'highlight',
+        cursor: 'not-allowed',
+      },
+    },
+    formSuccess: {
+      textTransform: 'uppercase',
+      p: 2,
+      m: 0,
+      color: 'background',
+      borderRadius: 0,
+      backgroundColor: 'green',
+      cursor: 'pointer',
+      fontFamily: 'mono',
+      fontSize: 1,
       fontWeight: 'body',
       '&:hover': {
         color: 'highlight',
@@ -294,6 +367,23 @@ export const theme: Theme = {
       height: '50px',
     },
   },
+  grids: {
+    form: {
+      gap: 2,
+      borderStyle: 'solid',
+      borderWidth: '1px',
+      borderColor: 'secondary',
+      backgroundColor: 'muted',
+      p: 2,
+      position: 'relative',
+      width: '100%',
+      fontFamily: 'mono',
+      fontSize: 0,
+    },
+    formField: {
+      textAlign: 'left',
+    },
+  },
   cards: {
     tag: {
       px: 1,
@@ -317,6 +407,52 @@ export const theme: Theme = {
       borderStyle: 'solid',
       borderWidth: '1px',
       backgroundColor: 'muted',
+    },
+    componentMessage: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '4em',
+      fontSize: 3,
+      fontFamily: 'mono',
+    },
+    formContainer: {
+      width: ['100%', '100%', '50%', '20%'],
+    },
+    formButtonBox: {
+      display: 'flex',
+      gap: 2,
+      justifyContent: 'right',
+    },
+    formMessageBox: {
+      gridColumn: '1 / -1',
+    },
+    formField: {
+      textAlign: 'left',
+    },
+    form: {
+      my: 1,
+      borderStyle: 'solid',
+      borderWidth: '1px',
+      borderColor: 'secondary',
+      backgroundColor: 'muted',
+      p: 2,
+      position: 'relative',
+      width: '100%',
+      fontFamily: 'mono',
+      overflowWrap: 'anywhere',
+      overflowX: 'auto',
+      fontSize: 0,
+      pre: {
+        borderWidth: 0,
+        px: 0,
+        transform: 'translateY(0em)',
+        overflowWrap: 'anywhere',
+        overflowX: 'auto',
+        fontFamily: 'mono',
+        fontSize: 0,
+        m: 0,
+      },
     },
     code: {
       my: 1,
@@ -376,6 +512,9 @@ export const theme: Theme = {
       color: 'text',
       bg: 'green',
       fontFamily: 'mono',
+      fontSize: 0,
+      p: 1,
+      fontWeight: 'bold',
       justifyContent: 'center',
       textAlign: 'center',
       borderRadius: 0,
@@ -392,6 +531,9 @@ export const theme: Theme = {
       color: 'text',
       bg: 'red',
       fontFamily: 'mono',
+      fontSize: 0,
+      p: 1,
+      fontWeight: 'bold',
       justifyContent: 'center',
       textAlign: 'center',
       borderRadius: 0,
@@ -407,48 +549,74 @@ export const theme: Theme = {
   },
   links: {
     // color: 'text',
-    // textDecoration: 'underline',
     '&:hover': {
       color: 'secondary',
-      textDecoration: 'underline',
+    },
+    breadcrumb: {
+      color: 'secondary',
+      '&:hover': {
+        textDecoration: 'underline',
+        color: 'primary',
+      },
     },
     footer: {
-      color: 'text',
-      textDecoration: 'none',
       fontFamily: 'mono',
       fontSize: 0,
-      textTransform: 'uppercase',
       fontWeight: 'bold',
+      fontStyle: 'normal',
+      color: 'text',
+      textDecoration: 'underline',
+      textTransform: 'uppercase',
+      '&:hover': {
+        color: 'secondary',
+      },
+    },
+    link: {
+      cursor: 'pointer',
+      fontStyle: 'normal',
+      color: 'text',
+      textDecoration: 'underline',
       '&:hover': {
         color: 'secondary',
         textDecoration: 'underline',
-        cursor: 'pointer',
       },
     },
-    sideNav: {
-      color: 'secondary',
+    tag: {
       textDecoration: 'none',
-      fontSize: 3,
-      fontFamily: 'mono',
+    },
+    navLink: {
+      cursor: 'pointer',
+      fontStyle: 'normal',
+      color: 'accent',
+      textDecoration: 'none',
       textTransform: 'uppercase',
       '&:hover': {
         color: 'text',
         textDecoration: 'underline',
       },
     },
-    sideNavActive: {
+    navLinkActive: {
+      cursor: 'pointer',
+      fontStyle: 'normal',
       color: 'text',
       textDecoration: 'underline',
-      fontSize: 3,
-      fontFamily: 'mono',
       textTransform: 'uppercase',
       '&:hover': {
+        color: 'text',
         textDecoration: 'underline',
       },
     },
-    breadcrumb: {
-      color: 'text',
-      textDecoration: 'underline',
+    navLinkExpanded: {
+      display: 'block',
+      cursor: 'pointer',
+      fontStyle: 'normal',
+      color: 'secondary',
+      textDecoration: 'none',
+      textTransform: 'uppercase',
+      '&:hover': {
+        color: 'text',
+        textDecoration: 'underline',
+      },
     },
   },
   layout: {
@@ -464,6 +632,11 @@ export const theme: Theme = {
       letterSpacing: 'body',
       textUnderlineThickness: 'max(0.08em, 1px)',
       textUnderlineOffset: '0.15em',
+    },
+    fieldset: {
+      border: 0,
+      p: 0,
+      m: 0,
     },
     ul: {
       mt: 1,
