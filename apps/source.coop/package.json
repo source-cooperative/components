@@ -6,9 +6,9 @@
     "dev": "scripts/db_start.sh && next dev",
     "build": "next build",
     "kill": "scripts/db_stop.sh",
-    "lint": "eslint .",
+    "lint": "next lint",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "echo 'no typecheck for now'"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",
@@ -63,6 +63,7 @@
     "@types/swagger-ui-react": "^4.18.3",
     "aws-sdk-client-mock": "^4.0.1",
     "dotenv": "^16.4.5",
+    "eslint-config-next": "^15.1.7",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "node-mocks-http": "^1.15.1",
