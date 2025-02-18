@@ -1,12 +1,6 @@
-import {
-  BaseLayout,
-  FieldState,
-  FieldStateValue,
-  FieldType,
-  Form,
-  FormResult,
-  FormResultState,
-} from '@source-cooperative/components'
+import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
+import Form, { FormResult } from '@source-cooperative/components/components/Form.js'
+import { FieldState, FieldStateValue, FieldType, FormResultState } from '@source-cooperative/components/lib/enums.js'
 import { useState } from 'react'
 import { Heading } from 'theme-ui'
 import { sideNavLinks } from '../../utils/constants'

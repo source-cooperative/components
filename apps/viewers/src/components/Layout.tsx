@@ -1,4 +1,6 @@
-import { BaseLayout, Footer, Logo } from '@source-cooperative/components'
+import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
+import Footer from '@source-cooperative/components/components/Footer.js'
+import Logo from '@source-cooperative/components/components/Logo.js'
 import getConfig from 'next/config'
 import { ReactNode } from 'react'
 import { Flex, Link, Text } from 'theme-ui'

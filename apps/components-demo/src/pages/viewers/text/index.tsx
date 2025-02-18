@@ -1,4 +1,5 @@
-import { BaseLayout, text } from '@source-cooperative/components'
+import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
+import { text } from '@source-cooperative/components/components/viewers/text/index.js'
 import { Heading, Paragraph } from 'theme-ui'
 import { sideNavLinks } from '../../../utils/constants'
 

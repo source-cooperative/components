@@ -1,4 +1,6 @@
-import { BaseLayout, ViewerId, ViewerLoader } from '@source-cooperative/components'
+import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
+import ViewerLoader from '@source-cooperative/components/components/ViewerLoader.js'
+import { ViewerId } from '@source-cooperative/components/components/viewers/index.js'
 import { useState } from 'react'
 import { Divider, Heading, Paragraph, Select } from 'theme-ui'
 import { sideNavLinks } from '../../../utils/constants'

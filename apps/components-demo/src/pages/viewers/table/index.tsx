@@ -1,4 +1,5 @@
-import { BaseLayout, table } from '@source-cooperative/components'
+import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
+import { table } from '@source-cooperative/components/components/viewers/table/index.js'
 import { Heading, Paragraph } from 'theme-ui'
 import { sideNavLinks } from '../../../utils/constants'
 

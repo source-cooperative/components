@@ -1,4 +1,5 @@
-import { BaseLayout, markdown } from '@source-cooperative/components'
+import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
+import { markdown } from '@source-cooperative/components/components/viewers/markdown/index.js'
 import { Heading, Paragraph } from 'theme-ui'
 import { sideNavLinks } from '../../../utils/constants'
 // import { markdown } from './markdown'
