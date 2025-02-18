@@ -1,7 +1,7 @@
 import { FormEvent, MouseEvent } from 'react'
 import { Box, Grid, Input } from 'theme-ui'
-import { SxProp } from '../lib/sx'
 import Button from './Button'
+import { SxProp } from './sx'
 
 type SearchBarProps = {
 	placeholder?: string;

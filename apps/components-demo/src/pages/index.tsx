@@ -1,7 +1,7 @@
-import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
-import Footer from '@source-cooperative/components/components/Footer.js'
-import Link from '@source-cooperative/components/components/Link.js'
-import SearchBar from '@source-cooperative/components/components/SearchBar.js'
+import BaseLayout from '@source-cooperative/components/BaseLayout.js'
+import Footer from '@source-cooperative/components/Footer.js'
+import Link from '@source-cooperative/components/Link.js'
+import SearchBar from '@source-cooperative/components/SearchBar.js'
 import { Box, Heading } from 'theme-ui'
 import { sideNavLinks } from '../utils/constants'
 

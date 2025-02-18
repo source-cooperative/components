@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router'
 import Skeleton from 'react-loading-skeleton'
 import { Box, Card, Flex, Grid, Paragraph, Text } from 'theme-ui'
-import { SxProp } from '../lib/sx'
 import Button from './Button'
 import Link from './Link'
 import SVG from './SVG'
+import { SxProp } from './sx'
 
 interface Breadcrumb {
 	href: string;

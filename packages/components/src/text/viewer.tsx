@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { Box, Paragraph } from 'theme-ui'
-import { SxProp } from '../../../lib/sx'
-import { default as CodeBlock } from '../../CodeBlock'
+import { default as CodeBlock } from '../CodeBlock'
+import { SxProp } from '../sx'
 import { FileProps } from '../types'
 
-export function TextViewer(props: FileProps & SxProp) {
+export default function TextViewer(props: FileProps & SxProp) {
   const { url, sx, css, className } = props
 
   const [content, setContent] = useState<string | undefined>(undefined)

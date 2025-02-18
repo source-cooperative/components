@@ -1,6 +1,6 @@
-import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
-import Button from '@source-cooperative/components/components/Button.js'
-import CodeBlock, { InlineCode } from '@source-cooperative/components/components/CodeBlock.js'
+import BaseLayout from '@source-cooperative/components/BaseLayout.js'
+import Button from '@source-cooperative/components/Button.js'
+import CodeBlock, { InlineCode } from '@source-cooperative/components/CodeBlock.js'
 import { sideNavLinks } from '../../utils/constants'
 
 export default function ButtonPage() {

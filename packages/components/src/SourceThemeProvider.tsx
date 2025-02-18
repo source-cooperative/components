@@ -4,8 +4,8 @@ import Prism from '@theme-ui/prism'
 import type { MDXComponents } from 'mdx/types.js'
 import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { Card, Heading, Paragraph, ThemeUIProvider } from 'theme-ui'
-import CodeBlock, { InlineCode } from '../components/CodeBlock'
-import Link from '../components/Link'
+import CodeBlock, { InlineCode } from './CodeBlock'
+import Link from './Link'
 
 function createHeadingWithLink(level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') {
   return function headingWithLink(props: ComponentPropsWithoutRef<typeof Heading>) {

@@ -2,10 +2,10 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 import { Alert, Box, Container, Flex, Grid, Select } from 'theme-ui'
-import { SxProp } from '../lib/sx'
 import Link from './Link'
 import Logo from './Logo'
 import Meta, { MetaProps } from './Meta'
+import { SxProp } from './sx'
 
 export interface SideNavLink {
 	title: string;

@@ -2,8 +2,8 @@ import { MDXModule } from 'mdx/types.js'
 import { ReactNode, useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { Box } from 'theme-ui'
-import { SourceComponents } from '../../../lib/provider'
-import { SxProp } from '../../../lib/sx'
+import { SourceComponents } from '../SourceThemeProvider'
+import { SxProp } from '../sx'
 import { FileProps } from '../types'
 import { generateContent } from './mdx'
 
@@ -15,7 +15,7 @@ async function fetchText(url: string): Promise<string> {
   return response.text()
 }
 
-export function MarkdownViewer(props: FileProps & { errorChildren?: ReactNode } & SxProp) {
+export default function MarkdownViewer(props: FileProps & { errorChildren?: ReactNode } & SxProp) {
   const { url, errorChildren, sx, css, className } = props
 
   const [error, setError] = useState<string | undefined>(undefined)

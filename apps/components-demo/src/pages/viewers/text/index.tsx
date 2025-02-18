@@ -1,10 +1,11 @@
-import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
-import { text } from '@source-cooperative/components/components/viewers/text/index.js'
+import BaseLayout from '@source-cooperative/components/BaseLayout.js'
+import metadata from '@source-cooperative/components/text/metadata.js'
+import TextViewer from '@source-cooperative/components/text/viewer.js'
 import { Heading, Paragraph } from 'theme-ui'
 import { sideNavLinks } from '../../../utils/constants'
 
 export default function Text() {
-  const { title, description, viewer: TextViewer } = text
+  const { title, description } = metadata
   return (
     <BaseLayout sideNavLinks={sideNavLinks}>
       <Heading as="h1">{title}</Heading>

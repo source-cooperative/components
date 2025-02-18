@@ -1,5 +1,5 @@
 import React from 'react'
-import { SxProp } from '../lib/sx'
+import { SxProp } from './sx'
 
 export type OptionalSVGProps = {
  title?: string

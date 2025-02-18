@@ -1,5 +1,5 @@
-import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
-import Link from '@source-cooperative/components/components/Link.js'
+import BaseLayout from '@source-cooperative/components/BaseLayout.js'
+import Link from '@source-cooperative/components/Link.js'
 import { Heading, Paragraph } from 'theme-ui'
 import { sideNavLinks } from '../../utils/constants'
 

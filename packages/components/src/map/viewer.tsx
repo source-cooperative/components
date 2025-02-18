@@ -1,6 +1,6 @@
 import { PMTilesVectorSource } from 'ol-pmtiles'
-import Map from 'ol/Map'
-import MapBrowserEvent from 'ol/MapBrowserEvent'
+import Map from 'ol/Map.js'
+import MapBrowserEvent from 'ol/MapBrowserEvent.js'
 import Overlay from 'ol/Overlay.js'
 import View from 'ol/View'
 import VectorTileLayer from 'ol/layer/VectorTile'
@@ -10,12 +10,12 @@ import type VectorSource from 'ol/source/Vector'
 import { Fill, Stroke, Style } from 'ol/style'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Flex, Text, useThemeUI } from 'theme-ui'
-import { SxProp, cn } from '../../../lib/sx'
+import { SxProp, cn } from '../sx'
 import { FileProps } from '../types'
 import { getLayer } from './formats'
 import { getFeatureColor, parseColor } from './utils'
 
-export function MapViewer(props: FileProps & SxProp) {
+export default function MapViewer(props: FileProps & SxProp) {
   const { url, filename, sx, css, className } = props
   const { theme: { rawColors } } = useThemeUI()
 

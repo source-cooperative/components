@@ -1,6 +1,6 @@
 import { Box, Grid, Text, useColorMode } from 'theme-ui'
-import { SxProp } from '../lib/sx'
 import Link from './Link'
+import { SxProp } from './sx'
 
 interface FooterLink {
 	href: string;

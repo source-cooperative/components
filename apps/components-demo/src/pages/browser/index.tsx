@@ -1,5 +1,5 @@
-import BaseLayout from '@source-cooperative/components/components/BaseLayout.js'
-import Browser from '@source-cooperative/components/components/Browser.js'
+import BaseLayout from '@source-cooperative/components/BaseLayout.js'
+import Browser from '@source-cooperative/components/Browser.js'
 import { Box, Heading } from 'theme-ui'
 import { sideNavLinks } from '../../utils/constants'
 
