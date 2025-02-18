@@ -13,7 +13,8 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
-  }
+  },
+	transpilePackages: ["@source-cooperative/components"]
 };
 
 module.exports = nextConfig;
