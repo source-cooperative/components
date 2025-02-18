@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { AspectRatio, Box, Text } from 'theme-ui'
-import { SxProp } from '../../../lib/sx'
+import { SxProp } from '../sx'
 import { FileProps } from '../types'
 import { fetchRows } from './formats'
 import { TruncatedData, printNumRows, truncate } from './utils'
@@ -9,7 +9,7 @@ import { TruncatedData, printNumRows, truncate } from './utils'
 const maxNumRows = 100
 const maxCellLength = 100
 
-export function TableViewer(props: FileProps & SxProp) {
+export default function TableViewer(props: FileProps & SxProp) {
   const { url, filename, sx, css, className } = props
 
   const [error, setError] = useState<string | undefined>(undefined)

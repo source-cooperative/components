@@ -1,4 +1,4 @@
-import { Link } from '@source-cooperative/components'
+import Link from '@source-cooperative/components/Link.js'
 import { Heading, Paragraph } from 'theme-ui'
 import Layout from '../../components/Layout'
 

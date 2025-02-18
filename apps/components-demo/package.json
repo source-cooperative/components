@@ -23,7 +23,7 @@
     "url": "https://github.com/source-cooperative/components/issues"
   },
   "dependencies": {
-    "@source-cooperative/components": "1.3.2",
+    "@source-cooperative/components": "1.4.0",
     "next": "15.1.6",
     "theme-ui": "0.16.1",
     "@emotion/react": "11.13.3",

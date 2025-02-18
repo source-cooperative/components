@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { MouseEventHandler, ReactNode } from 'react'
 import { Link as ThemeLink } from 'theme-ui'
-import { SxProp } from '../lib/sx'
+import { SxProp } from './sx'
 
 type LinkProps = {
   children?: ReactNode

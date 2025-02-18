@@ -1,12 +1,5 @@
-import {
-  BaseLayout,
-  FieldState,
-  FieldStateValue,
-  FieldType,
-  Form,
-  FormResult,
-  FormResultState,
-} from '@source-cooperative/components'
+import BaseLayout from '@source-cooperative/components/BaseLayout.js'
+import Form, { FieldState, FieldStateValue, FieldType, FormResult, FormResultState } from '@source-cooperative/components/Form.js'
 import { useState } from 'react'
 import { Heading } from 'theme-ui'
 import { sideNavLinks } from '../../utils/constants'

@@ -1,14 +1,6 @@
-import {
-  FieldState,
-  FieldType,
-  Form,
-  FormFieldState,
-  FormResult,
-  FormResultState,
-  ViewerId,
-  ViewerLoader,
-  viewerIds,
-} from '@source-cooperative/components'
+import Form, { FieldState, FieldType, FormFieldState, FormResult, FormResultState } from '@source-cooperative/components/Form.js'
+import ViewerLoader from '@source-cooperative/components/ViewerLoader.js'
+import { ViewerId, viewerIds } from '@source-cooperative/components/viewers.js'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Divider } from 'theme-ui'

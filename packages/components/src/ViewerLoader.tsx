@@ -1,9 +1,23 @@
-import { useCallback, useEffect, useState } from 'react'
+import { JSX, useCallback, useEffect, useState } from 'react'
 import { Box, Grid, Heading, Text } from 'theme-ui'
-import { SxProp } from '../lib/sx'
 import { default as Button } from './Button'
+import MapViewer from './map/viewer'
+import MarkdownViewer from './markdown/viewer'
+import { SxProp } from './sx'
+import TableViewer from './table/viewer'
+import TextViewer from './text/viewer'
+import { FileProps, ViewerMetadata } from './types'
 import { ViewerId, viewers } from './viewers'
-import { FileProps, ViewerMetadata } from './viewers/types'
+
+type Viewer = (props: FileProps & SxProp) => JSX.Element
+
+// TODO(SL): dynamically import the viewers (or do it in viewers.ts?)
+const viewerLU: Record<ViewerId, Viewer> = {
+  map: MapViewer,
+  markdown: MarkdownViewer,
+  table: TableViewer,
+  text: TextViewer,
+}
 
 type ViewerLoaderProps ={
   url: string;
@@ -75,11 +89,11 @@ export default function ViewerLoader(props: ViewerLoaderProps) {
   const { fileProps, compatibleViewers } = state
 
   if (viewerId) {
-    const viewerMetadata = viewers[viewerId]
+    const viewer = { component: viewerLU[viewerId] }
     return (
       <Box sx={{ py: 2, ...sx }} css={css} className={className}>
         {
-          <viewerMetadata.viewer
+          <viewer.component
             url={fileProps.url}
             filename={fileProps.filename}
           />

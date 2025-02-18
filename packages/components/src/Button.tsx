@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { MouseEventHandler, ReactNode, Ref, forwardRef } from 'react'
 import { Box, Button as ThemeButton } from 'theme-ui'
 import type { UrlObject } from 'url'
-import { SxProp } from '../lib/sx'
+import { SxProp } from './sx'
 
 type Url = string | UrlObject;
 

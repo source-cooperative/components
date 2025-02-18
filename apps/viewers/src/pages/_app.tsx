@@ -1,4 +1,5 @@
-import { SourceProvider, theme } from '@source-cooperative/components'
+import { SourceProvider } from '@source-cooperative/components/SourceThemeProvider.js'
+import { theme } from '@source-cooperative/components/theme.js'
 import type { AppProps } from 'next/app'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import '../styles/globals.css' // TODO(SL): distribute in components package

@@ -2,8 +2,8 @@ import React, { ComponentPropsWithoutRef, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { Box, Card } from 'theme-ui'
 import { useCopyToClipboard } from 'usehooks-ts'
-import { SxProp } from '../lib/sx'
 import SVG from './SVG'
+import { SxProp } from './sx'
 
 export function ClipboardIcon() {
   return (
