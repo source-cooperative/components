@@ -55,7 +55,7 @@
     "build": "tsc",
     "prebuild": "rimraf dist",
     "lint": "eslint .",
-    "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
     "typecheck": "tsc --noEmit"
   }
 }
